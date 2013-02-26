@@ -8,3 +8,4 @@
 #etc. #
 *.classpath
 *.project
+*.settings
