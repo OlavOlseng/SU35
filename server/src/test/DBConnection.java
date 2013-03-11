@@ -40,4 +40,19 @@ public class DBConnection {
 		System.out.println("Connection closed...");
 	}
 	
+	public ResultSet makeSingleQuery(String sql) throws SQLException {
+		Statement st = connection.createStatement();
+		return st.executeQuery(sql);
+	}
+	
+	public void makeSingleUpdate(String sql) throws SQLException {
+		Statement st = connection.createStatement();
+		st.executeUpdate(sql);
+	}
+
+	
+	public PreparedStatement preparedStatement(String sql) throws SQLException {
+		return connection.prepareStatement(sql);
+	}
+	
 }
