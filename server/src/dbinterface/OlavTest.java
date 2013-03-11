@@ -19,14 +19,8 @@ public class OlavTest {
 			ResultSet rs=dbc.makeSingleQuery(sql);
 			ResultSetMetaData meta=rs.getMetaData();
 			
-			
-			int cols = meta.getColumnCount();
-			
-			for (int i = 1; i <= cols; i++) {
-				System.out.print("Col:" +i + " " +meta.getColumnLabel(i) + "\t");
-			}
 			System.out.println();
-			System.out.println();
+			
 			rs.beforeFirst();
 			
 			while(rs.next())

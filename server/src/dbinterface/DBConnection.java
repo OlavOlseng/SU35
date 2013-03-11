@@ -23,7 +23,7 @@ public class DBConnection {
 	}
 	
 	public void init() throws SQLException, ClassNotFoundException {
-		System.out.println("Opening connection...");
+		System.out.println("Opening connection to database...");
 		
 		Class.forName(p.getProperty("jdbcDriver"));
 		
@@ -35,7 +35,7 @@ public class DBConnection {
 	}
 	
 	public void close() throws SQLException {
-		System.out.println("Closing connection...");
+		System.out.println("Closing connection to database...");
 		connection.close();
 		System.out.println("Connection closed...");
 	}
@@ -50,7 +50,6 @@ public class DBConnection {
 		st.executeUpdate(sql);
 	}
 
-	
 	public PreparedStatement preparedStatement(String sql) throws SQLException {
 		return connection.prepareStatement(sql);
 	}
