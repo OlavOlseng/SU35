@@ -13,11 +13,11 @@ public class DBConnection {
 	private Properties p;
 	private Connection connection;
 	
-	public DBConnection() {
+	public DBConnection(String user, String password) {
 		p = new Properties();
 		
-		p.setProperty("user", "root");
-		p.setProperty("password", "admin");
+		p.setProperty("user", user);
+		p.setProperty("password", password);
 		p.setProperty("jdbcDriver", "com.mysql.jdbc.Driver");
 		p.setProperty("url", "jdbc:mysql://localhost/mydb");
 	}
