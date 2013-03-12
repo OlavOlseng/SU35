@@ -12,28 +12,27 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import java.awt.Color;
+
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.SwingConstants;
 
 
-public class CalendarView {
+public class CalendarView extends JPanel{
 
-	private JFrame frame;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					CalendarView window = new CalendarView();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		
+		
+		JFrame frame = new JFrame("Superblaster");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setBounds(50, 50, 800, 600);
+		frame.setContentPane(new CalendarView());
+		frame.pack();
+		frame.setVisible(true);
 	}
 
 	/**
@@ -41,22 +40,20 @@ public class CalendarView {
 	 */
 	public CalendarView() {
 		initialize();
-	}
+		}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 800, 600);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setTitle("Superblaster");
+		this.setBorder(new EmptyBorder(5,5,5,5));
+		this.setBackground(new Color(153, 190, 255));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{120, 670, 0};
 		gridBagLayout.rowHeights = new int[]{50, 540, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0};
-		frame.getContentPane().setLayout(gridBagLayout);
+		this.setLayout(gridBagLayout);
 		
 		JPanel topLeftPanel = new JPanel();
 		GridBagConstraints gbc_topLeftPanel = new GridBagConstraints();
@@ -64,7 +61,7 @@ public class CalendarView {
 		gbc_topLeftPanel.fill = GridBagConstraints.BOTH;
 		gbc_topLeftPanel.gridx = 0;
 		gbc_topLeftPanel.gridy = 0;
-		frame.getContentPane().add(topLeftPanel, gbc_topLeftPanel);
+		this.add(topLeftPanel, gbc_topLeftPanel);
 		GridBagLayout gbl_topLeftPanel = new GridBagLayout();
 		gbl_topLeftPanel.columnWidths = new int[]{0, 0};
 		gbl_topLeftPanel.rowHeights = new int[]{0, 0};
@@ -80,12 +77,13 @@ public class CalendarView {
 		topLeftPanel.add(btnNotifications, gbc_btnNotifications);
 		
 		JPanel topRightPanel = new JPanel();
+		topRightPanel.setBackground(new Color(153, 190, 255));
 		GridBagConstraints gbc_topRightPanel = new GridBagConstraints();
 		gbc_topRightPanel.insets = new Insets(0, 0, 5, 0);
 		gbc_topRightPanel.fill = GridBagConstraints.BOTH;
 		gbc_topRightPanel.gridx = 1;
 		gbc_topRightPanel.gridy = 0;
-		frame.getContentPane().add(topRightPanel, gbc_topRightPanel);
+		this.add(topRightPanel, gbc_topRightPanel);
 		GridBagLayout gbl_topRightPanel = new GridBagLayout();
 		gbl_topRightPanel.columnWidths = new int[]{170, 100, 100, 100, 100, 100, 0};
 		gbl_topRightPanel.rowHeights = new int[]{0, 0};
@@ -133,12 +131,13 @@ public class CalendarView {
 		topRightPanel.add(btnLogout, gbc_btnLogout);
 		
 		JPanel bottomLeftPanel = new JPanel();
+		bottomLeftPanel.setBackground(new Color(153, 190, 255));
 		GridBagConstraints gbc_bottomLeftPanel = new GridBagConstraints();
 		gbc_bottomLeftPanel.insets = new Insets(0, 0, 5, 5);
 		gbc_bottomLeftPanel.fill = GridBagConstraints.BOTH;
 		gbc_bottomLeftPanel.gridx = 0;
 		gbc_bottomLeftPanel.gridy = 1;
-		frame.getContentPane().add(bottomLeftPanel, gbc_bottomLeftPanel);
+		this.add(bottomLeftPanel, gbc_bottomLeftPanel);
 		GridBagLayout gbl_bottomLeftPanel = new GridBagLayout();
 		gbl_bottomLeftPanel.columnWidths = new int[]{0, 0};
 		gbl_bottomLeftPanel.rowHeights = new int[]{470, 0, 0, 0};
@@ -176,12 +175,13 @@ public class CalendarView {
 		bottomLeftPanel.add(btnEdit, gbc_btnEdit);
 		
 		JPanel bottomRightPanel = new JPanel();
+		bottomRightPanel.setBackground(new Color(153, 190, 255));
 		GridBagConstraints gbc_bottomRightPanel = new GridBagConstraints();
 		gbc_bottomRightPanel.insets = new Insets(0, 0, 5, 0);
 		gbc_bottomRightPanel.fill = GridBagConstraints.BOTH;
 		gbc_bottomRightPanel.gridx = 1;
 		gbc_bottomRightPanel.gridy = 1;
-		frame.getContentPane().add(bottomRightPanel, gbc_bottomRightPanel);
+		this.add(bottomRightPanel, gbc_bottomRightPanel);
 		GridBagLayout gbl_bottomRightPanel = new GridBagLayout();
 		gbl_bottomRightPanel.columnWidths = new int[]{80, 80, 80, 80, 80, 80, 80, 80, 0};
 		gbl_bottomRightPanel.rowHeights = new int[]{30, 50, 80, 80, 80, 80, 80, 0};
@@ -213,6 +213,7 @@ public class CalendarView {
 		gbc_btnNextWeek.insets = new Insets(0, 0, 5, 5);
 		gbc_btnNextWeek.gridx = 6;
 		gbc_btnNextWeek.gridy = 0;
+		//frame.getContentPane().
 		bottomRightPanel.add(btnNextWeek, gbc_btnNextWeek);
 		
 		JLabel lblMonday = new JLabel("Monday");
@@ -272,6 +273,7 @@ public class CalendarView {
 		bottomRightPanel.add(label_1, gbc_label_1);
 		
 		JPanel calendarPanel = new JPanel();
+		calendarPanel.setBackground(new Color(153, 190, 255));
 		GridBagConstraints gbc_calendarPanel = new GridBagConstraints();
 		gbc_calendarPanel.gridwidth = 7;
 		gbc_calendarPanel.gridheight = 5;
