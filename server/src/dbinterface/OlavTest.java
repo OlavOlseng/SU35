@@ -10,7 +10,7 @@ import models.Employee;
 public class OlavTest {
 	
 	public static void main(String[] argv) {
-		DBConnection dbc = new DBConnection();
+		DBConnection dbc = new DBConnection("root", "admin");
 		
 		try {
 			dbc.init();
@@ -43,9 +43,6 @@ public class OlavTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 	}
-	
 }
 
