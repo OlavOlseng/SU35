@@ -1,7 +1,9 @@
 package clientnetwork;
 
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -9,46 +11,76 @@ import java.net.UnknownHostException;
 
 public class ClientSocket {
 	private Socket cs;
-	private final static int connectPort = 4000;
-	private final static String host = "78.91.14.34";
+	private PrintWriter writer;
+	private final static int CONNECTPORT = 49153;
+	private final static String host = "192.168.137.1";
+	
+	public ClientSocket(){}
+	
+	public ClientSocket(String host, int socketnum)throws UnknownHostException, IOException{
+		// connect to host
+		
+		cs = new Socket(host, socketnum);
+		
+		// add writer (and reader) to client to enable writing 
+		//(and reading) to/from host.
+		
+		writer = null;
+		try {
+			writer = new PrintWriter(cs.getOutputStream(),true);
+		} catch (IOException e) {
+			System.err.println("An IOException occured during making writer");
+		}
+	}
 	
 	public static void main(String[] args){
-		ClientSocket user1 = new ClientSocket();
+		boolean connected = false;
+		ClientSocket user = null;
+		// establish connection
 		try {
-			user1.connect();
-			user1.send("hei");
-		} catch (UnknownHostException e) {
-			System.err.println("Could not connect to the host " +
-		host+ " with port number " + connectPort );
-			
-		} catch (IOException e) {
-			e.printStackTrace();
+			user = new ClientSocket(ClientSocket.host, ClientSocket.CONNECTPORT);
+			connected = true;
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
-		try {
-			user1.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void connect() throws UnknownHostException, IOException{
-		cs = new Socket(host, connectPort);
-	}
-	
-	public void send(String s){
-		if(cs != null){
-			PrintWriter writer = null;
+		
+		// sending stuff
+		BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
+		while(connected){
 			try {
-				writer = new PrintWriter(cs.getOutputStream(),true);
+				String mess = r.readLine();
+				if(mess.equals("end")){
+					break;
+				}
+				user.send(mess);
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.err.println("An IOException occured during sending or reading input");
 			}
 			
-			writer.println(s);
-			writer.close();
 		}
+		
+		// closing connection
+		try {
+			user.close();
+		} catch (IOException e) {
+			System.err.println("An IOException occured during closing socket");
+		}
+		
 	}
 	
+	// not needed, but can be used if standard constructor is used
+	public void connect(String host, int port) throws UnknownHostException, IOException{
+		cs = new Socket(host, port);
+	}
+	
+	// sends info over the socket
+	public void send(String s){
+		writer.println(s);
+	}
+	
+	// close the connection
 	public void close() throws IOException{
 		if( cs!= null) cs.close();
 	}
