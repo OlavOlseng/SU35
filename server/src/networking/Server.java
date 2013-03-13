@@ -13,16 +13,15 @@ public class Server implements Runnable{
 
 	private boolean running;
 	private ServerSocket welcomeSocket;
-	private ConnectionPool connectionPool;
 	
 	public Server() {
-		connectionPool = new ConnectionPool();
 		running = false;
 	}
 
 	public void init() {
 		try {
 			welcomeSocket = new ServerSocket(Server.SERVERPORT);
+			System.out.println("Server initialised...");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -37,25 +36,34 @@ public class Server implements Runnable{
 	public void run(){
 		//this method listens for incoming connections, and adds new connections to the pool
 		this.running = true;
-		
+		System.out.println("Server running...");
 		while(running) {
 			try {
 				Socket s = welcomeSocket.accept();
 				System.out.println(String.format("Connection received from %s ...", s.getInetAddress().getHostAddress()));
-				Connection c = new Connection(s, connectionPool);
-				connectionPool.add(c);
+				DBConnection dbc = new DBConnection("root", "admin");
+				dbc.init();
+				Connection c = new Connection(s);
+				ConnectionBridge cb = new ConnectionBridge(c, dbc);
+				ConnectionPool.getInstance().add(cb);
 				
 			}
 			catch (IOException e) {
 				e.printStackTrace();
 				running = false;
 				break;
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		try {
 			welcomeSocket.close();
-			connectionPool.flush();
-		} catch (IOException e) {
+			ConnectionPool.getInstance().flush();
+		} catch (IOException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
