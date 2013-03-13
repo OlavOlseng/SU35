@@ -39,7 +39,6 @@ public class ReceiveWorker extends Thread{
 			try {
 				msg = connection.receive();
 				if(msg == null){ 
-					System.out.println("BREAKING");
 					break;
 				}
 			} catch (IOException e) {
