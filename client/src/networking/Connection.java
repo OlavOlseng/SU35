@@ -11,15 +11,12 @@ public class Connection {
 	private Socket socket;
 	private BufferedReader in;
 	private PrintWriter out;
-	private ReceiveWorker receiveWorker;
 
-	public Connection(Socket s, MessageListener ml) throws IOException {
+	public Connection(Socket s) throws IOException {
 		this.socket = s;
-		this.receiveWorker = new ReceiveWorker(this, ml);
 		if(socket.isBound()) {
 			this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			this.out = new PrintWriter(socket.getOutputStream(),true);
-			this.receiveWorker.start();
 		}
 		
 	}
@@ -29,11 +26,11 @@ public class Connection {
 		socket = new Socket(host, port);
 		this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		this.out = new PrintWriter(socket.getOutputStream(),true);
-		receiveWorker.start();
 	}
 	
 	public void send(String msg) throws IOException {
-		out.println(msg);
+		if(socket.isBound())
+			out.println(msg);
 	}
 
 	public void close() throws IOException {

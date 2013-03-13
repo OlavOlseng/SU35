@@ -3,25 +3,33 @@ package networking;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 public class SocketTest implements MessageListener{
 	public static int CLIENTPORT = 49153;
-	public static String host = "78.91.15.184";
+	public static String host = "localhost";
 	
 	private Connection conn;
 	private Socket client;
 	
 	public SocketTest(String host,int port) throws UnknownHostException, IOException{
 		client = new Socket();
-		conn = new Connection(client, this);
+		conn = new Connection(client);
 		conn.connect(host, port);
 	}
 	
 	public static void main(String[] args) {
 		try {
 			SocketTest test = new SocketTest(SocketTest.host, SocketTest.CLIENTPORT);
-			test.conn.send("select * from employee");
-		
+			Scanner sc = new Scanner(System.in);
+			String msg = null;
+			do{
+				msg = sc.nextLine();
+				test.conn.send(msg);
+			}while(!msg.trim().equals("q"));
+			System.out.println("Closing connection to server");
+			test.conn.close();
+			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
