@@ -13,7 +13,7 @@ public class ClientSocket {
 	private Socket cs;
 	private PrintWriter writer;
 	private final static int CONNECTPORT = 49153;
-	private final static String host = "192.168.137.1";
+	private final static String host = "78.91.15.184";
 	
 	public ClientSocket(){}
 	
