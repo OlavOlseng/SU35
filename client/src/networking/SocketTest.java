@@ -7,15 +7,18 @@ import java.util.Scanner;
 
 public class SocketTest implements MessageListener{
 	public static int CLIENTPORT = 49153;
-	public static String host = "localhost";
+	public static String host = "78.91.15.184";
 	
 	private Connection conn;
 	private Socket client;
-	
+	private ReceiveWorker rw;
 	public SocketTest(String host,int port) throws UnknownHostException, IOException{
 		client = new Socket();
 		conn = new Connection(client);
 		conn.connect(host, port);
+		rw = new ReceiveWorker(conn, this);
+		rw.start();
+		
 	}
 	
 	public static void main(String[] args) {

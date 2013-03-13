@@ -39,6 +39,7 @@ public class ConnectionBridge implements MessageListener {
 		// TODO Auto-generated method stub
 		System.out.println(msg);
 		try {
+			ConnectionPool.getInstance().broadcast(String.format("Message received from %s: %s", inetConnection.getRemoteAddress().getHostAddress(), msg));
 			if(msg == null) 
 				close();
 		} catch (IOException e) {
