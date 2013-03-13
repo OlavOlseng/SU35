@@ -38,9 +38,6 @@ public class ReceiveWorker extends Thread{
 			String msg = null;
 			try {
 				msg = connection.receive();
-				if(msg == null){ 
-					break;
-				}
 			} catch (IOException e) {
 				e.printStackTrace();
 				break;
@@ -48,14 +45,10 @@ public class ReceiveWorker extends Thread{
 				for(MessageListener ml : listeners) {
 					ml.messageReceived(msg);
 				}
+				if(msg == null){ 
+					return;
+				}
 			}
-		}
-
-		try {
-			connection.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 }

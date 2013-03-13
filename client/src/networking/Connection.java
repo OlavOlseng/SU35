@@ -19,7 +19,6 @@ public class Connection {
 			this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			this.out = new PrintWriter(socket.getOutputStream(),true);
 		}
-		
 	}
 	
 	public InetAddress getRemoteAddress() {
