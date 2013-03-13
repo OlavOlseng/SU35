@@ -16,7 +16,7 @@ public class Connection {
 	public Connection(Socket s, MessageListener ml) throws IOException {
 		this.socket = s;
 		this.receiveWorker = new ReceiveWorker(this, ml);
-		if(!isClosed()) {
+		if(socket.isBound()) {
 			this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			this.out = new PrintWriter(socket.getOutputStream(),true);
 			this.receiveWorker.start();

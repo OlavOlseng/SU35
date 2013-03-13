@@ -12,13 +12,16 @@ public class SocketTest implements MessageListener{
 	private Socket client;
 	
 	public SocketTest(String host,int port) throws UnknownHostException, IOException{
-		client = new Socket(host, CLIENTPORT);
+		client = new Socket();
 		conn = new Connection(client, this);
+		conn.connect(host, port);
 	}
 	
 	public static void main(String[] args) {
 		try {
 			SocketTest test = new SocketTest(SocketTest.host, SocketTest.CLIENTPORT);
+			test.conn.send("select * from employee");
+		
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
