@@ -4,14 +4,22 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
+
+import java.awt.Component;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -20,14 +28,18 @@ import javax.swing.SwingConstants;
 
 public class CalendarView extends JPanel{
 
-
+	static JFrame frame;
+	private JPanel topLeftPanel, topRightPanel, bottomLeftPanel, bottomRightPanel, calendarPanel;
+	private JButton btnNotifications, btnMe, btnCalendars, btnGoto, btnCreate, btnLogout, btnMore, btnEdit, btnPreviousWeek, btnNextWeek;
+	private JTextArea textAreaInfo;
+	private JLabel lblWeek, lblMonday, lblTuesday, lblWednesday, lblThursday, lblFriday, lblSaturday, lblSunday, lbl_00, lbl_06, lbl_12, lbl_18, lbl_24;
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		
 		
-		JFrame frame = new JFrame("Superblaster");
+		frame = new JFrame("Superblaster");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBounds(50, 50, 800, 600);
 		frame.setContentPane(new CalendarView());
@@ -40,7 +52,7 @@ public class CalendarView extends JPanel{
 	 */
 	public CalendarView() {
 		initialize();
-		}
+	}
 
 	/**
 	 * Initialize the contents of the frame.
@@ -55,7 +67,7 @@ public class CalendarView extends JPanel{
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0};
 		this.setLayout(gridBagLayout);
 		
-		JPanel topLeftPanel = new JPanel();
+		topLeftPanel = new JPanel();
 		GridBagConstraints gbc_topLeftPanel = new GridBagConstraints();
 		gbc_topLeftPanel.insets = new Insets(0, 0, 5, 5);
 		gbc_topLeftPanel.fill = GridBagConstraints.BOTH;
@@ -69,14 +81,14 @@ public class CalendarView extends JPanel{
 		gbl_topLeftPanel.rowWeights = new double[]{1.0, Double.MIN_VALUE};
 		topLeftPanel.setLayout(gbl_topLeftPanel);
 		
-		JButton btnNotifications = new JButton("Notifications");
+		btnNotifications = new JButton("Notifications");
 		GridBagConstraints gbc_btnNotifications = new GridBagConstraints();
 		gbc_btnNotifications.fill = GridBagConstraints.BOTH;
 		gbc_btnNotifications.gridx = 0;
 		gbc_btnNotifications.gridy = 0;
 		topLeftPanel.add(btnNotifications, gbc_btnNotifications);
 		
-		JPanel topRightPanel = new JPanel();
+		topRightPanel = new JPanel();
 		topRightPanel.setBackground(new Color(153, 190, 255));
 		GridBagConstraints gbc_topRightPanel = new GridBagConstraints();
 		gbc_topRightPanel.insets = new Insets(0, 0, 5, 0);
@@ -91,7 +103,7 @@ public class CalendarView extends JPanel{
 		gbl_topRightPanel.rowWeights = new double[]{1.0, Double.MIN_VALUE};
 		topRightPanel.setLayout(gbl_topRightPanel);
 		
-		JButton btnMe = new JButton("Me");
+		btnMe = new JButton("Me");
 		GridBagConstraints gbc_btnMe = new GridBagConstraints();
 		gbc_btnMe.fill = GridBagConstraints.BOTH;
 		gbc_btnMe.insets = new Insets(0, 0, 0, 5);
@@ -99,7 +111,7 @@ public class CalendarView extends JPanel{
 		gbc_btnMe.gridy = 0;
 		topRightPanel.add(btnMe, gbc_btnMe);
 		
-		JButton btnCalendars = new JButton("Calendars");
+		btnCalendars = new JButton("Calendars");
 		GridBagConstraints gbc_btnCalendars = new GridBagConstraints();
 		gbc_btnCalendars.fill = GridBagConstraints.BOTH;
 		gbc_btnCalendars.insets = new Insets(0, 0, 0, 5);
@@ -107,7 +119,25 @@ public class CalendarView extends JPanel{
 		gbc_btnCalendars.gridy = 0;
 		topRightPanel.add(btnCalendars, gbc_btnCalendars);
 		
-		JButton btnGoto = new JButton("Go to");
+		btnGoto = new JButton("Go to");
+		btnGoto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GotoDialog gotoDialog = new GotoDialog((JFrame) btnGoto.getTopLevelAncestor(), true);
+				gotoDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				gotoDialog.setVisible(true);
+				
+				if (gotoDialog.getAnswer() == "abort") {
+					gotoDialog.dispose();
+				}
+				else if (gotoDialog.getAnswer() == "week") {
+					gotoDialog.dispose();
+				}
+				else if (gotoDialog.getAnswer() == "date") {
+					//Show date
+				}
+			}
+		});
+		
 		GridBagConstraints gbc_btnGoto = new GridBagConstraints();
 		gbc_btnGoto.fill = GridBagConstraints.BOTH;
 		gbc_btnGoto.insets = new Insets(0, 0, 0, 5);
@@ -115,7 +145,12 @@ public class CalendarView extends JPanel{
 		gbc_btnGoto.gridy = 0;
 		topRightPanel.add(btnGoto, gbc_btnGoto);
 		
-		JButton btnCreate = new JButton("Create");
+		btnCreate = new JButton("Create");
+		btnCreate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//Open EditView
+			}
+		});
 		GridBagConstraints gbc_btnCreate = new GridBagConstraints();
 		gbc_btnCreate.fill = GridBagConstraints.BOTH;
 		gbc_btnCreate.insets = new Insets(0, 0, 0, 5);
@@ -123,14 +158,26 @@ public class CalendarView extends JPanel{
 		gbc_btnCreate.gridy = 0;
 		topRightPanel.add(btnCreate, gbc_btnCreate);
 		
-		JButton btnLogout = new JButton("Logout");
+		btnLogout = new JButton("Logout");
+		btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int n = JOptionPane.showConfirmDialog(
+					    JOptionPane.getFrameForComponent(getRootPane()),
+					    "Are you sure you wish to logout?",
+					    "Logout",
+					    JOptionPane.YES_NO_OPTION);
+				if (n == 0) {
+					JOptionPane.getFrameForComponent(btnLogout).dispose();
+				}
+			}
+		});
 		GridBagConstraints gbc_btnLogout = new GridBagConstraints();
 		gbc_btnLogout.fill = GridBagConstraints.BOTH;
 		gbc_btnLogout.gridx = 5;
 		gbc_btnLogout.gridy = 0;
 		topRightPanel.add(btnLogout, gbc_btnLogout);
 		
-		JPanel bottomLeftPanel = new JPanel();
+		bottomLeftPanel = new JPanel();
 		bottomLeftPanel.setBackground(new Color(153, 190, 255));
 		GridBagConstraints gbc_bottomLeftPanel = new GridBagConstraints();
 		gbc_bottomLeftPanel.insets = new Insets(0, 0, 5, 5);
@@ -145,7 +192,7 @@ public class CalendarView extends JPanel{
 		gbl_bottomLeftPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		bottomLeftPanel.setLayout(gbl_bottomLeftPanel);
 		
-		JTextArea textAreaInfo = new JTextArea();
+		textAreaInfo = new JTextArea();
 		textAreaInfo.setEditable(false);
 		textAreaInfo.setRows(19);
 		textAreaInfo.setText("Info:");
@@ -157,7 +204,12 @@ public class CalendarView extends JPanel{
 		gbc_textAreaInfo.gridy = 0;
 		bottomLeftPanel.add(textAreaInfo, gbc_textAreaInfo);
 		
-		JButton btnMore = new JButton("More");
+		btnMore = new JButton("More");
+		btnMore.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//Open InfoView
+			}
+		});
 		GridBagConstraints gbc_btnMore = new GridBagConstraints();
 		gbc_btnMore.anchor = GridBagConstraints.SOUTH;
 		gbc_btnMore.fill = GridBagConstraints.HORIZONTAL;
@@ -166,7 +218,12 @@ public class CalendarView extends JPanel{
 		gbc_btnMore.gridy = 1;
 		bottomLeftPanel.add(btnMore, gbc_btnMore);
 		
-		JButton btnEdit = new JButton("Edit");
+		btnEdit = new JButton("Edit");
+		btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//Open EditView
+			}
+		});
 		GridBagConstraints gbc_btnEdit = new GridBagConstraints();
 		gbc_btnEdit.anchor = GridBagConstraints.SOUTH;
 		gbc_btnEdit.fill = GridBagConstraints.HORIZONTAL;
@@ -174,7 +231,7 @@ public class CalendarView extends JPanel{
 		gbc_btnEdit.gridy = 2;
 		bottomLeftPanel.add(btnEdit, gbc_btnEdit);
 		
-		JPanel bottomRightPanel = new JPanel();
+		bottomRightPanel = new JPanel();
 		bottomRightPanel.setBackground(new Color(153, 190, 255));
 		GridBagConstraints gbc_bottomRightPanel = new GridBagConstraints();
 		gbc_bottomRightPanel.insets = new Insets(0, 0, 5, 0);
@@ -189,7 +246,12 @@ public class CalendarView extends JPanel{
 		gbl_bottomRightPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		bottomRightPanel.setLayout(gbl_bottomRightPanel);
 		
-		JButton btnPreviousWeek = new JButton("Previous week");
+		btnPreviousWeek = new JButton("Previous week");
+		btnPreviousWeek.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//Load previous week in calendar
+			}
+		});
 		GridBagConstraints gbc_btnPreviousWeek = new GridBagConstraints();
 		gbc_btnPreviousWeek.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnPreviousWeek.gridwidth = 2;
@@ -198,7 +260,7 @@ public class CalendarView extends JPanel{
 		gbc_btnPreviousWeek.gridy = 0;
 		bottomRightPanel.add(btnPreviousWeek, gbc_btnPreviousWeek);
 		
-		JLabel lblWeek = new JLabel("Week: XX");
+		lblWeek = new JLabel("Week: XX");
 		GridBagConstraints gbc_lblWeek = new GridBagConstraints();
 		gbc_lblWeek.gridwidth = 4;
 		gbc_lblWeek.insets = new Insets(0, 0, 5, 5);
@@ -206,7 +268,12 @@ public class CalendarView extends JPanel{
 		gbc_lblWeek.gridy = 0;
 		bottomRightPanel.add(lblWeek, gbc_lblWeek);
 		
-		JButton btnNextWeek = new JButton("Next week");
+		btnNextWeek = new JButton("Next week");
+		btnNextWeek.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//Load next week in calendar
+			}
+		});
 		GridBagConstraints gbc_btnNextWeek = new GridBagConstraints();
 		gbc_btnNextWeek.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnNextWeek.gridwidth = 2;
@@ -216,63 +283,63 @@ public class CalendarView extends JPanel{
 		//frame.getContentPane().
 		bottomRightPanel.add(btnNextWeek, gbc_btnNextWeek);
 		
-		JLabel lblMonday = new JLabel("Monday");
+		lblMonday = new JLabel("Monday");
 		GridBagConstraints gbc_lblMonday = new GridBagConstraints();
 		gbc_lblMonday.insets = new Insets(0, 0, 5, 5);
 		gbc_lblMonday.gridx = 1;
 		gbc_lblMonday.gridy = 1;
 		bottomRightPanel.add(lblMonday, gbc_lblMonday);
 		
-		JLabel lblTuesday = new JLabel("Tuesday");
+		lblTuesday = new JLabel("Tuesday");
 		GridBagConstraints gbc_lblTuesday = new GridBagConstraints();
 		gbc_lblTuesday.insets = new Insets(0, 0, 5, 5);
 		gbc_lblTuesday.gridx = 2;
 		gbc_lblTuesday.gridy = 1;
 		bottomRightPanel.add(lblTuesday, gbc_lblTuesday);
 		
-		JLabel lblWednesday = new JLabel("Wednesday");
+		lblWednesday = new JLabel("Wednesday");
 		GridBagConstraints gbc_lblWednesday = new GridBagConstraints();
 		gbc_lblWednesday.insets = new Insets(0, 0, 5, 5);
 		gbc_lblWednesday.gridx = 3;
 		gbc_lblWednesday.gridy = 1;
 		bottomRightPanel.add(lblWednesday, gbc_lblWednesday);
 		
-		JLabel lblThursday = new JLabel("Thursday");
+		lblThursday = new JLabel("Thursday");
 		GridBagConstraints gbc_lblThursday = new GridBagConstraints();
 		gbc_lblThursday.insets = new Insets(0, 0, 5, 5);
 		gbc_lblThursday.gridx = 4;
 		gbc_lblThursday.gridy = 1;
 		bottomRightPanel.add(lblThursday, gbc_lblThursday);
 		
-		JLabel lblFriday = new JLabel("Friday");
+		lblFriday = new JLabel("Friday");
 		GridBagConstraints gbc_lblFriday = new GridBagConstraints();
 		gbc_lblFriday.insets = new Insets(0, 0, 5, 5);
 		gbc_lblFriday.gridx = 5;
 		gbc_lblFriday.gridy = 1;
 		bottomRightPanel.add(lblFriday, gbc_lblFriday);
 		
-		JLabel lblSaturday = new JLabel("Saturday");
+		lblSaturday = new JLabel("Saturday");
 		GridBagConstraints gbc_lblSaturday = new GridBagConstraints();
 		gbc_lblSaturday.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSaturday.gridx = 6;
 		gbc_lblSaturday.gridy = 1;
 		bottomRightPanel.add(lblSaturday, gbc_lblSaturday);
 		
-		JLabel lblSunday = new JLabel("Sunday");
+		lblSunday = new JLabel("Sunday");
 		GridBagConstraints gbc_lblSunday = new GridBagConstraints();
 		gbc_lblSunday.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSunday.gridx = 7;
 		gbc_lblSunday.gridy = 1;
 		bottomRightPanel.add(lblSunday, gbc_lblSunday);
 		
-		JLabel label_1 = new JLabel("00:00");
+		lbl_00 = new JLabel("00:00");
 		GridBagConstraints gbc_label_1 = new GridBagConstraints();
 		gbc_label_1.insets = new Insets(0, 0, 5, 5);
 		gbc_label_1.gridx = 0;
 		gbc_label_1.gridy = 2;
-		bottomRightPanel.add(label_1, gbc_label_1);
+		bottomRightPanel.add(lbl_00, gbc_label_1);
 		
-		JPanel calendarPanel = new JPanel();
+		calendarPanel = new JPanel();
 		calendarPanel.setBackground(new Color(153, 190, 255));
 		GridBagConstraints gbc_calendarPanel = new GridBagConstraints();
 		gbc_calendarPanel.gridwidth = 7;
@@ -282,33 +349,34 @@ public class CalendarView extends JPanel{
 		gbc_calendarPanel.gridy = 2;
 		bottomRightPanel.add(calendarPanel, gbc_calendarPanel);
 		
-		JLabel label_2 = new JLabel("06:00");
+		lbl_06 = new JLabel("06:00");
 		GridBagConstraints gbc_label_2 = new GridBagConstraints();
 		gbc_label_2.insets = new Insets(0, 0, 5, 5);
 		gbc_label_2.gridx = 0;
 		gbc_label_2.gridy = 3;
-		bottomRightPanel.add(label_2, gbc_label_2);
+		bottomRightPanel.add(lbl_06, gbc_label_2);
 		
-		JLabel label_3 = new JLabel("12:00");
+		lbl_12 = new JLabel("12:00");
 		GridBagConstraints gbc_label_3 = new GridBagConstraints();
 		gbc_label_3.insets = new Insets(0, 0, 5, 5);
 		gbc_label_3.gridx = 0;
 		gbc_label_3.gridy = 4;
-		bottomRightPanel.add(label_3, gbc_label_3);
+		bottomRightPanel.add(lbl_12, gbc_label_3);
 		
-		JLabel label_4 = new JLabel("18:00");
+		lbl_18 = new JLabel("18:00");
 		GridBagConstraints gbc_label_4 = new GridBagConstraints();
 		gbc_label_4.insets = new Insets(0, 0, 5, 5);
 		gbc_label_4.gridx = 0;
 		gbc_label_4.gridy = 5;
-		bottomRightPanel.add(label_4, gbc_label_4);
+		bottomRightPanel.add(lbl_18, gbc_label_4);
 		
-		JLabel label_5 = new JLabel("23:59");
+		lbl_24 = new JLabel("23:59");
 		GridBagConstraints gbc_label_5 = new GridBagConstraints();
 		gbc_label_5.insets = new Insets(0, 0, 0, 5);
 		gbc_label_5.gridx = 0;
 		gbc_label_5.gridy = 6;
-		bottomRightPanel.add(label_5, gbc_label_5);
+		bottomRightPanel.add(lbl_24, gbc_label_5);
+		
 	}
 
 }
