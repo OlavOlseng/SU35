@@ -15,15 +15,20 @@ public class Connection {
 
 	public Connection(Socket s, MessageListener ml) throws IOException {
 		this.socket = s;
-		this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		this.out = new DataOutputStream(socket.getOutputStream());
 		this.receiveWorker = new ReceiveWorker(this, ml);
-		this.receiveWorker.start();
+		if(!isClosed()) {
+			this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			this.out = new DataOutputStream(socket.getOutputStream());
+			this.receiveWorker.start();
+		}
+		
 	}
 	
 	
 	public void connect(String host, int port) throws IOException{
 		socket = new Socket(host, port);
+		this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		this.out = new DataOutputStream(socket.getOutputStream());
 		receiveWorker.start();
 	}
 	
