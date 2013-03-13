@@ -1,16 +1,16 @@
 package networking;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 public class Connection {
 
 	private Socket socket;
 	private BufferedReader in;
-	private DataOutputStream out;
+	private PrintWriter out;
 	private ReceiveWorker receiveWorker;
 
 	public Connection(Socket s, MessageListener ml) throws IOException {
@@ -18,7 +18,7 @@ public class Connection {
 		this.receiveWorker = new ReceiveWorker(this, ml);
 		if(!isClosed()) {
 			this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			this.out = new DataOutputStream(socket.getOutputStream());
+			this.out = new PrintWriter(socket.getOutputStream(),true);
 			this.receiveWorker.start();
 		}
 		
@@ -28,12 +28,12 @@ public class Connection {
 	public void connect(String host, int port) throws IOException{
 		socket = new Socket(host, port);
 		this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		this.out = new DataOutputStream(socket.getOutputStream());
+		this.out = new PrintWriter(socket.getOutputStream(),true);
 		receiveWorker.start();
 	}
 	
 	public void send(String msg) throws IOException {
-		out.writeBytes(msg);
+		out.println(msg);
 	}
 
 	public void close() throws IOException {
