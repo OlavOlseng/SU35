@@ -50,11 +50,11 @@ public class ClientSocket {
 		BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
 		while(connected){
 			try {
-				String mess = r.readLine();
-				if(mess.equals("end")){
+				String message = r.readLine();
+				if(message.equals("end")){
 					break;
 				}
-				user.send(mess);
+				user.send(message);
 			} catch (IOException e) {
 				System.err.println("An IOException occured during sending or reading input");
 			}
