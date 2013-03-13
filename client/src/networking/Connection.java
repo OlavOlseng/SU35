@@ -20,22 +20,28 @@ public class Connection {
 		this.receiveWorker = new ReceiveWorker(this, ml);
 		this.receiveWorker.start();
 	}
-
+	
+	
+	public void connect(String host, int port) throws IOException{
+		socket = new Socket(host, port);
+		receiveWorker.start();
+	}
+	
 	public void send(String msg) throws IOException {
 		out.writeBytes(msg);
 	}
 
-	public String recieve() throws IOException {
-		return in.readLine();
-	}
-
 	public void close() throws IOException {
 		socket.close();
-		System.out.println(String.format("Connection closed from %s ...", socket.getInetAddress().getHostAddress()));
+		System.out.println(String.format("Connection closed on, %s ...", socket.getInetAddress().getHostAddress()));
 	}
 
 	public String receive() throws IOException {
 		String	msg = in.readLine();
 		return msg;
+	}
+	
+	public boolean isClosed() {
+		return socket.isClosed();
 	}
 }

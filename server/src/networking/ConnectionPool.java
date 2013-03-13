@@ -16,19 +16,25 @@ public class ConnectionPool implements MessageListener{
 	}
 	
 	public void close(Connection c) throws IOException {
+		if(!c.isClosed())
+			c.close();
 		pool.remove(c);
-		c.close();
 	}
 	
 	public void flush() throws IOException {
 		for(Connection c : pool) {
-			c.close();
+			if(!c.isClosed())
+				c.close();
 		}
 		pool.clear();
 	}
 	
 	public void broadcast(String msg) throws IOException {
 		for (Connection c : pool) {
+			if (c.isClosed()) {
+				close(c);
+				continue;
+			}
 			c.send(msg);
 		}
 	}
@@ -37,6 +43,4 @@ public class ConnectionPool implements MessageListener{
 	public void messageReceived(String msg) {
 		System.out.println(msg);
 	}
-	
-	
 }

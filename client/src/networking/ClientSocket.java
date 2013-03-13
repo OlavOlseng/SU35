@@ -1,4 +1,4 @@
-package clientnetwork;
+package networking;
 
 
 import java.io.BufferedReader;
