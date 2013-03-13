@@ -8,7 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
-public class DBConnection {
+import networking.MessageListener;
+
+public class DBConnection implements MessageListener{
 	
 	private Properties p;
 	private Connection connection;
@@ -52,6 +54,12 @@ public class DBConnection {
 
 	public PreparedStatement preparedStatement(String sql) throws SQLException {
 		return connection.prepareStatement(sql);
+	}
+
+	@Override
+	public void messageReceived(String msg) {
+		// TODO Auto-generated method stub
+		System.out.println(msg);
 	}
 	
 }
