@@ -9,4 +9,12 @@ public class RoomManager {
 	public RoomManager(int minRoomSize) {
 		this.minRoomSize = minRoomSize;
 	}
+	
+	public ArrayList<MeetingRoom> findSuitableRooms() {
+		String query = "SELECT...";
+		/*
+		 * send query to server
+		 */
+		return meetingRooms;
+	}
 }

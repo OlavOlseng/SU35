@@ -7,12 +7,11 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Appointment {
-	private final int appointmentID;
-	private Calendar startTime;
-	private Calendar endTime;
-	private String description;
-	private String location;
-	private MeetingRoom meetingRoom;
+	protected final int appointmentID;
+	protected Calendar startTime;
+	protected Calendar endTime;
+	protected String description;
+	protected String location;
 	
 	public Appointment(int appointmentID) {
 		this.appointmentID = appointmentID;
@@ -96,16 +95,7 @@ public class Appointment {
 		return location;
 	}
 	
-	public void setMeetingRoom(MeetingRoom meetingRoom) {
-		this.meetingRoom = meetingRoom;
-	}
-	
-	public MeetingRoom getMeetingRoom() {
-		return meetingRoom;
-	}
-	
 	public String toString() {
-		return "Start time:\t" + startTime.toString() + "\nEnd time:\t" + endTime.toString() + 
-				"\nMeeting room:\t" + meetingRoom.toString();
+		return "Start time:\t" + startTime.toString() + "\nEnd time:\t" + endTime.toString();
 	}
 }
