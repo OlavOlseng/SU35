@@ -24,8 +24,9 @@ public class Meeting extends Appointment {
 		return meetingLeader;
 	}
 	
+	// May cause null-pointer hell, too lazy to fix.
 	public String toString() {
-		return "Start time:\t" + startTime.toString() + "\nEnd time:\t" + endTime.toString() + 
+		return "Start time:\t" + startTime.getTime().toString() + "\nEnd time:\t" + endTime.getTime().toString() + 
 				"\nMeeting room:\t" + meetingRoom.toString() + "\nMeeting Leader:\t" + meetingLeader.toString();
 	}
 }
