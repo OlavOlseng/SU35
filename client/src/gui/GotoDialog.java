@@ -25,24 +25,34 @@ public class GotoDialog extends JDialog implements ActionListener{
     private JButton btnGo1 = null;
     private JButton btnGo2 = null;
     private JButton cancelButton = null;
-    private String answer = "";
+    private int answer;
+    private String week;
+    private String date;
     
-    public String getAnswer() {
-    	return answer;
+    public String getWeek() {
+    	return week;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public int getAnswer() {
+    	return this.answer;
     }
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
-//			GotoDialog dialog = new GotoDialog();
-//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	public static void main(String[] args) {
+//		try {
+////			GotoDialog dialog = new GotoDialog();
+////			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+////			dialog.setVisible(true);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	/**
 	 * Create the dialog.
@@ -121,11 +131,7 @@ public class GotoDialog extends JDialog implements ActionListener{
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				cancelButton = new JButton("Abort");
-				cancelButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						answer = "abort";
-					}
-				});
+				cancelButton.addActionListener(this);
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
@@ -133,13 +139,19 @@ public class GotoDialog extends JDialog implements ActionListener{
 	}
 	public void actionPerformed(ActionEvent e) {
         if(btnGo1 == e.getSource()) {
-            answer = "week";
+            answer = 1;
+            //System.out.println(answer);
+            week = txtWeek.getText();
+            this.dispose();
         }
         else if(btnGo2 == e.getSource()) {
-            answer = "date";
+            answer = 2;
+            //System.out.println(answer);
+            date = txtDate.getText();
+            this.dispose();
         }
-//        else if(cancelButton == e.getSource()) {
-//        	answer = "abort";
-//        }
+        else if(cancelButton == e.getSource()) {
+        	this.dispose();
+        }
     }
 }

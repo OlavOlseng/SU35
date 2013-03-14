@@ -18,8 +18,11 @@ import javax.swing.JTextField;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
+import javax.swing.SwingUtilities;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
 
 
 public class EditView extends JPanel/*JFrame*/ {
@@ -136,6 +139,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		this.add(peopleLabel, gbc_peopleLabel);
 		
 		JLabel dateLabel = new JLabel("Date:");
+		dateLabel.setToolTipText("Enter date in the format: DD-MM-YYYY");
 		GridBagConstraints gbc_dateLabel = new GridBagConstraints();
 		gbc_dateLabel.anchor = GridBagConstraints.EAST;
 		gbc_dateLabel.insets = new Insets(0, 0, 5, 5);
@@ -152,6 +156,22 @@ public class EditView extends JPanel/*JFrame*/ {
 		this.add(dateField, gbc_dateField);
 		dateField.setColumns(20);
 		
+		JButton chooseDate = new JButton("Choose Date");
+		GridBagConstraints gbc_chooseDate = new GridBagConstraints();
+		gbc_chooseDate.fill = GridBagConstraints.BOTH;
+		gbc_chooseDate.insets = new Insets(0, 0, 5, 5);
+		gbc_chooseDate.gridx = 3;
+		gbc_chooseDate.gridy = 4;
+		add(chooseDate, gbc_chooseDate);
+		
+		chooseDate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event)
+				{
+				dateField.setText(new DatePicker((JFrame)SwingUtilities.getRoot(
+						_parentContentPane)).setPickedDate());
+				}
+		});
+		
 		JList peopleList = new JList();
 		GridBagConstraints gbc_peopleList = new GridBagConstraints();
 		gbc_peopleList.insets = new Insets(0, 0, 5, 5);
@@ -163,6 +183,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		this.add(peopleList, gbc_peopleList);
 		
 		JLabel startLabel = new JLabel("Start:");
+		startLabel.setToolTipText("Enter time in the format: HH:MM:SS");
 		GridBagConstraints gbc_startLabel = new GridBagConstraints();
 		gbc_startLabel.anchor = GridBagConstraints.EAST;
 		gbc_startLabel.insets = new Insets(0, 0, 5, 5);
@@ -180,6 +201,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		startField.setColumns(20);
 		
 		JLabel endLabel = new JLabel("End:");
+		endLabel.setToolTipText("Enter time in the format: HH:MM:SS");
 		GridBagConstraints gbc_endLabel = new GridBagConstraints();
 		gbc_endLabel.anchor = GridBagConstraints.EAST;
 		gbc_endLabel.insets = new Insets(0, 0, 5, 5);
@@ -198,16 +220,18 @@ public class EditView extends JPanel/*JFrame*/ {
 		
 		JButton addButton = new JButton("Add");
 		GridBagConstraints gbc_addButton = new GridBagConstraints();
+		gbc_addButton.fill = GridBagConstraints.BOTH;
 		gbc_addButton.insets = new Insets(0, 0, 5, 5);
 		gbc_addButton.gridx = 4;
-		gbc_addButton.gridy = 6;
+		gbc_addButton.gridy = 7;
 		this.add(addButton, gbc_addButton);
 		
 		JButton removeButton = new JButton("Remove");
 		GridBagConstraints gbc_removeButton = new GridBagConstraints();
+		gbc_removeButton.fill = GridBagConstraints.BOTH;
 		gbc_removeButton.insets = new Insets(0, 0, 5, 5);
 		gbc_removeButton.gridx = 5;
-		gbc_removeButton.gridy = 6;
+		gbc_removeButton.gridy = 7;
 		this.add(removeButton, gbc_removeButton);
 		
 		JLabel descriptionLabel = new JLabel("Description:");

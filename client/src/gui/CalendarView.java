@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Frame;
@@ -12,7 +13,9 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
 import javax.swing.JDialog;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -34,6 +37,8 @@ public class CalendarView extends JPanel{
 	private JButton btnNotifications, btnMe, btnCalendars, btnGoto, btnCreate, btnLogout, btnMore, btnEdit, btnPreviousWeek, btnNextWeek;
 	private JTextArea textAreaInfo;
 	private JLabel lblWeek, lblMonday, lblTuesday, lblWednesday, lblThursday, lblFriday, lblSaturday, lblSunday, lbl_00, lbl_06, lbl_12, lbl_18, lbl_24;
+	private JPopupMenu menuNotifications, menuCalendars;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -53,6 +58,8 @@ public class CalendarView extends JPanel{
 	 */
 	public CalendarView(JPanel parentContentPane) {
 		initialize(parentContentPane);
+		//updateInfo();
+		btnNotifications.setText("Notifications (" + Integer.toString(menuNotifications.getComponentCount()) + ")");
 	}
 
 	/**
@@ -85,11 +92,32 @@ public class CalendarView extends JPanel{
 		topLeftPanel.setLayout(gbl_topLeftPanel);
 		
 		btnNotifications = new JButton("Notifications");
+		
+		menuNotifications = new JPopupMenu();
+		menuNotifications.add("Menuitem 1");
+		menuNotifications.add("Menuitem 2");
+		menuNotifications.add(new JMenuItem("Menuitem 3"));
+
+		btnNotifications.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        menuNotifications.show(btnNotifications, btnNotifications.getBounds().x, btnNotifications.getBounds().y
+		           + btnNotifications.getBounds().height);
+		    }
+		});
+		
 		GridBagConstraints gbc_btnNotifications = new GridBagConstraints();
 		gbc_btnNotifications.fill = GridBagConstraints.BOTH;
 		gbc_btnNotifications.gridx = 0;
 		gbc_btnNotifications.gridy = 0;
 		topLeftPanel.add(btnNotifications, gbc_btnNotifications);
+		
+//		lblNotifications = new JLabel();
+//		GridBagConstraints gbc_lblNotifications = new GridBagConstraints();
+//		gbc_lblNotifications.insets = new Insets(0, 0, 5, 5);
+//		gbc_lblNotifications.gridx = 0;
+//		gbc_lblNotifications.gridy = 0;
+//		topLeftPanel.add(lblNotifications, gbc_lblNotifications);
+//		lblNotifications.setVisible(false);
 		
 		topRightPanel = new JPanel();
 		topRightPanel.setBackground(new Color(153, 190, 255));
@@ -115,6 +143,18 @@ public class CalendarView extends JPanel{
 		topRightPanel.add(btnMe, gbc_btnMe);
 		
 		btnCalendars = new JButton("Calendars");
+		menuCalendars = new JPopupMenu();
+		menuCalendars.add("Menuitem 1");
+		menuCalendars.add("Menuitem 2");
+		menuCalendars.add(new JMenuItem("Menuitem 3"));
+
+		btnCalendars.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        menuCalendars.show(btnCalendars, btnCalendars.getBounds().x -270, btnCalendars.getBounds().y
+		           + btnCalendars.getBounds().height);
+		    }
+		});
+		
 		GridBagConstraints gbc_btnCalendars = new GridBagConstraints();
 		gbc_btnCalendars.fill = GridBagConstraints.BOTH;
 		gbc_btnCalendars.insets = new Insets(0, 0, 0, 5);
@@ -129,14 +169,13 @@ public class CalendarView extends JPanel{
 				gotoDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				gotoDialog.setVisible(true);
 				
-				if (gotoDialog.getAnswer() == "abort") {
-					gotoDialog.dispose();
+				if (gotoDialog.getAnswer() == 1) {
+					//System.out.println(gotoDialog.getWeek());
+					//Update CalendarView with week from gotoDialog.getWeek()
 				}
-				else if (gotoDialog.getAnswer() == "week") {
-					gotoDialog.dispose();
-				}
-				else if (gotoDialog.getAnswer() == "date") {
-					//Show date
+				else if (gotoDialog.getAnswer() == 2) {
+					//System.out.println(gotoDialog.getDate());
+					//Update CalendarView with week from gotoDialog.getWeek()
 				}
 			}
 		});
@@ -358,6 +397,26 @@ public class CalendarView extends JPanel{
 		gbc_calendarPanel.gridx = 1;
 		gbc_calendarPanel.gridy = 2;
 		bottomRightPanel.add(calendarPanel, gbc_calendarPanel);
+		
+		GridBagLayout gbl_calendarPanel = new GridBagLayout();
+		gbl_calendarPanel.columnWidths = new int[]{80, 80, 80, 80, 80, 80, 80};
+		gbl_calendarPanel.rowHeights = new int[]{80, 80, 80, 80, 80};
+		gbl_calendarPanel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_calendarPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+		calendarPanel.setLayout(gbl_calendarPanel);
+		
+//		JButton b = new JButton();
+//		b.setLayout(new BorderLayout());
+//		JLabel label1 = new JLabel("Meet People");
+//		JLabel label2 = new JLabel("18:00-20:00");
+//		b.add(BorderLayout.NORTH,label1);
+//		b.add(BorderLayout.SOUTH,label2);
+//		GridBagConstraints gbc_btnAppointment = new GridBagConstraints();
+//		gbc_btnAppointment.fill = GridBagConstraints.VERTICAL;
+//		gbc_btnAppointment.gridx = 2;
+//		gbc_btnAppointment.gridy = 3;
+//		gbc_btnAppointment.gridheight = 1;
+//		calendarPanel.add(b, gbc_btnAppointment);
 		
 		lbl_06 = new JLabel("06:00");
 		GridBagConstraints gbc_label_2 = new GridBagConstraints();
