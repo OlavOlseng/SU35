@@ -3,10 +3,14 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.BoxLayout;
+
+import java.awt.CardLayout;
 import java.awt.GridBagLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -19,18 +23,19 @@ import java.awt.event.ActionEvent;
 import java.awt.Color;
 
 
-public class Login extends JFrame {
-
+public class Login extends JPanel/*JFrame*/ {
+	
+	private JPanel _parentContentPane;
 	private JPanel contentPane;
 	private JTextField emailAddress;
-	private JTextField password;
+	private JPasswordField password;
 	private JLabel welcomeLabel;
 	private JButton logInButton;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+/*	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -42,18 +47,19 @@ public class Login extends JFrame {
 			}
 		});
 	}
-
+*/
 	/**
 	 * Create the frame.
 	 */
-	public Login() {
-		setTitle("Superblaster");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(50, 50, 800, 600);
+	public Login(JPanel parentContentPane) {
+		_parentContentPane = parentContentPane;
+//		setTitle("Superblaster");
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		setBounds(50, 50, 800, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setBackground(new Color(153, 190, 255));
-		setContentPane(contentPane);
+//		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		//gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 1.0};
 		//gbl_contentPane
@@ -101,13 +107,19 @@ public class Login extends JFrame {
 		gbc_passwordLabel.gridx = 1;
 		gbc_passwordLabel.gridy = 4;
 		contentPane.add(passwordLabel, gbc_passwordLabel);
+		
 		logInButton = new JButton("Log in");
 		logInButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent arg0) 
+				{
+				//NB! Unfinished.
+				//We have to check if email and password is correct
+				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
+				c1.show(_parentContentPane, "Calendar View");
 			}
 		});
 
-		password = new JTextField();
+		password = new JPasswordField();
 		password.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		GridBagConstraints gbc_password = new GridBagConstraints();
 		gbc_password.insets = new Insets(0, 0, 5, 5);
@@ -124,5 +136,7 @@ public class Login extends JFrame {
 		gbc_logInButton.gridy = 6;
 		contentPane.add(logInButton, gbc_logInButton);
 	}
+	public JPanel getContentPane()
+		{ return contentPane; }
 
 }
