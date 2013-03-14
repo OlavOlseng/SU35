@@ -1,28 +1,32 @@
 package dbinterface;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import com.sun.xml.internal.ws.api.addressing.WSEndpointReference.Metadata;
 
 import models.*;
 
 public class DBFactory {
-	public Employee getEmployee(ResultSet rs) throws ClassNotFoundException, SQLException {
+	public ArrayList<Employee> getEmployees(ResultSet rs) throws ClassNotFoundException, SQLException {
 		//String query = "SELECT * FROM Employee WHERE email=" + employeeEmail;
-		String email = "";
-		String firstName = "";
-		String lastName = "";
-		String homePhone = "";
-		String mobilePhone = "";
+		if(!rs.first()) throw new SQLException("No matching entry found"); 
+		
+		ArrayList<Employee> employees = new ArrayList<Employee>();
+		rs.beforeFirst();
+			
 		while(rs.next()) {
-			email = rs.getString(1);
-			firstName = rs.getString(2);
-			lastName = rs.getString(3);
-			homePhone = rs.getString(4);
-			mobilePhone = rs.getString(5);
+			String email = rs.getString(1);
+			String firstName = rs.getString(2);
+			String lastName = rs.getString(3);
+			String homePhone = rs.getString(4);
+			String mobilePhone = rs.getString(5);
+			employees.add(new Employee(email, firstName, lastName, homePhone, mobilePhone));
 		}
-		Employee employee = new Employee(email, firstName, lastName, homePhone, mobilePhone);
-		return employee;
+
+		return employees;
 	}
 	
 	public MeetingRoom getMeetingRoom(ResultSet rs) throws ClassNotFoundException, SQLException {
