@@ -8,7 +8,7 @@ public class ModelTester {
 		MeetingRoom meetingRoom = new MeetingRoom(101, 10);
 		meetingRoom.setName("Sesam sitt lokale");
 		// Test meeting
-		Meeting meeting = new Meeting(1);
+		Appointment meeting = new Appointment(1);
 		meeting.setDate("2013-03-13");
 		meeting.setStartTime("16:05");
 		meeting.setEndTime("19:05");

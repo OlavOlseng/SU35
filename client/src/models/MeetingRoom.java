@@ -8,6 +8,7 @@ public class MeetingRoom {
 	public MeetingRoom(int meetingRoomID, int roomSize) {
 		this.meetingRoomID = meetingRoomID;
 		this.roomSize = roomSize;
+		name = "";
 	}
 	
 	public int getMeetingRoomID() {
@@ -27,6 +28,6 @@ public class MeetingRoom {
 	}
 	
 	public String toString() {
-		return "ID:\t" + meetingRoomID + "\nName:\t" + name + "\nRoom Size:\t" + roomSize;
+		return "Room ID:\t\t\t" + meetingRoomID + "\nRoom Name:\t\t\t" + name + "\nRoom Size:\t\t\t" + roomSize;
 	}
 }

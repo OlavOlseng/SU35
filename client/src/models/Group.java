@@ -10,6 +10,7 @@ public class Group {
 	public Group(int groupID) {
 		this.groupID = groupID;
 		members = new ArrayList<Employee>();
+		name = "";
 	}
 	
 	public ArrayList<Employee> getMembers() {
