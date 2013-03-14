@@ -59,6 +59,7 @@ public class CalendarView extends JPanel{
 	public CalendarView(JPanel parentContentPane) {
 		initialize(parentContentPane);
 		//updateInfo();
+		btnNotifications.setText("Notifications (" + Integer.toString(menuNotifications.getComponentCount()) + ")");
 	}
 
 	/**
@@ -109,6 +110,14 @@ public class CalendarView extends JPanel{
 		gbc_btnNotifications.gridx = 0;
 		gbc_btnNotifications.gridy = 0;
 		topLeftPanel.add(btnNotifications, gbc_btnNotifications);
+		
+//		lblNotifications = new JLabel();
+//		GridBagConstraints gbc_lblNotifications = new GridBagConstraints();
+//		gbc_lblNotifications.insets = new Insets(0, 0, 5, 5);
+//		gbc_lblNotifications.gridx = 0;
+//		gbc_lblNotifications.gridy = 0;
+//		topLeftPanel.add(lblNotifications, gbc_lblNotifications);
+//		lblNotifications.setVisible(false);
 		
 		topRightPanel = new JPanel();
 		topRightPanel.setBackground(new Color(153, 190, 255));
