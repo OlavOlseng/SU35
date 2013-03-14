@@ -18,6 +18,8 @@ import javax.swing.JTextField;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
+import javax.swing.SwingUtilities;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -151,6 +153,21 @@ public class EditView extends JPanel/*JFrame*/ {
 		gbc_dateField.gridy = 4;
 		this.add(dateField, gbc_dateField);
 		dateField.setColumns(20);
+		
+		JButton chooseDate = new JButton("Choose Date");
+		GridBagConstraints gbc_chooseDate = new GridBagConstraints();
+		gbc_chooseDate.fill = GridBagConstraints.BOTH;
+		gbc_chooseDate.insets = new Insets(0, 0, 5, 5);
+		gbc_chooseDate.gridx = 3;
+		gbc_chooseDate.gridy = 4;
+		add(chooseDate, gbc_chooseDate);
+		
+		chooseDate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event)
+				{
+				dateField.setText(new DatePicker((JFrame)SwingUtilities.getRoot(_parentContentPane)).setPickedDate());
+				}
+		});
 		
 		JList peopleList = new JList();
 		GridBagConstraints gbc_peopleList = new GridBagConstraints();
