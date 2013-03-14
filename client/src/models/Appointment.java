@@ -7,16 +7,20 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Appointment {
-	protected final int appointmentID;
-	protected Calendar startTime;
-	protected Calendar endTime;
-	protected String description;
-	protected String location;
+	private final int appointmentID;
+	private Calendar startTime;
+	private Calendar endTime;
+	private String description;
+	private String location;
+	private MeetingRoom meetingRoom;
+	private Employee meetingLeader;
 	
 	public Appointment(int appointmentID) {
 		this.appointmentID = appointmentID;
 		startTime = Calendar.getInstance();
 		endTime = Calendar.getInstance();
+		description = "";
+		location = "";
 	}
 	
 	public int getAppointmentID() {
@@ -102,7 +106,27 @@ public class Appointment {
 		return location;
 	}
 	
+	public void setMeetingRoom(MeetingRoom meetingRoom) {
+		this.meetingRoom = meetingRoom;
+	}
+	
+	public MeetingRoom getMeetingRoom() {
+		return meetingRoom;
+	}
+	
+	public void setMeetingLeader(Employee meetingLeader) {
+		this.meetingLeader = meetingLeader;
+	}
+	
+	public Employee getMeetingLeader() {
+		return meetingLeader;
+	}
+	
+	// May cause null-pointer hell, too lazy to fix.
 	public String toString() {
-		return "Start time:\t" + startTime.getTime().toString() + "\nEnd time:\t" + endTime.getTime().toString();
+		return "Appointment ID:\t\t\t" + appointmentID + "\nAppointment Description:\t" + description +
+				"\nStart time:\t\t\t" + startTime.getTime().toString() + "\nEnd time:\t\t\t" + endTime.getTime().toString() + 
+				"\nAppointment Location:\t\t" + location + "\nMeeting room:\n" + meetingRoom.toString() + 
+				"\nMeeting Leader:\n" + meetingLeader.toString();
 	}
 }

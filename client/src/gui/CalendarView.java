@@ -35,9 +35,7 @@ public class CalendarView extends JPanel{
 	private JButton btnNotifications, btnMe, btnCalendars, btnGoto, btnCreate, btnLogout, btnMore, btnEdit, btnPreviousWeek, btnNextWeek;
 	private JTextArea textAreaInfo;
 	private JLabel lblWeek, lblMonday, lblTuesday, lblWednesday, lblThursday, lblFriday, lblSaturday, lblSunday, lbl_00, lbl_06, lbl_12, lbl_18, lbl_24;
-	private JButton btnAppointment;
 	private JTable table;
-	
 	/**
 	 * Launch the application.
 	 */
@@ -362,9 +360,9 @@ public class CalendarView extends JPanel{
 		gbc_calendarPanel.gridy = 2;
 		bottomRightPanel.add(calendarPanel, gbc_calendarPanel);
 		
-//		table = new JTable();
-//		table.setCellSelectionEnabled(true);
-//		calendarPanel.add(table);
+		table = new JTable();
+		calendarPanel.add(table);
+		
 		GridBagLayout gbl_calendarPanel = new GridBagLayout();
 		gbl_calendarPanel.columnWidths = new int[]{80, 80, 80, 80, 80, 80, 80};
 		gbl_calendarPanel.rowHeights = new int[]{80, 80, 80, 80, 80};
