@@ -13,6 +13,7 @@ import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
 import java.awt.Insets;
 
+import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -27,6 +28,8 @@ import javax.swing.SwingConstants;
 
 
 public class EditView extends JPanel/*JFrame*/ {
+	private ActionListener peopleListener;
+
 	private JButton addButton;
 	private JButton calendarButton;
 	private JPanel _parentContentPane;
@@ -221,18 +224,51 @@ public class EditView extends JPanel/*JFrame*/ {
 		this.add(endField, gbc_endField);
 		endField.setColumns(20);
 		
-		addPeopleMenu = new JPopupMenu();
-		addPeopleMenu.add("This i a test.");
-		addPeopleMenu.add("This is a much longer text.");
+		
+		
+		peopleListener = new ActionListener() {
+			public void actionPerformed(ActionEvent event)
+				{
+				titleField.setText(((JMenuItem)event.getSource()).getText());
+				}
+			};
+		
+		
+		
 		
 		addButton = new JButton("Add");
 		addButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				addPeopleMenu.show(addButton, -185, -135
-						/*addButton.getBounds().x - 500, addButton.getBounds().y + addButton.getBounds().height*/);
+			public void actionPerformed(ActionEvent arg0)
+				{
+				//Here we handle code related to adding people to an appointment
+				addPeopleMenu = new JPopupMenu();
+				JLabel addPeopleMenuLabel = new JLabel("Select people to add to appointment:");
+				addPeopleMenu.add(addPeopleMenuLabel);
+				addPeopleMenu.addSeparator();
 				
-			}
+				
+				
+				
+				//Idea: We receive email addresses from database when we open application
+				// or when we open EditView and save these data in an array which we use when we add JMenuItems in
+				// the JPopupMenu. This should be put in a method
+				
+				//Testing purposes:
+				String[] emailAddresses = {"This is a text.",
+													"This is a much longer text."};
+				JMenuItem menuItem;
+				
+				for(int i = 0; i < emailAddresses.length; i++)
+					{
+					menuItem = new JMenuItem(emailAddresses[i]);
+					addPeopleMenu.add(menuItem);
+					menuItem.addActionListener(peopleListener);
+					}
+				
+				addPeopleMenu.show(addButton, -290, -135);
+				}
 		});
+		
 		GridBagConstraints gbc_addButton = new GridBagConstraints();
 		gbc_addButton.fill = GridBagConstraints.BOTH;
 		gbc_addButton.insets = new Insets(0, 0, 5, 5);
