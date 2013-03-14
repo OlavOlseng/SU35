@@ -13,6 +13,7 @@ import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
 import java.awt.Insets;
 
+import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JScrollBar;
@@ -26,8 +27,10 @@ import javax.swing.SwingConstants;
 
 
 public class EditView extends JPanel/*JFrame*/ {
+	private JButton addButton;
 	private JButton calendarButton;
 	private JPanel _parentContentPane;
+	private JPopupMenu addPeopleMenu;
 	private JTextField titleField;
 	private JTextField dateField;
 	private JTextField startField;
@@ -218,7 +221,18 @@ public class EditView extends JPanel/*JFrame*/ {
 		this.add(endField, gbc_endField);
 		endField.setColumns(20);
 		
-		JButton addButton = new JButton("Add");
+		addPeopleMenu = new JPopupMenu();
+		addPeopleMenu.add("This i a test.");
+		addPeopleMenu.add("This is a much longer text.");
+		
+		addButton = new JButton("Add");
+		addButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				addPeopleMenu.show(addButton, -185, -135
+						/*addButton.getBounds().x - 500, addButton.getBounds().y + addButton.getBounds().height*/);
+				
+			}
+		});
 		GridBagConstraints gbc_addButton = new GridBagConstraints();
 		gbc_addButton.fill = GridBagConstraints.BOTH;
 		gbc_addButton.insets = new Insets(0, 0, 5, 5);
