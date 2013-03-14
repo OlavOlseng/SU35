@@ -13,7 +13,9 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
 import javax.swing.JDialog;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -35,6 +37,7 @@ public class CalendarView extends JPanel{
 	private JButton btnNotifications, btnMe, btnCalendars, btnGoto, btnCreate, btnLogout, btnMore, btnEdit, btnPreviousWeek, btnNextWeek;
 	private JTextArea textAreaInfo;
 	private JLabel lblWeek, lblMonday, lblTuesday, lblWednesday, lblThursday, lblFriday, lblSaturday, lblSunday, lbl_00, lbl_06, lbl_12, lbl_18, lbl_24;
+	private JPopupMenu menuNotifications, menuCalendars;
 	
 	/**
 	 * Launch the application.
@@ -55,6 +58,7 @@ public class CalendarView extends JPanel{
 	 */
 	public CalendarView(JPanel parentContentPane) {
 		initialize(parentContentPane);
+		//updateInfo();
 	}
 
 	/**
@@ -87,6 +91,19 @@ public class CalendarView extends JPanel{
 		topLeftPanel.setLayout(gbl_topLeftPanel);
 		
 		btnNotifications = new JButton("Notifications");
+		
+		menuNotifications = new JPopupMenu();
+		menuNotifications.add("Menuitem 1");
+		menuNotifications.add("Menuitem 2");
+		menuNotifications.add(new JMenuItem("Menuitem 3"));
+
+		btnNotifications.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        menuNotifications.show(btnNotifications, btnNotifications.getBounds().x, btnNotifications.getBounds().y
+		           + btnNotifications.getBounds().height);
+		    }
+		});
+		
 		GridBagConstraints gbc_btnNotifications = new GridBagConstraints();
 		gbc_btnNotifications.fill = GridBagConstraints.BOTH;
 		gbc_btnNotifications.gridx = 0;
@@ -117,6 +134,18 @@ public class CalendarView extends JPanel{
 		topRightPanel.add(btnMe, gbc_btnMe);
 		
 		btnCalendars = new JButton("Calendars");
+		menuCalendars = new JPopupMenu();
+		menuCalendars.add("Menuitem 1");
+		menuCalendars.add("Menuitem 2");
+		menuCalendars.add(new JMenuItem("Menuitem 3"));
+
+		btnCalendars.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        menuCalendars.show(btnCalendars, btnCalendars.getBounds().x -270, btnCalendars.getBounds().y
+		           + btnCalendars.getBounds().height);
+		    }
+		});
+		
 		GridBagConstraints gbc_btnCalendars = new GridBagConstraints();
 		gbc_btnCalendars.fill = GridBagConstraints.BOTH;
 		gbc_btnCalendars.insets = new Insets(0, 0, 0, 5);
