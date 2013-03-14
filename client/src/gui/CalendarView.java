@@ -35,7 +35,7 @@ public class CalendarView extends JPanel{
 	private JButton btnNotifications, btnMe, btnCalendars, btnGoto, btnCreate, btnLogout, btnMore, btnEdit, btnPreviousWeek, btnNextWeek;
 	private JTextArea textAreaInfo;
 	private JLabel lblWeek, lblMonday, lblTuesday, lblWednesday, lblThursday, lblFriday, lblSaturday, lblSunday, lbl_00, lbl_06, lbl_12, lbl_18, lbl_24;
-	private JTable table;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -360,9 +360,6 @@ public class CalendarView extends JPanel{
 		gbc_calendarPanel.gridy = 2;
 		bottomRightPanel.add(calendarPanel, gbc_calendarPanel);
 		
-		table = new JTable();
-		calendarPanel.add(table);
-		
 		GridBagLayout gbl_calendarPanel = new GridBagLayout();
 		gbl_calendarPanel.columnWidths = new int[]{80, 80, 80, 80, 80, 80, 80};
 		gbl_calendarPanel.rowHeights = new int[]{80, 80, 80, 80, 80};
@@ -370,18 +367,18 @@ public class CalendarView extends JPanel{
 		gbl_calendarPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		calendarPanel.setLayout(gbl_calendarPanel);
 		
-		JButton b = new JButton();
-		b.setLayout(new BorderLayout());
-		JLabel label1 = new JLabel("Meet People");
-		JLabel label2 = new JLabel("18:00-20:00");
-		b.add(BorderLayout.NORTH,label1);
-		b.add(BorderLayout.SOUTH,label2);
-		GridBagConstraints gbc_btnAppointment = new GridBagConstraints();
-		gbc_btnAppointment.fill = GridBagConstraints.VERTICAL;
-		gbc_btnAppointment.gridx = 2;
-		gbc_btnAppointment.gridy = 3;
-		gbc_btnAppointment.gridheight = 1;
-		calendarPanel.add(b, gbc_btnAppointment);
+//		JButton b = new JButton();
+//		b.setLayout(new BorderLayout());
+//		JLabel label1 = new JLabel("Meet People");
+//		JLabel label2 = new JLabel("18:00-20:00");
+//		b.add(BorderLayout.NORTH,label1);
+//		b.add(BorderLayout.SOUTH,label2);
+//		GridBagConstraints gbc_btnAppointment = new GridBagConstraints();
+//		gbc_btnAppointment.fill = GridBagConstraints.VERTICAL;
+//		gbc_btnAppointment.gridx = 2;
+//		gbc_btnAppointment.gridy = 3;
+//		gbc_btnAppointment.gridheight = 1;
+//		calendarPanel.add(b, gbc_btnAppointment);
 		
 		lbl_06 = new JLabel("06:00");
 		GridBagConstraints gbc_label_2 = new GridBagConstraints();
