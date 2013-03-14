@@ -21,27 +21,27 @@ public class SBPFactory {
 	}
 	
 	public String makeLoginMessage(String user, String password) {
-		String payload = String.format("%s^%s", user, password);
+		String payload = String.format("%s¤%s", user, password);
 		return createMessage(MessageType.LOGIN, false, "", payload);
 	}
 	
 	public String makeGetMessage(String what, String id) {
-		String payload = String.format("%s^%s", what, id);
+		String payload = String.format("%s¤%s", what, id);
 		return createMessage(MessageType.GET, false, "", payload);
 	}
 	
 	public String makeDeleteMessage(String table, String condition) {
-		String payload = String.format("%s^%s", table, condition);
+		String payload = String.format("%s¤%s", table, condition);
 		return createMessage(MessageType.DELETE, false, "", payload);
 	}
 	
 	public String makeCreateMessage(String table, String what, String values){
-		String payload = String.format("%s^%s^%s", table, what, values);
+		String payload = String.format("%s¤%s¤%s", table, what, values);
 		return createMessage(MessageType.CREATE, false, "", payload);
 	}
 	
 	public String makeUpdateMessage(String table, String what, String condition) {
-		String payload = String.format("%s^%s^%s",table, what, condition);
+		String payload = String.format("%s¤%s¤%s",table, what, condition);
 		return createMessage(MessageType.UPDATE, false, "", payload);
 	}
 	

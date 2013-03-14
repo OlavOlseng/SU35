@@ -3,6 +3,7 @@ package networking;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -17,12 +18,12 @@ import dbinterface.DBConnection;
 import dbinterface.DBFactory;
 
 public class ServerMessageHandler extends MessageHandler{
-	
+
 	ConnectionBridge bridge;
 	DBConnection conn;
 	DBFactory dbFactory;
 	SBPFactory msgFactory;
-	
+
 	public ServerMessageHandler(ConnectionBridge bridge) {
 		this.bridge = bridge;
 		this.conn = bridge.getDBConnection();
@@ -32,37 +33,54 @@ public class ServerMessageHandler extends MessageHandler{
 
 	@Override
 	public void getEntry(String[] data) {
-		boolean error = false;
-		String errorMsg = null;
-		String msg[] = data[3].split("^");
+		String msg[] = data[3].split("¤");
 		String what = msg[0];
-		String id = msg[1];
-		String payload = null;
-
-		try {
-			switch(what) {
-				case("employee"): 
-					String query = String.format("SELECT * FROM employee WHERE id='%s'", id);
-				ResultSet set = conn.makeSingleQuery(query);
-				Employee e = dbFactory.getEmployee(set);
-				payload = XMLSerializer.personToXml(e);
-				break;
-
-			}
+		String response = null;
 		
-		} catch (SQLException | ClassNotFoundException | ParserConfigurationException e) {
-			e.printStackTrace();
-			error = true;
-			errorMsg = e.getMessage();
+		switch(what) {
+			case("employee"): 
+				response = getEmployee(data);
+				break;
+			default:
+				response = msgFactory.createMessage(MessageType.GET, true, "No matching command found", null);
 		}
 		
-		String response = msgFactory.createMessage(MessageType.GET, error, errorMsg, payload);
 		try {
 			bridge.send(response);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public String getEmployee(String[] data) {
+		boolean error = true;
+		String errorMsg = "Unknown error...";
+		String msg[] = data[3].split("¤");
+		String id = msg[1];
+		String payload = null;
+		String response;
+		
+		try {
+			String query = String.format("SELECT * FROM employee WHERE email='%s'", id);
+			ResultSet set = conn.makeSingleQuery(query);
+			ArrayList<Employee> employees = dbFactory.getEmployees(set);
+			for(Employee e : employees){
+				payload = XMLSerializer.personToXml(e);
+			}
+			errorMsg = null;
+			error = false;
+
+		} catch (SQLException | ClassNotFoundException | ParserConfigurationException e) {
+			e.printStackTrace();
+			error = true;
+			errorMsg = e.getMessage();
+			
+		} finally {
+			response = msgFactory.createMessage(MessageType.GET, error, errorMsg, payload);
+		}
+		
+		return response;
 	}
 
 	@Override
@@ -91,7 +109,35 @@ public class ServerMessageHandler extends MessageHandler{
 
 	@Override
 	public void checkLogin(String[] data) {
-		// TODO Auto-generated method stub
+		String[] msg = data[3].split("¤");
+		String user = msg[0];
+		String pwd = msg[1];
+		String query = String.format("SELECT * FROM employee WHERE email='%s' AND password='%s'", user, pwd);
+		
+		boolean error = true;
+		String errorMsg = "Invalid login information";
+		String response = null;
+		
+		try {
+			ResultSet rs = conn.makeSingleQuery(query);
+			if (rs.first()) {
+				error = false;
+				errorMsg = null;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally{
+			response = msgFactory.createMessage(MessageType.LOGIN, error, errorMsg, null);
+		}
+		
+		try {
+			bridge.send(response);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 

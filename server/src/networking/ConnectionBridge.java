@@ -12,13 +12,13 @@ public class ConnectionBridge implements MessageListener {
 
 	private Connection inetConnection;
 	private DBConnection dbConnection;
-	private DBFactory factory;
 	private ReceiveWorker rw;
+	private ServerMessageHandler msgHandler;
 
 	public ConnectionBridge(Connection c, DBConnection dbc) {
 		this.inetConnection = c;
 		this.dbConnection = dbc;
-		this.factory = new DBFactory();
+		this.msgHandler = new ServerMessageHandler(this); 
 		this.rw = new ReceiveWorker(c);
 		rw.addListener(this);
 		rw.start();
@@ -33,6 +33,7 @@ public class ConnectionBridge implements MessageListener {
 
 	public void send(String msg) throws IOException {
 		inetConnection.send(msg);
+		System.out.println(msg);
 	}
 
 	public boolean isConnectionClosed() {
@@ -45,17 +46,11 @@ public class ConnectionBridge implements MessageListener {
 
 	@Override
 	public void messageReceived(String msg) {
-		// TODO Auto-generated method stub
-		System.out.println(msg);
-		try {
-			ConnectionPool.getInstance().broadcast(String.format("Message received from %s: %s", inetConnection.getRemoteAddress().getHostAddress(), msg));
-		} catch (IOException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		//This block is needed for closing the connection properly
 		if(msg == null)
 			try {
 				close();
+				return;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -63,5 +58,8 @@ public class ConnectionBridge implements MessageListener {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		
+		System.out.println(msg);
+		msgHandler.handleMessage(msg);
 	}
 }
