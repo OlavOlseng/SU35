@@ -240,7 +240,7 @@ public class CalendarView extends JPanel{
 		textAreaInfo = new JTextArea();
 		textAreaInfo.setEditable(false);
 		textAreaInfo.setRows(19);
-		textAreaInfo.setText("Info:");
+		//textAreaInfo.setText("Info:");
 		GridBagConstraints gbc_textAreaInfo = new GridBagConstraints();
 		gbc_textAreaInfo.anchor = GridBagConstraints.NORTH;
 		gbc_textAreaInfo.insets = new Insets(0, 0, 5, 0);
@@ -250,6 +250,7 @@ public class CalendarView extends JPanel{
 		bottomLeftPanel.add(textAreaInfo, gbc_textAreaInfo);
 		
 		btnMore = new JButton("More");
+		btnMore.setEnabled(false);
 		btnMore.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//Open InfoView
@@ -266,11 +267,12 @@ public class CalendarView extends JPanel{
 		bottomLeftPanel.add(btnMore, gbc_btnMore);
 		
 		btnEdit = new JButton("Edit");
+		btnEdit.setEnabled(false);
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				//Open EditView
 				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
 				c1.show(_parentContentPane, "Edit View");
-				//Open EditView
 			}
 		});
 		GridBagConstraints gbc_btnEdit = new GridBagConstraints();
@@ -405,18 +407,25 @@ public class CalendarView extends JPanel{
 		gbl_calendarPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		calendarPanel.setLayout(gbl_calendarPanel);
 		
-//		JButton b = new JButton();
-//		b.setLayout(new BorderLayout());
-//		JLabel label1 = new JLabel("Meet People");
-//		JLabel label2 = new JLabel("18:00-20:00");
-//		b.add(BorderLayout.NORTH,label1);
-//		b.add(BorderLayout.SOUTH,label2);
-//		GridBagConstraints gbc_btnAppointment = new GridBagConstraints();
-//		gbc_btnAppointment.fill = GridBagConstraints.VERTICAL;
-//		gbc_btnAppointment.gridx = 2;
-//		gbc_btnAppointment.gridy = 3;
-//		gbc_btnAppointment.gridheight = 1;
-//		calendarPanel.add(b, gbc_btnAppointment);
+		JButton b = new JButton();
+		b.setLayout(new BorderLayout());
+		JLabel label1 = new JLabel("Meet People");
+		JLabel label2 = new JLabel("18:00-20:00");
+		b.add(BorderLayout.NORTH,label1);
+		b.add(BorderLayout.SOUTH,label2);
+		b.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//Load info in the infoTextArea
+				btnMore.setEnabled(true);
+				btnEdit.setEnabled(true);
+			}
+		});
+		GridBagConstraints gbc_btnAppointment = new GridBagConstraints();
+		gbc_btnAppointment.fill = GridBagConstraints.VERTICAL;
+		gbc_btnAppointment.gridx = 2;
+		gbc_btnAppointment.gridy = 3;
+		gbc_btnAppointment.gridheight = 1;
+		calendarPanel.add(b, gbc_btnAppointment);
 		
 		lbl_06 = new JLabel("06:00");
 		GridBagConstraints gbc_label_2 = new GridBagConstraints();
