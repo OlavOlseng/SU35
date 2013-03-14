@@ -13,6 +13,8 @@ import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
 import java.awt.Insets;
 
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JScrollBar;
@@ -22,11 +24,16 @@ import javax.swing.SwingUtilities;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
 
 
 public class EditView extends JPanel/*JFrame*/ {
+	private ActionListener peopleListener;
+
+	private JButton addButton;
 	private JButton calendarButton;
 	private JPanel _parentContentPane;
+	private JPopupMenu addPeopleMenu;
 	private JTextField titleField;
 	private JTextField dateField;
 	private JTextField startField;
@@ -138,6 +145,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		this.add(peopleLabel, gbc_peopleLabel);
 		
 		JLabel dateLabel = new JLabel("Date:");
+		dateLabel.setToolTipText("Enter date in the format: DD-MM-YYYY");
 		GridBagConstraints gbc_dateLabel = new GridBagConstraints();
 		gbc_dateLabel.anchor = GridBagConstraints.EAST;
 		gbc_dateLabel.insets = new Insets(0, 0, 5, 5);
@@ -165,7 +173,8 @@ public class EditView extends JPanel/*JFrame*/ {
 		chooseDate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event)
 				{
-				dateField.setText(new DatePicker((JFrame)SwingUtilities.getRoot(_parentContentPane)).setPickedDate());
+				dateField.setText(new DatePicker((JFrame)SwingUtilities.getRoot(
+						_parentContentPane)).setPickedDate());
 				}
 		});
 		
@@ -180,6 +189,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		this.add(peopleList, gbc_peopleList);
 		
 		JLabel startLabel = new JLabel("Start:");
+		startLabel.setToolTipText("Enter time in the format: HH:MM:SS");
 		GridBagConstraints gbc_startLabel = new GridBagConstraints();
 		gbc_startLabel.anchor = GridBagConstraints.EAST;
 		gbc_startLabel.insets = new Insets(0, 0, 5, 5);
@@ -197,6 +207,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		startField.setColumns(20);
 		
 		JLabel endLabel = new JLabel("End:");
+		endLabel.setToolTipText("Enter time in the format: HH:MM:SS");
 		GridBagConstraints gbc_endLabel = new GridBagConstraints();
 		gbc_endLabel.anchor = GridBagConstraints.EAST;
 		gbc_endLabel.insets = new Insets(0, 0, 5, 5);
@@ -213,18 +224,64 @@ public class EditView extends JPanel/*JFrame*/ {
 		this.add(endField, gbc_endField);
 		endField.setColumns(20);
 		
-		JButton addButton = new JButton("Add");
+		
+		
+		peopleListener = new ActionListener() {
+			public void actionPerformed(ActionEvent event)
+				{
+				titleField.setText(((JMenuItem)event.getSource()).getText());
+				}
+			};
+		
+		
+		
+		
+		addButton = new JButton("Add");
+		addButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0)
+				{
+				//Here we handle code related to adding people to an appointment
+				addPeopleMenu = new JPopupMenu();
+				JLabel addPeopleMenuLabel = new JLabel("Select people to add to appointment:");
+				addPeopleMenu.add(addPeopleMenuLabel);
+				addPeopleMenu.addSeparator();
+				
+				
+				
+				
+				//Idea: We receive email addresses from database when we open application
+				// or when we open EditView and save these data in an array which we use when we add JMenuItems in
+				// the JPopupMenu. This should be put in a method
+				
+				//Testing purposes:
+				String[] emailAddresses = {"This is a text.",
+													"This is a much longer text."};
+				JMenuItem menuItem;
+				
+				for(int i = 0; i < emailAddresses.length; i++)
+					{
+					menuItem = new JMenuItem(emailAddresses[i]);
+					addPeopleMenu.add(menuItem);
+					menuItem.addActionListener(peopleListener);
+					}
+				
+				addPeopleMenu.show(addButton, -290, -135);
+				}
+		});
+		
 		GridBagConstraints gbc_addButton = new GridBagConstraints();
+		gbc_addButton.fill = GridBagConstraints.BOTH;
 		gbc_addButton.insets = new Insets(0, 0, 5, 5);
 		gbc_addButton.gridx = 4;
-		gbc_addButton.gridy = 6;
+		gbc_addButton.gridy = 7;
 		this.add(addButton, gbc_addButton);
 		
 		JButton removeButton = new JButton("Remove");
 		GridBagConstraints gbc_removeButton = new GridBagConstraints();
+		gbc_removeButton.fill = GridBagConstraints.BOTH;
 		gbc_removeButton.insets = new Insets(0, 0, 5, 5);
 		gbc_removeButton.gridx = 5;
-		gbc_removeButton.gridy = 6;
+		gbc_removeButton.gridy = 7;
 		this.add(removeButton, gbc_removeButton);
 		
 		JLabel descriptionLabel = new JLabel("Description:");

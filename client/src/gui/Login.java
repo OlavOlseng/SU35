@@ -109,12 +109,19 @@ public class Login extends JPanel/*JFrame*/ {
 		
 		logInButton = new JButton("Log in");
 		logInButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) 
-				{
+			public void actionPerformed(ActionEvent arg0) {
 				//NB! Unfinished.
 				//We have to check if email and password is correct
-				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
-				c1.show(_parentContentPane, "Calendar View");
+//				if (email and password exist in database) {
+					CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
+					c1.show(_parentContentPane, "Calendar View");
+//				}
+//				else {
+//					JOptionPane.showMessageDialog(JOptionPane.getFrameForComponent(getRootPane()),
+//						    "Login failed!" + "\n" +"Please re-enter your email and password, or contact system administrator.",
+//						    "Login failed!",
+//						    JOptionPane.ERROR_MESSAGE);
+////				}
 			}
 		});
 
@@ -127,11 +134,12 @@ public class Login extends JPanel/*JFrame*/ {
 		gbc_password.gridy = 4;
 		this.add(password, gbc_password);
 		password.setColumns(20);
-		logInButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		logInButton.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		GridBagConstraints gbc_logInButton = new GridBagConstraints();
-		gbc_logInButton.gridwidth = 5;
+		gbc_logInButton.fill = GridBagConstraints.BOTH;
+		gbc_logInButton.gridwidth = 2;
 		gbc_logInButton.insets = new Insets(0, 0, 5, 0);
-		gbc_logInButton.gridx = 0;
+		gbc_logInButton.gridx = 1;
 		gbc_logInButton.gridy = 6;
 		this.add(logInButton, gbc_logInButton);
 	}

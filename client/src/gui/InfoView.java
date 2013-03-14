@@ -102,6 +102,14 @@ public class InfoView extends JPanel/*JFrame*/ {
 				c1.show(_parentContentPane, "Edit View");
 			}
 		});
+		
+		JButton saveButton = new JButton("Save");
+		GridBagConstraints gbc_saveButton = new GridBagConstraints();
+		gbc_saveButton.fill = GridBagConstraints.BOTH;
+		gbc_saveButton.insets = new Insets(0, 0, 5, 5);
+		gbc_saveButton.gridx = 5;
+		gbc_saveButton.gridy = 1;
+		add(saveButton, gbc_saveButton);
 		GridBagConstraints gbc_editButton = new GridBagConstraints();
 		gbc_editButton.fill = GridBagConstraints.BOTH;
 		gbc_editButton.insets = new Insets(0, 0, 5, 5);
