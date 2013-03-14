@@ -23,7 +23,7 @@ public class Calendar {
 		contentPane.setLayout(new CardLayout());
 						
 		Login login = new Login(contentPane);
-		contentPane.add(login.getContentPane(), LOG_IN);
+		contentPane.add(login, LOG_IN);
 		
 		CalendarView calendarView = new CalendarView(contentPane);
 		contentPane.add(calendarView, CALENDAR_VIEW);
