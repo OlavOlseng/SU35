@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
@@ -26,7 +27,7 @@ import javax.swing.JRadioButton;
 
 public class InfoView extends JPanel/*JFrame*/ {
 
-	//private JPanel contentPane;
+	private JPanel _parentContentPane;
 	private JTextField ownerField;
 	private JTextField titleField;
 	private final JLabel startLabel = new JLabel("Start:");
@@ -39,7 +40,7 @@ public class InfoView extends JPanel/*JFrame*/ {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+/*	public static void main(String[] args) {
 		JFrame frame = new JFrame("Superblaster");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBounds(50, 50, 800, 600);
@@ -58,11 +59,13 @@ public class InfoView extends JPanel/*JFrame*/ {
 //			}
 //		});
 	}
-
+*/
 	/**
 	 * Create the frame.
 	 */
-	public InfoView() {
+	public InfoView(JPanel parentContentPane) {
+		_parentContentPane = parentContentPane;
+	
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//setBounds(100, 100, 800, 600);
 		//contentPane = new JPanel();
@@ -78,9 +81,11 @@ public class InfoView extends JPanel/*JFrame*/ {
 		//gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		this.setLayout(gbl_contentPane);
 		
-		JButton backButton = new JButton("Back");
-		backButton.addActionListener(new ActionListener() {
+		JButton calendarButton = new JButton("Calendar");
+		calendarButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
+				c1.show(_parentContentPane, "Calendar View");
 			}
 		});
 		GridBagConstraints gbc_backButton = new GridBagConstraints();
@@ -88,11 +93,13 @@ public class InfoView extends JPanel/*JFrame*/ {
 		gbc_backButton.insets = new Insets(0, 0, 5, 5);
 		gbc_backButton.gridx = 1;
 		gbc_backButton.gridy = 1;
-		this.add(backButton, gbc_backButton);
+		this.add(calendarButton, gbc_backButton);
 		
 		JButton editButton = new JButton("Edit");
 		editButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
+				c1.show(_parentContentPane, "Edit View");
 			}
 		});
 		GridBagConstraints gbc_editButton = new GridBagConstraints();

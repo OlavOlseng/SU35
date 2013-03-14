@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 
+import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
@@ -28,15 +29,15 @@ import javax.swing.SwingConstants;
 
 public class CalendarView extends JPanel{
 
-	static JFrame frame;
-	private JPanel topLeftPanel, topRightPanel, bottomLeftPanel, bottomRightPanel, calendarPanel;
+//	static JFrame frame;
+	private JPanel topLeftPanel, topRightPanel, bottomLeftPanel, bottomRightPanel, calendarPanel, _parentContentPane;
 	private JButton btnNotifications, btnMe, btnCalendars, btnGoto, btnCreate, btnLogout, btnMore, btnEdit, btnPreviousWeek, btnNextWeek;
 	private JTextArea textAreaInfo;
 	private JLabel lblWeek, lblMonday, lblTuesday, lblWednesday, lblThursday, lblFriday, lblSaturday, lblSunday, lbl_00, lbl_06, lbl_12, lbl_18, lbl_24;
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+/*	public static void main(String[] args) {
 		
 		
 		frame = new JFrame("Superblaster");
@@ -46,18 +47,20 @@ public class CalendarView extends JPanel{
 		frame.pack();
 		frame.setVisible(true);
 	}
-
+*/
 	/**
 	 * Create the application.
 	 */
-	public CalendarView() {
-		initialize();
+	public CalendarView(JPanel parentContentPane) {
+		initialize(parentContentPane);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize(JPanel parentContentPane) {
+		_parentContentPane = parentContentPane;
+	
 		this.setBorder(new EmptyBorder(5,5,5,5));
 		this.setBackground(new Color(153, 190, 255));
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -149,6 +152,9 @@ public class CalendarView extends JPanel{
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//Open EditView
+				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
+				c1.show(_parentContentPane, "Edit View");
+				
 			}
 		});
 		GridBagConstraints gbc_btnCreate = new GridBagConstraints();
@@ -208,6 +214,8 @@ public class CalendarView extends JPanel{
 		btnMore.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//Open InfoView
+				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
+				c1.show(_parentContentPane, "Info View");
 			}
 		});
 		GridBagConstraints gbc_btnMore = new GridBagConstraints();
@@ -221,6 +229,8 @@ public class CalendarView extends JPanel{
 		btnEdit = new JButton("Edit");
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
+				c1.show(_parentContentPane, "Edit View");
 				//Open EditView
 			}
 		});
@@ -378,5 +388,7 @@ public class CalendarView extends JPanel{
 		bottomRightPanel.add(lbl_24, gbc_label_5);
 		
 	}
+//	public JPanel getContentPane()
+//		{ return 
 
 }

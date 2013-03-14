@@ -1,5 +1,6 @@
 package gui;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -11,6 +12,8 @@ import javax.swing.JButton;
 import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
 import java.awt.Insets;
+
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -20,7 +23,8 @@ import java.awt.event.ActionEvent;
 
 
 public class EditView extends JPanel/*JFrame*/ {
-
+	private JButton calendarButton;
+	private JPanel _parentContentPane;
 	private JTextField titleField;
 	private JTextField dateField;
 	private JTextField startField;
@@ -30,29 +34,31 @@ public class EditView extends JPanel/*JFrame*/ {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+/*	public static void main(String[] args) {
 		JFrame frame = new JFrame("Superblaster");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBounds(50, 50, 800, 600);
 		frame.setContentPane(new EditView());
 		frame.pack();
 		frame.setVisible(true);
-		/*EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					EditView frame = new EditView();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});*/
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					EditView frame = new EditView();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
 	}
-
+*/
 	/**
 	 * Create the frame.
 	 */
-	public EditView() {
+	public EditView(JPanel parentContentPane) {
+		_parentContentPane = parentContentPane;
+	
 		/*setTitle("Superblaster");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);*/
 		//setBounds(50, 50, 800, 600);
@@ -69,17 +75,20 @@ public class EditView extends JPanel/*JFrame*/ {
 		//gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		this.setLayout(gbl_contentPane);
 		
-		JButton backButton = new JButton("Back");
-		backButton.addActionListener(new ActionListener() {
+		calendarButton = new JButton("Calendar");
+		calendarButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
+				c1.show(_parentContentPane, "Calendar View");
+				
 			}
 		});
-		GridBagConstraints gbc_backButton = new GridBagConstraints();
-		gbc_backButton.fill = GridBagConstraints.BOTH;
-		gbc_backButton.insets = new Insets(0, 0, 5, 5);
-		gbc_backButton.gridx = 1;
-		gbc_backButton.gridy = 1;
-		this.add(backButton, gbc_backButton);
+		GridBagConstraints gbc_calendarButton = new GridBagConstraints();
+		gbc_calendarButton.fill = GridBagConstraints.BOTH;
+		gbc_calendarButton.insets = new Insets(0, 0, 5, 5);
+		gbc_calendarButton.gridx = 1;
+		gbc_calendarButton.gridy = 1;
+		this.add(calendarButton, gbc_calendarButton);
 		
 		JButton saveButton = new JButton("Save");
 		GridBagConstraints gbc_saveButton = new GridBagConstraints();
@@ -209,7 +218,9 @@ public class EditView extends JPanel/*JFrame*/ {
 		gbc_descriptionLabel.gridy = 7;
 		this.add(descriptionLabel, gbc_descriptionLabel);
 		
-		JScrollPane descriptionScrollPane = new JScrollPane();
+		JTextArea descriptionArea = new JTextArea();
+		
+		JScrollPane descriptionScrollPane = new JScrollPane(descriptionArea);
 		GridBagConstraints gbc_descriptionScrollPane = new GridBagConstraints();
 		gbc_descriptionScrollPane.insets = new Insets(0, 0, 5, 5);
 		gbc_descriptionScrollPane.fill = GridBagConstraints.BOTH;
