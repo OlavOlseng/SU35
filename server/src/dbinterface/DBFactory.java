@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import models.*;
 
-public class Factory {
+public class DBFactory {
 	public Employee getEmployee(ResultSet rs) throws ClassNotFoundException, SQLException {
 		//String query = "SELECT * FROM Employee WHERE email=" + employeeEmail;
 		String email = "";
