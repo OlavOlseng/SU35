@@ -9,9 +9,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import networking.SBPFactory.MessageType;
 
-import util.XMLSerializer;
-
-
 import models.Employee;
 
 import dbinterface.DBConnection;
@@ -66,7 +63,8 @@ public class ServerMessageHandler extends MessageHandler{
 			ResultSet set = conn.makeSingleQuery(query);
 			ArrayList<Employee> employees = dbFactory.getEmployees(set);
 			for(Employee e : employees){
-				payload = XMLSerializer.personToXml(e);
+				//TODO make serializer work properly
+				payload = (e.toString());
 			}
 			errorMsg = null;
 			error = false;
