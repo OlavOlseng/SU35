@@ -1,10 +1,8 @@
 package models;
 
 public class Employee {
-	
 	private final String email;
-	private String  firstName, lastName,
-		homePhone, mobilePhone;
+	private String  firstName, lastName, homePhone, mobilePhone;
 	
 	public Employee(String email, String firstName, String lastName, String homePhone, String mobilePhone) {
 		this.email = email;
@@ -36,15 +34,15 @@ public class Employee {
 	
 	public String toString() {
 		String s = new String();
-		s += "Email:\t" + email;
-		s += "\nName:\t" + lastName +", " + firstName;
+		s += "Employee Email:\t\t\t" + email;
+		s += "\nEmployee Name:\t\t\t" + lastName +", " + firstName;
 		
 		if (homePhone != null) {
-			s += "\nHome phn.:\t" + homePhone; 
+			s += "\nEmployee Home phn.:\t\t" + homePhone; 
 		}
 		
 		if (mobilePhone != null) {
-			s += "\nMobile phn.:\t" + mobilePhone;
+			s += "\nEmployee Mobile phn.:\t\t" + mobilePhone;
 		}
 		return s;
 	}
