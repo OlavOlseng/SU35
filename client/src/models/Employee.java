@@ -1,7 +1,11 @@
 package models;
 
 public class Employee {
-	private final String email;
+	private String email;
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	private String  firstName, lastName, homePhone, mobilePhone;
 	
 	public Employee(String email, String firstName, String lastName, String homePhone, String mobilePhone) {
@@ -11,6 +15,32 @@ public class Employee {
 		this.homePhone = homePhone;
 		this.mobilePhone = mobilePhone;
 	}
+	
+	
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+
+
+	public void setHomePhone(String homePhone) {
+		this.homePhone = homePhone;
+	}
+
+
+
+	public void setMobilePhone(String mobilePhone) {
+		this.mobilePhone = mobilePhone;
+	}
+
+
 
 	public String getEmail() {
 		return email;

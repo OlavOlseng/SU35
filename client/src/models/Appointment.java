@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Appointment {
-	private final int appointmentID;
+	private int appointmentID;
 	private Calendar startTime;
 	private Calendar endTime;
 	private String description;
