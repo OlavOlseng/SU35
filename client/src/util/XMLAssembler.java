@@ -11,12 +11,13 @@ import nu.xom.ParsingException;
 
 import models.Appointment;
 import models.Employee;
+import models.Invitation;
+import models.Invitation.Answer;
+import models.Room;
 
 public class XMLAssembler {
 	
-	public static Employee assembleEmployee(Element personElement, Employee e) throws ParseException {
-		String firstname = null, lastname = null, 
-				email = null, homephone = null, mobilephone = null;
+	public static void assembleEmployee(Element personElement, Employee e) throws ParseException {
 		
 		Element element = personElement.getFirstChildElement("email");
 		if (element != null) {
@@ -39,7 +40,52 @@ public class XMLAssembler {
 		if (element != null) {
 			e.setMobilePhone(element.getValue());
 		}
-		return new Employee(email, firstname, lastname, homephone, mobilephone);
+	}
+	
+	public static void assembleAppointment(Element appointmentElement, Appointment a) throws ParseException {
+		
+		Element element = appointmentElement.getFirstChildElement("appointmentID");
+		if (element != null) {
+			a.setAppointmentID(Integer.parseInt(element.getValue()));
+		}
+		element = appointmentElement.getFirstChildElement("starttime");
+		if(element != null){
+			a.setStartTime(element.getValue());
+		}
+		element = appointmentElement.getFirstChildElement("endtime");
+		if(element != null){
+			a.setEndTime(element.getValue());
+		}
+		element = appointmentElement.getFirstChildElement("description");
+		if(element != null){
+			a.setDescription(element.getValue());
+		}
+		element = appointmentElement.getFirstChildElement("location");
+		if(element != null){
+			a.setLocation(element.getValue());
+		}
+		element = appointmentElement.getFirstChildElement("meetingleader");
+		if(element != null){
+			
+		}
+		element = appointmentElement.getFirstChildElement("meetingroom");
+		if(element != null){
+			
+		}
+	}
+	
+	public static void assembleMeetingRoom(Element meetingRoomElement, Room mr){
+		Element element = meetingRoomElement.getFirstChildElement("name");
+		if(element != null){
+			mr.setName(element.getValue());
+		}
+	}
+	
+	public static void assembleInvitation(Element invitationElement, Invitation invite){
+		Element element = invitationElement.getFirstChildElement("answer");
+		if(element != null){
+			invite.setAnswer(Answer.valueOf(element.getValue()));
+		}
 	}
 	
 

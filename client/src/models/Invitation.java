@@ -1,7 +1,7 @@
 package models;
 
 public class Invitation {
-	public enum Answer { ACCEPTED, DECLINED, PENDING };
+	public enum Answer { ACCEPTED, DECLINED, PENDING};
 	private Answer answer;
 	private final String employeeEmail;
 	private final int appointmentID;
@@ -20,15 +20,11 @@ public class Invitation {
 		return appointmentID;
 	}
 	
-	public void acceptInvite() {
-		answer = Answer.ACCEPTED;
+	public void setAnswer(Answer answer){
+		this.answer = answer;
 	}
 	
-	public void declineInvite() {
-		answer = Answer.DECLINED;
-	}
-	
-	public Answer getStatus() {
+	public Answer getAnswer() {
 		return answer;
 	}
 	

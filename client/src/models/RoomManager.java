@@ -4,17 +4,17 @@ import java.util.ArrayList;
 
 public class RoomManager {
 	private int minRoomSize;
-	private ArrayList<MeetingRoom> meetingRooms;
+	private ArrayList<Room> rooms;
 	
 	public RoomManager(int minRoomSize) {
 		this.minRoomSize = minRoomSize;
 	}
 	
-	public ArrayList<MeetingRoom> findSuitableRooms() {
+	public ArrayList<Room> findSuitableRooms() {
 		String query = "SELECT...";
 		/*
 		 * send query to server
 		 */
-		return meetingRooms;
+		return rooms;
 	}
 }

@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class SocketTest implements MessageListener{
 	public static int CLIENTPORT = 49153;
-	public static String host = "localhost";
+	public static String host = "78.91.14.138";
 	
 	private Connection conn;
 	private Socket client;

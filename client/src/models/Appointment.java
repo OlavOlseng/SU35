@@ -12,8 +12,8 @@ public class Appointment {
 	private Calendar endTime;
 	private String description;
 	private String location;
-	private MeetingRoom meetingRoom;
-	private Employee meetingLeader;
+	private String meetingRoom;
+	private String meetingLeader;
 	
 	public Appointment(int appointmentID) {
 		this.appointmentID = appointmentID;
@@ -21,6 +21,10 @@ public class Appointment {
 		endTime = Calendar.getInstance();
 		description = "";
 		location = "";
+	}
+	
+	public void setAppointmentID(int appointmentID){
+		this.appointmentID = appointmentID;
 	}
 	
 	public int getAppointmentID() {
@@ -104,22 +108,6 @@ public class Appointment {
 	
 	public String getLocation() {
 		return location;
-	}
-	
-	public void setMeetingRoom(MeetingRoom meetingRoom) {
-		this.meetingRoom = meetingRoom;
-	}
-	
-	public MeetingRoom getMeetingRoom() {
-		return meetingRoom;
-	}
-	
-	public void setMeetingLeader(Employee meetingLeader) {
-		this.meetingLeader = meetingLeader;
-	}
-	
-	public Employee getMeetingLeader() {
-		return meetingLeader;
 	}
 	
 	// May cause null-pointer hell, too lazy to fix.

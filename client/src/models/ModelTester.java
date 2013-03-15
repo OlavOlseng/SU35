@@ -5,8 +5,8 @@ public class ModelTester {
 		// Test employee
 		Employee employee = new Employee("augustak@stud.ntnu.no", "August", "Kvernmo", "47713553", "47713553");
 		// Test meeting room
-		MeetingRoom meetingRoom = new MeetingRoom(101, 10);
-		meetingRoom.setName("Sesam sitt lokale");
+		Room room = new Room(101, 10);
+		room.setName("Sesam sitt lokale");
 		// Test meeting
 		Appointment meeting = new Appointment(1);
 		meeting.setDate("2013-03-13");
@@ -15,7 +15,7 @@ public class ModelTester {
 		meeting.setDescription("ekskursjon til Sesam");
 		meeting.setLocation("Sesam gatekjøkken");
 		meeting.setMeetingLeader(employee);
-		meeting.setMeetingRoom(meetingRoom);
+		meeting.setMeetingRoom(room);
 		System.out.println(meeting.toString());
 	}
 }

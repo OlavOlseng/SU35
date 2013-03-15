@@ -1,11 +1,11 @@
 package models;
 
-public class MeetingRoom {
+public class Room {
 	private final int meetingRoomID;
 	private final int roomSize;
 	private String name;
 	
-	public MeetingRoom(int meetingRoomID, int roomSize) {
+	public Room(int meetingRoomID, int roomSize) {
 		this.meetingRoomID = meetingRoomID;
 		this.roomSize = roomSize;
 		name = "";
