@@ -29,7 +29,7 @@ public class DBFactory {
 		return employees;
 	}
 	
-	public MeetingRoom getMeetingRoom(ResultSet rs) throws ClassNotFoundException, SQLException {
+	public Room getMeetingRoom(ResultSet rs) throws ClassNotFoundException, SQLException {
 		//String query = "SELECT * FROM Meetingroom WHERE meetingroomID=" + roomID;
 		int roomID=0;
 		int roomSize=0;
@@ -39,7 +39,7 @@ public class DBFactory {
 			roomSize = rs.getInt(2);
 			roomName = rs.getString(3);
 		}
-		MeetingRoom meetingRoom = new MeetingRoom(roomID, roomSize);
+		Room meetingRoom = new Room(roomID, roomSize);
 		meetingRoom.setName(roomName);
 		return meetingRoom;
 	}
