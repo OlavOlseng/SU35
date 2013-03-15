@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import models.*;
+import models.Invitation.Answer;
 
 public class DBFactory {
 	public ArrayList<Employee> getEmployees(ResultSet rs) throws ClassNotFoundException, SQLException {
@@ -77,5 +78,40 @@ public class DBFactory {
 			appointments.add(appointment);
 		}
 		return appointments;
+	}
+
+	public ArrayList<Invitation> getInvitations(ResultSet rs) throws SQLException {
+		// TODO Auto-generated method stub
+		ArrayList<Invitation> invites = new ArrayList<Invitation>();
+		
+		if(!rs.first()) throw new SQLException("No matching entry found"); 
+		
+		rs.beforeFirst();
+		while(rs.next())
+		{
+			String employee_email = rs.getString(1);
+			int appointmentID = rs.getInt(2);
+			int accepted = rs.getInt(3);
+			String message = rs.getString(4);
+			
+			Invitation i = new Invitation(employee_email, appointmentID);
+			
+			Answer a;
+			switch(accepted) {
+			case(1):
+				a = Answer.ACCEPTED;
+			break;
+			case(0):
+				a = Answer.DECLINED;
+			break;
+			default:
+				a = Answer.PENDING;
+			}
+			
+			i.setAnswer(a);
+			i.setMessage(message);
+			invites.add(i);
+		}
+		return invites;
 	}
 }

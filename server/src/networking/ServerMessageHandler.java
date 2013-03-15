@@ -11,6 +11,7 @@ import networking.SBPFactory.MessageType;
 
 import models.Appointment;
 import models.Employee;
+import models.Invitation;
 
 import dbinterface.DBConnection;
 import dbinterface.DBFactory;
@@ -40,17 +41,23 @@ public class ServerMessageHandler extends MessageHandler{
 		case(SBPFactory.OPTION_APPOINTMENT):
 			getAppointments(data);
 		break;
+		case(SBPFactory.OPTION_INVITATIONS_BY_EMPLOYEE):
+			getInvitationsE(data);
+		break;
+		case(SBPFactory.OPTION_INVITATIONS_BY_APPOINTMENT):
+			getInvitationsA(data);
+		break;
 		default:
 			response = msgFactory.createMessage(MessageType.GET, true, "No matching command found", data[3], null);
 			try {
 				bridge.send(response);
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
 		
 	}
+
 
 	public void getEmployees(String[] data) {
 		boolean error = true;
@@ -77,12 +84,11 @@ public class ServerMessageHandler extends MessageHandler{
 
 			for(Employee e : employees){
 				//TODO make serializer work properly
-				payload = data[3] + "¤" + (e.toString());
+				payload = (e.toString());
 				response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_EMPLOYEE, payload);
 				try {
 					this.bridge.send(response);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -115,7 +121,7 @@ public class ServerMessageHandler extends MessageHandler{
 
 			for(Appointment a : apps){
 				//TODO make serializer work properly
-				payload = data[3] + "¤" + (a.toString());
+				payload = (a.toString());
 				response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_APPOINTMENT, payload);
 				try {
 					this.bridge.send(response);
@@ -124,6 +130,82 @@ public class ServerMessageHandler extends MessageHandler{
 				}
 			}
 		}
+	}
+	
+	public void getInvitationsE(String[] data) {
+		boolean error = true;
+		String errorMsg = "Unknown error...";
+		String id = data[4];
+		String payload = null;
+		String response;
+		ArrayList<Invitation> invites = new ArrayList<Invitation>();
+		
+		String query = String.format("SELECT * FROM invitation WHERE employee_email='%s'", id);
+		ResultSet set;
+		
+		try {
+			set = conn.makeSingleQuery(query);
+			invites = dbFactory.getInvitations(set);
+			
+			errorMsg = null;
+			error = false;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			error = true;
+			errorMsg = e.getMessage();
+		} finally {
+
+			for(Invitation i : invites){
+				//TODO make serializer work properly
+				payload = (i.toString());
+				response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_INVITATION, payload);
+				try {
+					this.bridge.send(response);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	private void getInvitationsA(String[] data) {
+		boolean error = true;
+		String errorMsg = "Unknown error...";
+		String id = data[4];
+		String payload = null;
+		String response;
+		ArrayList<Invitation> invites = new ArrayList<Invitation>();
+		
+		String query = String.format("SELECT * FROM invitation WHERE appointentID='%s'", id);
+		ResultSet set;
+		
+		try {
+			set = conn.makeSingleQuery(query);
+			invites = dbFactory.getInvitations(set);
+			
+			errorMsg = null;
+			error = false;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			error = true;
+			errorMsg = e.getMessage();
+		} finally {
+
+			for(Invitation i : invites){
+				//TODO make serializer work properly
+				payload = (i.toString());
+				response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_INVITATION, payload);
+				try {
+					this.bridge.send(response);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+
+		
 	}
 	
 	@Override
@@ -168,7 +250,6 @@ public class ServerMessageHandler extends MessageHandler{
 				errorMsg = null;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		finally{
@@ -178,10 +259,7 @@ public class ServerMessageHandler extends MessageHandler{
 		try {
 			bridge.send(response);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
-
 }

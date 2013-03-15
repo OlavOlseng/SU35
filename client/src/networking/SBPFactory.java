@@ -23,7 +23,9 @@ public class SBPFactory {
 	public final static String OPTION_NONE = "none";
 	public final static String OPTION_EMPLOYEE = "employee";
 	public final static String OPTION_APPOINTMENT = "appointment";
-	public final static String OPTION_INVITATIONS = "invitations";
+	public final static String OPTION_INVITATION = "invitation";
+	public final static String OPTION_INVITATIONS_BY_EMPLOYEE = "invitationE";
+	public final static String OPTION_INVITATIONS_BY_APPOINTMENT = "invitationA";
 	public final static String OPTION_ROOM = "room";
 	public final static String OPTION_ALARM = "alarm";
 	

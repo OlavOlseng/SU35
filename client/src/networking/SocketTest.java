@@ -48,7 +48,7 @@ public class SocketTest implements MessageListener{
 				}
 				if (msg.equals("testA2")) {
 					System.out.println("Querying");
-					msg = test.fac.makeGetMessage(SBPFactory.OPTION_APPOINTMENT, "1");
+					msg = test.fac.makeGetMessage(SBPFactory.OPTION_APPOINTMENT, "2");
 				}
 				
 				if (msg.equals("login1")) {
