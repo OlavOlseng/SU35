@@ -5,19 +5,20 @@ import java.util.ArrayList;
 public class Group {
 	private final int groupID;
 	private String name;
-	private ArrayList<Employee> members;
+	private ArrayList<String> members;
 	
 	public Group(int groupID) {
 		this.groupID = groupID;
-		members = new ArrayList<Employee>();
+		members = new ArrayList<String>();
 		name = "";
 	}
 	
-	public ArrayList<Employee> getMembers() {
-		String query = "SELECT...";
-		/*
-		 * send query to server
-		 */
+	public void addMember(String id){
+		// TODO add code for sending to database
+		members.add(id);
+	}
+	
+	public ArrayList<String> getMembers() {
 		return members;
 	}
 	
@@ -31,7 +32,7 @@ public class Group {
 	
 	public String toString() {
 		String ret = "Group ID:\t" + groupID + "\nGroup name:\t" + name + "\nGroup members:\t";
-		for(Employee e : members) {
+		for(String e : members) {
 			ret += e.toString() + ", ";
 		}
 		return ret;

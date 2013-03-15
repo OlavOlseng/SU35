@@ -6,15 +6,22 @@ public class ApplicationModel {
 	private static ApplicationModel model = null;
 	private HashMap<String, Employee> employees;
 	private HashMap<Integer, Appointment> appointment;
-	private HashMap<Integer, Room> rooms;
+	private HashMap<String, Room> rooms;
 	private HashMap<String, Invitation> invitations;
+	private HashMap<Integer, Alarm> alarms;
 	public String username; 
 	
 	private ApplicationModel(){
 		employees = new HashMap<String, Employee>();
 		appointment = new HashMap<Integer, Appointment>();
-		rooms = new HashMap<Integer, Room>();
+		rooms = new HashMap<String, Room>();
 		invitations = new HashMap<String, Invitation>();
+		alarms = new HashMap<Integer, Alarm>();
+	}
+	
+	// key = email
+	public void addEmployee(String key, Employee value){
+		employees.put(key, value);
 	}
 	
 	public Employee getEmployee(String email){
@@ -29,6 +36,11 @@ public class ApplicationModel {
 		if(employees.containsKey(email)){
 			employees.put(email, e);
 		}
+	}
+	
+	// key = appointmentID
+	public void addAppointment(int key, Appointment value){
+		appointment.put(key, value);
 	}
 	
 	public Appointment getAppointment(int aID){
@@ -51,6 +63,11 @@ public class ApplicationModel {
 		}
 	}
 	
+	// key = email and appointmentID
+	public void addInvitation(String key, Invitation value){
+		invitations.put(key, value);
+	}
+	
 	public Invitation getInvitation(String id){
 		Invitation i = invitations.get(id);
 		if(i == null){
@@ -71,7 +88,12 @@ public class ApplicationModel {
 		}
 	}
 	
-	public Room getMeetingRoom(int id){
+	// key = name
+	public void addRoom(String key, Room value){
+		rooms.put(key, value);
+	}
+	
+	public Room getRoom(int id){
 		Room r = rooms.get(id);
 		if(r == null){
 			//TODO add method to clientmessagehandler
@@ -79,7 +101,7 @@ public class ApplicationModel {
 		return r;
 	}
 	
-	public void updateRoom(int id, Room r){
+	public void updateRoom(String id, Room r){
 		if(rooms.containsKey(id)){
 			rooms.put(id, r);
 		}
@@ -88,6 +110,31 @@ public class ApplicationModel {
 	public void deleteRoom(int id){
 		if(rooms.containsKey(id)){
 			rooms.remove(id);
+		}
+	}
+	
+	// key = alarmID
+	public void addAlarm(int key, Alarm value){
+		alarms.put(key, value);
+	}
+	
+	public Alarm getAlarm(int id){
+		Alarm a = alarms.get(id);
+		if(a == null){
+			// TODO add method to clientmessagehandler
+		}
+		return a;
+	}
+	
+	public void updateAlarm(int id, Alarm r){
+		if(alarms.containsKey(id)){
+			alarms.put(id, r);
+		}
+	}
+	
+	public void deleteAlarm(int id){
+		if(alarms.containsKey(id)){
+			alarms.remove(id);
 		}
 	}
 	
