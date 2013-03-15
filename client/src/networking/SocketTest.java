@@ -49,8 +49,17 @@ public class SocketTest implements MessageListener{
 				if (msg.equals("testA2")) {
 					System.out.println("Querying");
 					msg = test.fac.makeGetMessage(SBPFactory.OPTION_APPOINTMENT, "2");
-				}
 				
+				}
+				if (msg.equals("testI1")) {
+					System.out.println("Querying");
+					msg = test.fac.makeGetMessage(SBPFactory.OPTION_INVITATIONS_BY_APPOINTMENT, "1");
+					
+				}
+				if (msg.equals("testI2")) {
+					System.out.println("Querying");
+					msg = test.fac.makeGetMessage(SBPFactory.OPTION_INVITATIONS_BY_EMPLOYEE, "tissen");
+				}
 				if (msg.equals("login1")) {
 					System.out.println("Logging in");
 					msg = test.fac.makeLoginMessage("Leif", "1");

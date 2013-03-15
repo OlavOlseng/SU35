@@ -14,15 +14,25 @@ public class Invitation {
 	}
 
 	private Answer answer;
-	private final String employeeEmail;
-	private final int appointmentID;
 	String message;
+	private String employeeEmail;
+	private int appointmentID;
 	
 	public Invitation(String employeeEmail, int appointmentID) {
 		this.employeeEmail = employeeEmail;
 		this.appointmentID = appointmentID;
 		answer = Answer.PENDING;
 
+	}
+	
+	public void setEmployeeEmail(String employeeEmail) {
+		this.employeeEmail = employeeEmail;
+	}
+
+
+
+	public void setAppointmentID(int appointmentID) {
+		this.appointmentID = appointmentID;
 	}
 
 	public String getEmployeeEmail() {

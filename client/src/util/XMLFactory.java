@@ -34,11 +34,6 @@ public class XMLFactory {
 		root.appendChild(node);
 	}
 	
-	public static Document getDocument(String XML) throws ValidityException, ParsingException, IOException{
-		Document d = new Builder().build(XML);
-		return d;
-	}
-	
 	public static String getXML() {
 		Document d = new Document(root);
 		root = null;
