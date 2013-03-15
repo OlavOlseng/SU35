@@ -31,6 +31,22 @@ public class Appointment {
 		return appointmentID;
 	}
 	
+	public String getMeetingRoom() {
+		return meetingRoom;
+	}
+
+	public void setMeetingRoom(String meetingRoom) {
+		this.meetingRoom = meetingRoom;
+	}
+
+	public String getMeetingLeader() {
+		return meetingLeader;
+	}
+
+	public void setMeetingLeader(String meetingLeader) {
+		this.meetingLeader = meetingLeader;
+	}
+
 	private void setDate(int year, int month, int day) {
 		startTime.set(Calendar.YEAR, year+1900);
 		startTime.set(Calendar.MONTH, month);

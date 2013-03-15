@@ -1,10 +1,6 @@
 package models;
 
-import java.text.ParseException;
 import java.util.HashMap;
-import util.XMLAssembler;
-import nu.xom.Document;
-import nu.xom.Element;
 
 public class ApplicationModel {
 	private static ApplicationModel model = null;

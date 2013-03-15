@@ -66,11 +66,11 @@ public class XMLAssembler {
 		}
 		element = appointmentElement.getFirstChildElement("meetingleader");
 		if(element != null){
-			
+			a.setMeetingLeader(element.getValue());
 		}
 		element = appointmentElement.getFirstChildElement("meetingroom");
 		if(element != null){
-			
+			a.setMeetingRoom(element.getValue());
 		}
 	}
 	
@@ -78,6 +78,10 @@ public class XMLAssembler {
 		Element element = meetingRoomElement.getFirstChildElement("name");
 		if(element != null){
 			mr.setName(element.getValue());
+		}
+		element = meetingRoomElement.getFirstChildElement("size");
+		if(element != null){
+			mr.setRoomSize(Integer.parseInt(element.getValue()));
 		}
 	}
 	

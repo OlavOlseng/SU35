@@ -1,21 +1,18 @@
 package models;
 
 public class Room {
-	private final int meetingRoomID;
-	private final int roomSize;
+	private int roomSize;
 	private String name;
 	
-	public Room(int meetingRoomID, int roomSize) {
-		this.meetingRoomID = meetingRoomID;
+	public Room(String name, int roomSize) {
+		this.name = name;
 		this.roomSize = roomSize;
-		name = "";
+	}
+	public void setRoomSize(int roomSize){
+		this.roomSize = roomSize;
 	}
 	
-	public int getMeetingRoomID() {
-		return meetingRoomID;
-	}
-	
-	public int roomSize() {
+	public int getRoomSize() {
 		return roomSize;
 	}
 	
@@ -28,6 +25,6 @@ public class Room {
 	}
 	
 	public String toString() {
-		return "Room ID:\t\t\t" + meetingRoomID + "\nRoom Name:\t\t\t" + name + "\nRoom Size:\t\t\t" + roomSize;
+		return "Room Name:\t\t\t" + name + "\nRoom Size:\t\t\t" + roomSize;
 	}
 }
