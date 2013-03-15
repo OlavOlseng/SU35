@@ -33,12 +33,11 @@ public class ServerMessageHandler extends MessageHandler{
 	public void getEntry(String[] data) {
 		String what = data[3];
 		String response = null;
-
 		switch(what) {
-		case("employee"): 
+		case(SBPFactory.OPTION_EMPLOYEE): 
 			getEmployees(data);
 		break;
-		case("appointment"):
+		case(SBPFactory.OPTION_APPOINTMENT):
 			getAppointments(data);
 		break;
 		default:
@@ -79,7 +78,7 @@ public class ServerMessageHandler extends MessageHandler{
 			for(Employee e : employees){
 				//TODO make serializer work properly
 				payload = data[3] + "¤" + (e.toString());
-				response = msgFactory.createMessage(MessageType.GET, error, errorMsg, data[3], payload);
+				response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_EMPLOYEE, payload);
 				try {
 					this.bridge.send(response);
 				} catch (IOException e1) {
@@ -117,7 +116,7 @@ public class ServerMessageHandler extends MessageHandler{
 			for(Appointment a : apps){
 				//TODO make serializer work properly
 				payload = data[3] + "¤" + (a.toString());
-				response = msgFactory.createMessage(MessageType.GET, error, errorMsg, data[3], payload);
+				response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_APPOINTMENT, payload);
 				try {
 					this.bridge.send(response);
 				} catch (IOException e1) {

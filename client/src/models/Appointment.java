@@ -1,13 +1,11 @@
 package models;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 public class Appointment {
 	private int appointmentID;
+	private Calendar date;
 	private Calendar startTime;
 	private Calendar endTime;
 	private String description;
@@ -17,10 +15,11 @@ public class Appointment {
 	
 	public Appointment(int appointmentID) {
 		this.appointmentID = appointmentID;
-		startTime = Calendar.getInstance();
-		endTime = Calendar.getInstance();
 		description = "";
 		location = "";
+		startTime = Calendar.getInstance();
+		endTime = Calendar.getInstance();
+		date = Calendar.getInstance();
 	}
 	
 	public void setAppointmentID(int appointmentID){
@@ -48,41 +47,24 @@ public class Appointment {
 	}
 
 	private void setDate(int year, int month, int day) {
-		startTime.set(Calendar.YEAR, year+1900);
-		startTime.set(Calendar.MONTH, month);
-		startTime.set(Calendar.DAY_OF_MONTH, day);
-		endTime.set(Calendar.YEAR, year+1900);
-		endTime.set(Calendar.MONTH, month);
-		endTime.set(Calendar.DAY_OF_MONTH, day);
+		date.set(year, month, day, 0, 0, 0);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void setDate(String dateString) {
-		Date date;
-		try {
-			date = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(dateString);
-			setDate(date.getYear(), date.getMonth(), date.getDay());
-		}
-		catch(ParseException pe) {
-			System.out.println(pe.getMessage());
-		}
+		String[] temp = dateString.split("-");
+		setDate(Integer.parseInt(temp[0]), Integer.parseInt(temp[2]), Integer.parseInt(temp[2]));
 	}
 	
 	private void setStartTime(int hour, int minute) {
+		startTime.setTime(date.getTime());
 		startTime.set(Calendar.HOUR_OF_DAY, hour);
 		startTime.set(Calendar.MINUTE, minute);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void setStartTime(String time) {
-		Date date;
-		try {
-			date = new SimpleDateFormat("hh:mm", Locale.ENGLISH).parse(time);
-			setStartTime(date.getHours(), date.getMinutes());
-		}
-		catch(ParseException pe) {
-			System.out.println(pe.getMessage());
-		}
+		String[] temp0 = time.split(" ");
+		String[] temp = temp0[1].split(":");
+		setStartTime(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
 	}
 	
 	public Date getStartTime() {
@@ -90,20 +72,15 @@ public class Appointment {
 	}
 	
 	private void setEndTime(int hour, int minute) {
+		endTime.setTime(date.getTime());
 		endTime.set(Calendar.HOUR_OF_DAY, hour);
 		endTime.set(Calendar.MINUTE, minute);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void setEndTime(String time) {
-		Date date;
-		try {
-			date = new SimpleDateFormat("hh:mm", Locale.ENGLISH).parse(time);
-			setEndTime(date.getHours(), date.getMinutes());
-		}
-		catch(ParseException pe) {
-			System.out.println(pe.getMessage());
-		}
+		String[] temp0 = time.split(" ");
+		String[] temp = temp0[1].split(":");
+		setEndTime(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
 	}
 	
 	public Date getEndTime() {
@@ -126,11 +103,16 @@ public class Appointment {
 		return location;
 	}
 	
-	// May cause null-pointer hell, too lazy to fix.
+	// May cause null-pointer hell, too lazy to fix. <--- TRUE DAT
 	public String toString() {
-		return "Appointment ID:\t\t\t" + appointmentID + "\nAppointment Description:\t" + description +
+		String s  = "Appointment ID:\t\t\t" + appointmentID + "\nAppointment Description:\t" + description +
 				"\nStart time:\t\t\t" + startTime.getTime().toString() + "\nEnd time:\t\t\t" + endTime.getTime().toString() + 
-				"\nAppointment Location:\t\t" + location + "\nMeeting room:\n" + meetingRoom.toString() + 
-				"\nMeeting Leader:\n" + meetingLeader.toString();
+				"\nAppointment Location:\t\t" + location;
+		if (meetingRoom != null && meetingRoom != "")
+				s +=  "\nMeeting room:\n" + meetingRoom.toString();
+		if(meetingLeader != null && meetingLeader != "")
+				s += "\nMeeting Leader:\n" + meetingLeader.toString();
+		System.out.println(date.getTime().toString());
+		return s;
 	}
 }

@@ -19,12 +19,13 @@ public class SBPFactory {
 			return c;
 		}
 	}
-	public static String OPTION_NONE = "none";
-	public static String OPTION_EMPLOYEE = "employee";
-	public static String OPTION_APPOINTMENT = "appointment";
-	public static String OPTION_INVITATIONS = "invitations";
-	public static String OPTION_ROOM = "room";
-	public static String OPTION_ALARM = "alarm";
+	
+	public final static String OPTION_NONE = "none";
+	public final static String OPTION_EMPLOYEE = "employee";
+	public final static String OPTION_APPOINTMENT = "appointment";
+	public final static String OPTION_INVITATIONS = "invitations";
+	public final static String OPTION_ROOM = "room";
+	public final static String OPTION_ALARM = "alarm";
 	
 	public String makeLoginMessage(String user, String password) {
 		String payload = String.format("%s¤%s", user, password);

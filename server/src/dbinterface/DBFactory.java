@@ -1,11 +1,8 @@
 package dbinterface;
 
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import com.sun.xml.internal.ws.api.addressing.WSEndpointReference.Metadata;
 
 import models.*;
 
@@ -31,15 +28,13 @@ public class DBFactory {
 	
 	public Room getMeetingRoom(ResultSet rs) throws ClassNotFoundException, SQLException {
 		//String query = "SELECT * FROM Meetingroom WHERE meetingroomID=" + roomID;
-		int roomID=0;
+		String roomName ="";
 		int roomSize=0;
-		String roomName = "";
 		while(rs.next()) {
-			roomID = rs.getInt(1);
 			roomSize = rs.getInt(2);
-			roomName = rs.getString(3);
+			roomName = rs.getString(1);
 		}
-		Room meetingRoom = new Room(roomID, roomSize);
+		Room meetingRoom = new Room(roomName, roomSize);
 		meetingRoom.setName(roomName);
 		return meetingRoom;
 	}
@@ -56,18 +51,21 @@ public class DBFactory {
 			int appointmentID = rs.getInt(1);
 			String startTime = rs.getString(2);
 			String endTime = rs.getString(3);
-			// a date field needs to be added to the SQLDB
-			String date = rs.getString(4);
-			String description = rs.getString(5);
-			String location = rs.getString(6);
-			//int meetingRoomID = rs.getInt(7);
-			//String meetingLeaderEmail = rs.getString(8);
+			String date = startTime.split(" ")[0];
+			String description = rs.getString(4);
+			String location = rs.getString(5);
+			String meetingRoom = rs.getString(6);
+			String meetingLeaderEmail = rs.getString(7);
+			
 			Appointment appointment = new Appointment(appointmentID);
+			appointment.setDate(date);
 			appointment.setStartTime(startTime);
 			appointment.setEndTime(endTime);
-			appointment.setDate(date);
 			appointment.setDescription(description);
 			appointment.setLocation(location);
+			appointment.setMeetingRoom(meetingRoom);
+			appointment.setMeetingLeader(meetingLeaderEmail);
+			
 			/*
 			// get the MeetingRoom object associated with the appointment
 			MeetingRoom meetingRoom = getMeetingRoom(meetingRoomID);
