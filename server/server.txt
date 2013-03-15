@@ -1,1 +1,23 @@
-All server studd goes here
+All server stuFF goes here
+
+TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+1. implement getting features:
+    [x] Appointment by ID           
+    [x] Employee by ID              
+    [x] Alarm by Employee           
+    [ ] Invitations Employee        
+    [ ] Invitations by appointment
+    [ ] Invitations by appointment and employee
+    [ ] Groups
+    [ ] Finalized
+    
+    
+2. implement update features:
+    [ ] Finalized
+    
+3.  Implement create features:
+    [ ] Finalized
+    
+4. Implement deletion features:
+    [ ] Finalized
