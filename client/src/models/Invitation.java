@@ -1,5 +1,7 @@
 package models;
 
+import java.awt.datatransfer.StringSelection;
+
 public class Invitation {
 	public enum Answer { 
 		ACCEPTED(1), 
@@ -60,14 +62,7 @@ public class Invitation {
 	}
 
 	public String toString() {
-		if(answer == Answer.ACCEPTED) {
-			return "Invitation accepted";
-		}
-		else if(answer == Answer.DECLINED){
-			return "Invitation declined";
-		}
-		else {
-			return "Invitation pending";
-		}
+		String s = String.format("Employee: %s \n Appointment: %d\n, Answer: %s \n Message: %s", employeeEmail, appointmentID, answer, message);
+		return s;
 	}
 }
