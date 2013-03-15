@@ -19,33 +19,40 @@ public class SBPFactory {
 			return c;
 		}
 	}
+	public static String OPTION_NONE = "none";
+	public static String OPTION_EMPLOYEE = "employee";
+	public static String OPTION_APPOINTMENT = "appointment";
+	public static String OPTION_INVITATIONS = "invitations";
+	public static String OPTION_ROOM = "room";
+	public static String OPTION_ALARM = "alarm";
 	
 	public String makeLoginMessage(String user, String password) {
 		String payload = String.format("%s¤%s", user, password);
-		return createMessage(MessageType.LOGIN, false, "", payload);
+		return createMessage(MessageType.LOGIN, false, null, OPTION_NONE, payload);
 	}
 	
-	public String makeGetMessage(String what, String id) {
-		String payload = String.format("%s¤%s", what, id);
-		return createMessage(MessageType.GET, false, "", payload);
+	public String makeGetMessage(String option, String id) {
+		String payload = String.format("%s", id);
+		return createMessage(MessageType.GET, false, null, option, payload);
 	}
 	
-	public String makeDeleteMessage(String table, String condition) {
-		String payload = String.format("%s¤%s", table, condition);
-		return createMessage(MessageType.DELETE, false, "", payload);
+	public String makeDeleteMessage(String option, String condition) {
+		String payload = String.format("%s", condition);
+		return createMessage(MessageType.DELETE, false, null, option, payload);
 	}
 	
-	public String makeCreateMessage(String table, String what, String values){
-		String payload = String.format("%s¤%s¤%s", table, what, values);
-		return createMessage(MessageType.CREATE, false, "", payload);
+	//Not finalized
+	public String makeCreateMessage(String option, String what, String values){
+		String payload = String.format("%s¤%s", what, values);
+		return createMessage(MessageType.CREATE, false, null, option, payload);
 	}
 	
-	public String makeUpdateMessage(String table, String what, String condition) {
-		String payload = String.format("%s¤%s¤%s",table, what, condition);
-		return createMessage(MessageType.UPDATE, false, "", payload);
+	public String makeUpdateMessage(String option, String what, String condition) {
+		String payload = String.format("%s¤%s", what, condition);
+		return createMessage(MessageType.UPDATE, false, null, option, payload);
 	}
 	
-	public String createMessage(MessageType t, boolean error, String errorMsg, String payload) {
+	public String createMessage(MessageType t, boolean error, String errorMsg, String option, String payload) {
 		String msg = new String();
 		
 		msg += t.getType() + "~";
@@ -56,6 +63,7 @@ public class SBPFactory {
 		msg += "~";
 		
 		msg += errorMsg + "~";
+		msg += option + "~";
 		msg += payload;
 		
 		return msg;

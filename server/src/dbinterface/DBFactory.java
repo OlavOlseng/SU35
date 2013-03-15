@@ -47,6 +47,10 @@ public class DBFactory {
 	public ArrayList<Appointment> getAppointments(ResultSet rs) throws ClassNotFoundException, SQLException {
 		//String query = "SELECT * FROM Appointment WHERE appointmentID=(SELECT appointmentID FROM Employee WHERE email=" + employeeEmail + ")";
 		ArrayList<Appointment> appointments = new ArrayList<Appointment>();
+		
+		if(!rs.first()) throw new SQLException("No matching entry found"); 
+		
+		rs.beforeFirst();
 		while(rs.next())
 		{
 			int appointmentID = rs.getInt(1);
