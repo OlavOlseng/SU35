@@ -13,13 +13,16 @@ import java.awt.GridBagConstraints;
 import javax.swing.JLabel;
 import java.awt.Insets;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
 import java.awt.event.ActionListener;
@@ -30,15 +33,19 @@ import javax.swing.SwingConstants;
 public class EditView extends JPanel/*JFrame*/ {
 	private ActionListener peopleListener;
 
-	private JButton addButton;
-	private JButton calendarButton;
-	private JPanel _parentContentPane;
-	private JPopupMenu addPeopleMenu;
-	private JTextField titleField;
-	private JTextField dateField;
-	private JTextField startField;
-	private JTextField endField;
-	private JTextField whereField;
+	private JButton 				addButton;
+	private JButton 				removeButton;
+	private JButton 				calendarButton;
+	private JList					peopleList;
+	private JPanel 				_parentContentPane;
+	private JPopupMenu 			addPeopleMenu;
+	private JScrollPane 			peopleListScrollPane;
+	private JTextField 			titleField;
+	private JTextField 			dateField;
+	private JTextField 			startField;
+	private JTextField 			endField;
+	private JTextField 			whereField;
+	private DefaultListModel 	peopleListModel;
 
 	/**
 	 * Launch the application.
@@ -67,7 +74,9 @@ public class EditView extends JPanel/*JFrame*/ {
 	 */
 	public EditView(JPanel parentContentPane) {
 		_parentContentPane = parentContentPane;
-	
+		peopleListModel	 = new DefaultListModel();
+		
+		
 		/*setTitle("Superblaster");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);*/
 		//setBounds(50, 50, 800, 600);
@@ -84,6 +93,9 @@ public class EditView extends JPanel/*JFrame*/ {
 		//gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		this.setLayout(gbl_contentPane);
 		
+		
+		
+		
 		calendarButton = new JButton("Calendar");
 		calendarButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -92,12 +104,14 @@ public class EditView extends JPanel/*JFrame*/ {
 				
 			}
 		});
+		
 		GridBagConstraints gbc_calendarButton = new GridBagConstraints();
 		gbc_calendarButton.fill = GridBagConstraints.BOTH;
 		gbc_calendarButton.insets = new Insets(0, 0, 5, 5);
 		gbc_calendarButton.gridx = 1;
 		gbc_calendarButton.gridy = 1;
 		this.add(calendarButton, gbc_calendarButton);
+		
 		
 		JButton saveButton = new JButton("Save");
 		GridBagConstraints gbc_saveButton = new GridBagConstraints();
@@ -107,17 +121,20 @@ public class EditView extends JPanel/*JFrame*/ {
 		gbc_saveButton.gridy = 1;
 		this.add(saveButton, gbc_saveButton);
 		
+		
 		JButton deleteButton = new JButton("Delete");
 		deleteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
+		
 		GridBagConstraints gbc_deleteButton = new GridBagConstraints();
 		gbc_deleteButton.fill = GridBagConstraints.BOTH;
 		gbc_deleteButton.insets = new Insets(0, 0, 5, 5);
 		gbc_deleteButton.gridx = 5;
 		gbc_deleteButton.gridy = 1;
 		this.add(deleteButton, gbc_deleteButton);
+		
 		
 		JLabel titleLabel = new JLabel("Title:");
 		GridBagConstraints gbc_titleLabel = new GridBagConstraints();
@@ -126,6 +143,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		gbc_titleLabel.gridx = 1;
 		gbc_titleLabel.gridy = 3;
 		this.add(titleLabel, gbc_titleLabel);
+		
 		
 		titleField = new JTextField();
 		GridBagConstraints gbc_titleField = new GridBagConstraints();
@@ -136,6 +154,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		this.add(titleField, gbc_titleField);
 		titleField.setColumns(20);
 		
+		
 		JLabel peopleLabel = new JLabel("People:");
 		GridBagConstraints gbc_peopleLabel = new GridBagConstraints();
 		gbc_peopleLabel.insets = new Insets(0, 0, 5, 5);
@@ -143,6 +162,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		gbc_peopleLabel.gridy = 3;
 		gbc_peopleLabel.gridwidth = 2;
 		this.add(peopleLabel, gbc_peopleLabel);
+		
 		
 		JLabel dateLabel = new JLabel("Date:");
 		dateLabel.setToolTipText("Enter date in the format: DD-MM-YYYY");
@@ -153,6 +173,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		gbc_dateLabel.gridy = 4;
 		this.add(dateLabel, gbc_dateLabel);
 		
+		
 		dateField = new JTextField();
 		GridBagConstraints gbc_dateField = new GridBagConstraints();
 		gbc_dateField.insets = new Insets(0, 0, 5, 5);
@@ -161,6 +182,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		gbc_dateField.gridy = 4;
 		this.add(dateField, gbc_dateField);
 		dateField.setColumns(20);
+		
 		
 		JButton chooseDate = new JButton("Choose Date");
 		GridBagConstraints gbc_chooseDate = new GridBagConstraints();
@@ -178,16 +200,23 @@ public class EditView extends JPanel/*JFrame*/ {
 				}
 		});
 		
-		JList peopleList = new JList();
-		GridBagConstraints gbc_peopleList = new GridBagConstraints();
-		gbc_peopleList.insets = new Insets(0, 0, 5, 5);
-		gbc_peopleList.fill = GridBagConstraints.BOTH;
-		gbc_peopleList.gridx = 4;
-		gbc_peopleList.gridy = 4;
-		gbc_peopleList.gridwidth = 2;
-		gbc_peopleList.gridheight = 3;
-		this.add(peopleList, gbc_peopleList);
 		
+		//Here we create the list that will contain emailaddresses for the people
+		// who will be participating in a meeting 
+		peopleList = new JList(peopleListModel);
+		peopleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		peopleListScrollPane = new JScrollPane(peopleList);
+		
+		GridBagConstraints gbc_peopleListScrollPane = new GridBagConstraints();
+		gbc_peopleListScrollPane.insets = new Insets(0, 0, 5, 5);
+		gbc_peopleListScrollPane.fill = GridBagConstraints.BOTH;
+		gbc_peopleListScrollPane.gridx = 4;
+		gbc_peopleListScrollPane.gridy = 4;
+		gbc_peopleListScrollPane.gridwidth = 2;
+		gbc_peopleListScrollPane.gridheight = 3;
+		this.add(peopleListScrollPane, gbc_peopleListScrollPane);
+		
+				
 		JLabel startLabel = new JLabel("Start:");
 		startLabel.setToolTipText("Enter time in the format: HH:MM:SS");
 		GridBagConstraints gbc_startLabel = new GridBagConstraints();
@@ -196,6 +225,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		gbc_startLabel.gridx = 1;
 		gbc_startLabel.gridy = 5;
 		this.add(startLabel, gbc_startLabel);
+		
 		
 		startField = new JTextField();
 		GridBagConstraints gbc_startField = new GridBagConstraints();
@@ -206,6 +236,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		this.add(startField, gbc_startField);
 		startField.setColumns(20);
 		
+		
 		JLabel endLabel = new JLabel("End:");
 		endLabel.setToolTipText("Enter time in the format: HH:MM:SS");
 		GridBagConstraints gbc_endLabel = new GridBagConstraints();
@@ -214,6 +245,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		gbc_endLabel.gridx = 1;
 		gbc_endLabel.gridy = 6;
 		this.add(endLabel, gbc_endLabel);
+		
 		
 		endField = new JTextField();
 		GridBagConstraints gbc_endField = new GridBagConstraints();
@@ -225,16 +257,50 @@ public class EditView extends JPanel/*JFrame*/ {
 		endField.setColumns(20);
 		
 		
-		
+		//Here we handle selection of emailaddresses. The emailaddress selected
+		// goes into the peopleList.
 		peopleListener = new ActionListener() {
 			public void actionPerformed(ActionEvent event)
 				{
-				titleField.setText(((JMenuItem)event.getSource()).getText());
+				//We get the selected email
+				JMenuItem emailItem 		  = (JMenuItem)event.getSource();
+				String selectedEmail 	  = emailItem.getText();
+				boolean isEmailSelected = false;
+				
+				
+				//We need to check if the emailaddress is already in the peopleList
+				//NB! Could be handled differently where already chosen
+				// emailaddresses are not available in addPeopleMenu
+				for(int i = 0; i < peopleList.getModel().getSize(); i++)
+					{
+					String element = (String)peopleList.getModel().getElementAt(i);
+					
+					if(selectedEmail.equals(element))
+						{
+						JOptionPane.showMessageDialog(((JFrame)SwingUtilities.getRoot(
+								_parentContentPane)),
+								"Email address or group is already in list!",
+								"Error message", JOptionPane.ERROR_MESSAGE);
+						isEmailSelected = true;
+						
+						break;
+						}
+					}
+				
+				
+				//Email address is not already selected and we therefore add it to
+				// the peopleList
+				if(isEmailSelected == false)
+					{
+					peopleListModel.addElement(selectedEmail);
+					}
+			
+				
+				
+				//titleField.setText(((JMenuItem)event.getSource()).getText());
 				}
 			};
-		
-		
-		
+				
 		
 		addButton = new JButton("Add");
 		addButton.addActionListener(new ActionListener() {
@@ -249,13 +315,21 @@ public class EditView extends JPanel/*JFrame*/ {
 				
 				
 				
-				//Idea: We receive email addresses from database when we open application
-				// or when we open EditView and save these data in an array which we use when we add JMenuItems in
-				// the JPopupMenu. This should be put in a method
-				
+				//Idea: We receive email addresses from database when we open
+				// application or when we open EditView and save these data in an
+				// array which we use when we add JMenuItems in the JPopupMenu.
+				// This should be put in a method
 				//Testing purposes:
 				String[] emailAddresses = {"This is a text.",
-													"This is a much longer text."};
+													"This is a much longer text.",
+													"ASDFFDSFAF",
+													"fasfsfdfdsfaf",
+													"rfasdfadsfsf",
+													"fadsfdsfdfasfdaf",
+													"asfadsfsdfafdsf",
+													"asdgfsdhgfdg",
+													"fasdfsdfdfsfdsf",
+													"safdhfdsrer"};
 				JMenuItem menuItem;
 				
 				for(int i = 0; i < emailAddresses.length; i++)
@@ -276,13 +350,16 @@ public class EditView extends JPanel/*JFrame*/ {
 		gbc_addButton.gridy = 7;
 		this.add(addButton, gbc_addButton);
 		
-		JButton removeButton = new JButton("Remove");
+		
+		removeButton = new JButton("Remove");
+		removeButton.addActionListener(new RemoveListener());
 		GridBagConstraints gbc_removeButton = new GridBagConstraints();
 		gbc_removeButton.fill = GridBagConstraints.BOTH;
 		gbc_removeButton.insets = new Insets(0, 0, 5, 5);
 		gbc_removeButton.gridx = 5;
 		gbc_removeButton.gridy = 7;
 		this.add(removeButton, gbc_removeButton);
+		
 		
 		JLabel descriptionLabel = new JLabel("Description:");
 		GridBagConstraints gbc_descriptionLabel = new GridBagConstraints();
@@ -291,6 +368,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		gbc_descriptionLabel.gridx = 1;
 		gbc_descriptionLabel.gridy = 7;
 		this.add(descriptionLabel, gbc_descriptionLabel);
+		
 		
 		JTextArea descriptionArea = new JTextArea();
 		
@@ -303,6 +381,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		gbc_descriptionScrollPane.gridheight = 4;
 		this.add(descriptionScrollPane, gbc_descriptionScrollPane);
 		
+		
 		JLabel locationLabel = new JLabel("Location:");
 		GridBagConstraints gbc_locationLabel = new GridBagConstraints();
 		gbc_locationLabel.insets = new Insets(0, 0, 5, 5);
@@ -310,6 +389,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		gbc_locationLabel.gridy = 8;
 		gbc_locationLabel.gridwidth = 2;
 		this.add(locationLabel, gbc_locationLabel);
+		
 		
 		whereField = new JTextField();
 		GridBagConstraints gbc_whereField = new GridBagConstraints();
@@ -321,17 +401,20 @@ public class EditView extends JPanel/*JFrame*/ {
 		this.add(whereField, gbc_whereField);
 		whereField.setColumns(10);
 		
+		
 		JButton btnBookRoom = new JButton("Book room");
 		btnBookRoom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		
 		GridBagConstraints gbc_btnBookRoom = new GridBagConstraints();
 		gbc_btnBookRoom.fill = GridBagConstraints.BOTH;
 		gbc_btnBookRoom.insets = new Insets(0, 0, 5, 5);
 		gbc_btnBookRoom.gridx = 4;
 		gbc_btnBookRoom.gridy = 10;
 		this.add(btnBookRoom, gbc_btnBookRoom);
+		
 		
 		JButton btnUnbook = new JButton("Unbook");
 		GridBagConstraints gbc_btnUnbook = new GridBagConstraints();
@@ -341,5 +424,22 @@ public class EditView extends JPanel/*JFrame*/ {
 		gbc_btnUnbook.gridy = 10;
 		this.add(btnUnbook, gbc_btnUnbook);
 	}
-
+	//**************************************************************************
+	class RemoveListener implements ActionListener
+		{
+		public void actionPerformed(ActionEvent event)
+			{
+			int index = peopleList.getSelectedIndex();
+			
+			
+			if(index != -1)
+				{ peopleListModel.remove(index); }
+			
+			
+			//If there is no element in list, then we deactivate the removeButton
+			if(peopleListModel.getSize() == 0)
+				{ removeButton.setEnabled(false); }
+			}
+		}
+	//**************************************************************************
 }
