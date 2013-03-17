@@ -36,6 +36,7 @@ public class EditView extends JPanel/*JFrame*/ {
 	private JButton 				addButton;
 	private JButton 				removeButton;
 	private JButton 				calendarButton;
+	private JButton 				chooseDate;
 	private JList					peopleList;
 	private JPanel 				_parentContentPane;
 	private JPopupMenu 			addPeopleMenu;
@@ -114,6 +115,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		
 		
 		JButton saveButton = new JButton("Save");
+		saveButton.addActionListener(new SaveListener());
 		GridBagConstraints gbc_saveButton = new GridBagConstraints();
 		gbc_saveButton.fill = GridBagConstraints.BOTH;
 		gbc_saveButton.insets = new Insets(0, 0, 5, 5);
@@ -184,7 +186,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		dateField.setColumns(20);
 		
 		
-		JButton chooseDate = new JButton("Choose Date");
+		chooseDate = new JButton("Choose Date");
 		GridBagConstraints gbc_chooseDate = new GridBagConstraints();
 		gbc_chooseDate.fill = GridBagConstraints.BOTH;
 		gbc_chooseDate.insets = new Insets(0, 0, 5, 5);
@@ -255,93 +257,10 @@ public class EditView extends JPanel/*JFrame*/ {
 		gbc_endField.gridy = 6;
 		this.add(endField, gbc_endField);
 		endField.setColumns(20);
-		
-		
-		//Here we handle selection of emailaddresses. The emailaddress selected
-		// goes into the peopleList.
-		peopleListener = new ActionListener() {
-			public void actionPerformed(ActionEvent event)
-				{
-				//We get the selected email
-				JMenuItem emailItem 		  = (JMenuItem)event.getSource();
-				String selectedEmail 	  = emailItem.getText();
-				boolean isEmailSelected = false;
 				
-				
-				//We need to check if the emailaddress is already in the peopleList
-				//NB! Could be handled differently where already chosen
-				// emailaddresses are not available in addPeopleMenu
-				for(int i = 0; i < peopleList.getModel().getSize(); i++)
-					{
-					String element = (String)peopleList.getModel().getElementAt(i);
-					
-					if(selectedEmail.equals(element))
-						{
-						JOptionPane.showMessageDialog(((JFrame)SwingUtilities.getRoot(
-								_parentContentPane)),
-								"Email address or group is already in list!",
-								"Error message", JOptionPane.ERROR_MESSAGE);
-						isEmailSelected = true;
-						
-						break;
-						}
-					}
-				
-				
-				//Email address is not already selected and we therefore add it to
-				// the peopleList
-				if(isEmailSelected == false)
-					{
-					peopleListModel.addElement(selectedEmail);
-					}
-			
-				
-				
-				//titleField.setText(((JMenuItem)event.getSource()).getText());
-				}
-			};
-				
-		
+	
 		addButton = new JButton("Add");
-		addButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0)
-				{
-				//Here we handle code related to adding people to an appointment
-				addPeopleMenu = new JPopupMenu();
-				JLabel addPeopleMenuLabel = new JLabel("Select people to add to appointment:");
-				addPeopleMenu.add(addPeopleMenuLabel);
-				addPeopleMenu.addSeparator();
-				
-				
-				
-				
-				//Idea: We receive email addresses from database when we open
-				// application or when we open EditView and save these data in an
-				// array which we use when we add JMenuItems in the JPopupMenu.
-				// This should be put in a method
-				//Testing purposes:
-				String[] emailAddresses = {"This is a text.",
-													"This is a much longer text.",
-													"ASDFFDSFAF",
-													"fasfsfdfdsfaf",
-													"rfasdfadsfsf",
-													"fadsfdsfdfasfdaf",
-													"asfadsfsdfafdsf",
-													"asdgfsdhgfdg",
-													"fasdfsdfdfsfdsf",
-													"safdhfdsrer"};
-				JMenuItem menuItem;
-				
-				for(int i = 0; i < emailAddresses.length; i++)
-					{
-					menuItem = new JMenuItem(emailAddresses[i]);
-					addPeopleMenu.add(menuItem);
-					menuItem.addActionListener(peopleListener);
-					}
-				
-				addPeopleMenu.show(addButton, -290, -135);
-				}
-		});
+		addButton.addActionListener(new AddListener());
 		
 		GridBagConstraints gbc_addButton = new GridBagConstraints();
 		gbc_addButton.fill = GridBagConstraints.BOTH;
@@ -352,6 +271,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		
 		
 		removeButton = new JButton("Remove");
+		removeButton.setEnabled(false);
 		removeButton.addActionListener(new RemoveListener());
 		GridBagConstraints gbc_removeButton = new GridBagConstraints();
 		gbc_removeButton.fill = GridBagConstraints.BOTH;
@@ -423,7 +343,57 @@ public class EditView extends JPanel/*JFrame*/ {
 		gbc_btnUnbook.gridx = 5;
 		gbc_btnUnbook.gridy = 10;
 		this.add(btnUnbook, gbc_btnUnbook);
-	}
+		}
+	//--------------------------------------------------------------------------
+	//This function checks the different components
+	private boolean isDataValid()
+		{
+		//if()
+		return true;
+		}
+	//**************************************************************************
+	class AddListener implements ActionListener
+		{
+		public void actionPerformed(ActionEvent arg0)
+			{
+			//Here we handle code related to adding people to an appointment
+			addPeopleMenu = new JPopupMenu();
+			JLabel addPeopleMenuLabel = new JLabel("Select people to add to appointment:");
+			addPeopleMenu.add(addPeopleMenuLabel);
+			addPeopleMenu.addSeparator();
+			
+			
+			
+			
+			//Idea: We receive email addresses from database when we open
+			// application or when we open EditView and save these data in an
+			// array which we use when we add JMenuItems in the JPopupMenu.
+			// This should be put in a method
+			//Testing purposes:
+			String[] emailAddresses = {"This is a text.",
+												"This is a much longer text.",
+												"ASDFFDSFAF",
+												"fasfsfdfdsfaf",
+												"rfasdfadsfsf",
+												"fadsfdsfdfasfdaf",
+												"asfadsfsdfafdsf",
+												"asdgfsdhgfdg",
+												"fasdfsdfdfsfdsf",
+												"safdhfdsrer"};
+			JMenuItem menuItem;
+			
+			
+			for(int i = 0; i < emailAddresses.length; i++)
+				{
+				menuItem = new JMenuItem(emailAddresses[i]);
+				addPeopleMenu.add(menuItem);
+				menuItem.addActionListener(new PeopleListener());
+				}
+			
+			
+			addPeopleMenu.show(addButton, -290, -135);
+			}
+		}
 	//**************************************************************************
 	class RemoveListener implements ActionListener
 		{
@@ -442,4 +412,65 @@ public class EditView extends JPanel/*JFrame*/ {
 			}
 		}
 	//**************************************************************************
-}
+	//Here we handle selection of emailaddresses. The emailaddress selected
+	// goes into the peopleList.
+	class PeopleListener implements ActionListener
+		{
+		public void actionPerformed(ActionEvent event)
+			{
+			//We get the selected email
+			JMenuItem emailItem 		  = (JMenuItem)event.getSource();
+			String selectedEmail 	  = emailItem.getText();
+			boolean isEmailSelected = false;
+					
+					
+			//We need to check if the emailaddress is already in the peopleList
+			//NB! Could be handled differently where already chosen
+			// emailaddresses are not available in addPeopleMenu
+			for(int i = 0; i < peopleList.getModel().getSize(); i++)
+				{
+				String element = (String)peopleList.getModel().getElementAt(i);
+		
+				
+				if(selectedEmail.equals(element))
+					{
+					JOptionPane.showMessageDialog(((JFrame)SwingUtilities.getRoot(
+							_parentContentPane)),
+							"Email address or group is already in list!",
+							"Error message", JOptionPane.ERROR_MESSAGE);
+					isEmailSelected = true;
+							
+					break;
+					}
+				}
+					
+					
+			//Email address is not already selected and we therefore add it to
+			// the peopleList. We also activate the remove button
+			if(isEmailSelected == false)
+				{
+				peopleListModel.addElement(selectedEmail);
+				removeButton.setEnabled(true);
+				}
+			}
+		}
+	//**************************************************************************
+	class SaveListener implements ActionListener
+		{
+		public void actionPerformed(ActionEvent event)
+			{
+			//We need to check if the data is valid
+			//If the data is valid we save appointment in the database and return
+			// to the calendar-view
+			if(isDataValid() == true)
+				{
+				//TODO: Save appointment for this user in database and send message
+				// to relevant employees (employees added to the people-list)
+				
+				//We go to the calendar view
+				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
+				c1.show(_parentContentPane, "Calendar View");
+				}
+			}
+		}
+	}
