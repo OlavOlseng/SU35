@@ -346,6 +346,35 @@ public class EditView extends JPanel/*JFrame*/ {
 		this.add(btnUnbook, gbc_btnUnbook);
 		}
 	//--------------------------------------------------------------------------
+	public void initialize(int appointmentID)
+		{
+		//If appointmentID is -1 this means that this is a new appointment and we
+		// need to make sure that the fields are empty 
+		if(appointmentID == -1)
+			{ resetPanel(); }
+		//This is an appointment that we might want to edit.  Get data from
+		// appointment with the specified appointmentID and put data in the
+		// fields
+		else
+			{
+			//TODO: Load data into fields
+			}
+		}
+	//--------------------------------------------------------------------------
+	private void resetPanel()
+		{
+		//Set all fields to empty fields
+		titleField.setText("");
+		dateField.setText("");
+		startField.setText("");
+		endField.setText("");
+		descriptionArea.setText("");
+		locationField.setText("");
+		
+		//Make sure peopleList is empty
+		peopleList.removeAll();
+		}
+	//--------------------------------------------------------------------------
 	//This function checks the different components
 	private boolean isDataValid()
 		{
@@ -354,7 +383,7 @@ public class EditView extends JPanel/*JFrame*/ {
 			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
 					_parentContentPane), "Title field is empty!\n" +
 					"Please enter title of appointment.",
-					"Input problem", JOptionPane.ERROR_MESSAGE);
+					"Not valid input", JOptionPane.ERROR_MESSAGE);
 			
 			return false;
 			}
@@ -363,7 +392,7 @@ public class EditView extends JPanel/*JFrame*/ {
 			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
 					_parentContentPane), "Date field is empty!\n" +
 					"Please enter date of appointment.",
-					"Input problem", JOptionPane.ERROR_MESSAGE);
+					"Not valid input", JOptionPane.ERROR_MESSAGE);
 			
 			return false;
 			}
@@ -373,7 +402,7 @@ public class EditView extends JPanel/*JFrame*/ {
 //			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
 //					_parentContentPane), "Format of date field is wrong!\n" +
 //					"The correct format is DD-MM-YYYY.",
-//					"Input problem", JOptionPane.ERROR_MESSAGE);
+//					"Not valid input", JOptionPane.ERROR_MESSAGE);
 //			
 //			return false;
 //			}
@@ -382,7 +411,7 @@ public class EditView extends JPanel/*JFrame*/ {
 			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
 					_parentContentPane), "Start field is empty!\n" +
 					"Please enter start of appointment.",
-					"Input problem", JOptionPane.ERROR_MESSAGE);
+					"Not valid input", JOptionPane.ERROR_MESSAGE);
 			
 			return false;
 			}
@@ -394,7 +423,7 @@ public class EditView extends JPanel/*JFrame*/ {
 //					"Date is incorrect!\n +
 //					"You can not select a date that has already been."
 //					"The correct format is HH:MM:SS.",
-//					"Input problem", JOptionPane.ERROR_MESSAGE);
+//					"Not valid input", JOptionPane.ERROR_MESSAGE);
 //			
 //			return false;
 //			}	
@@ -404,7 +433,7 @@ public class EditView extends JPanel/*JFrame*/ {
 //			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
 //					_parentContentPane), "Format of start field is wrong!\n" +
 //					"The correct format is HH:MM:SS.",
-//					"Input problem", JOptionPane.ERROR_MESSAGE);
+//					"Not valid input", JOptionPane.ERROR_MESSAGE);
 //			
 //			return false;
 //			}	
@@ -413,7 +442,7 @@ public class EditView extends JPanel/*JFrame*/ {
 			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
 					_parentContentPane), "End field is empty!\n" +
 					"Please enter end of appointment.",
-					"Input problem", JOptionPane.ERROR_MESSAGE);
+					"Not valid input", JOptionPane.ERROR_MESSAGE);
 			
 			return false;
 			}
@@ -423,7 +452,7 @@ public class EditView extends JPanel/*JFrame*/ {
 //			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
 //					_parentContentPane), "Format of end field is wrong!\n" +
 //					"The correct format is HH:MM:SS.",
-//					"Input problem", JOptionPane.ERROR_MESSAGE);
+//					"Not valid input", JOptionPane.ERROR_MESSAGE);
 //			
 //			return false;
 //			}
@@ -432,7 +461,7 @@ public class EditView extends JPanel/*JFrame*/ {
 			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
 					_parentContentPane), "Description field is empty!\n" +
 					"Please enter description of appointment.",
-					"Input problem", JOptionPane.ERROR_MESSAGE);
+					"Not valid input", JOptionPane.ERROR_MESSAGE);
 			
 			return false;
 			}
@@ -443,7 +472,7 @@ public class EditView extends JPanel/*JFrame*/ {
 			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
 					_parentContentPane), "Location field is empty!\n" +
 					"Please enter location of appointment.",
-					"Input problem", JOptionPane.ERROR_MESSAGE);
+					"Not valid input", JOptionPane.ERROR_MESSAGE);
 			
 			return false;
 			}
@@ -469,7 +498,7 @@ public class EditView extends JPanel/*JFrame*/ {
 			// application or when we open EditView and save these data in an
 			// array which we use when we add JMenuItems in the JPopupMenu.
 			// This should be put in a method
-			//Testing purposes:
+			//For testing purposes:
 			String[] emailAddresses = {"This is a text.",
 												"This is a much longer text.",
 												"ASDFFDSFAF",
@@ -495,6 +524,7 @@ public class EditView extends JPanel/*JFrame*/ {
 			}
 		}
 	//**************************************************************************
+	//Here we handle removal of people in the list with employees 
 	class RemoveListener implements ActionListener
 		{
 		public void actionPerformed(ActionEvent event)
@@ -566,6 +596,13 @@ public class EditView extends JPanel/*JFrame*/ {
 				{
 				//TODO: Save appointment for this user in database and send message
 				// to relevant employees (employees added to the people-list)
+				
+				
+				JOptionPane.showMessageDialog(
+						(JFrame)SwingUtilities.getRoot(_parentContentPane),
+						"Appointment has been saved!",
+						"Information Message",
+						JOptionPane.INFORMATION_MESSAGE);
 				
 				//We go to the calendar view
 				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
