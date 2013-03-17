@@ -41,11 +41,12 @@ public class EditView extends JPanel/*JFrame*/ {
 	private JPanel 				_parentContentPane;
 	private JPopupMenu 			addPeopleMenu;
 	private JScrollPane 			peopleListScrollPane;
+	private JTextArea 			descriptionArea;
 	private JTextField 			titleField;
 	private JTextField 			dateField;
 	private JTextField 			startField;
 	private JTextField 			endField;
-	private JTextField 			whereField;
+	private JTextField 			locationField;
 	private DefaultListModel 	peopleListModel;
 
 	/**
@@ -290,7 +291,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		this.add(descriptionLabel, gbc_descriptionLabel);
 		
 		
-		JTextArea descriptionArea = new JTextArea();
+		descriptionArea = new JTextArea();
 		
 		JScrollPane descriptionScrollPane = new JScrollPane(descriptionArea);
 		GridBagConstraints gbc_descriptionScrollPane = new GridBagConstraints();
@@ -311,15 +312,15 @@ public class EditView extends JPanel/*JFrame*/ {
 		this.add(locationLabel, gbc_locationLabel);
 		
 		
-		whereField = new JTextField();
+		locationField = new JTextField();
 		GridBagConstraints gbc_whereField = new GridBagConstraints();
 		gbc_whereField.insets = new Insets(0, 0, 5, 5);
 		gbc_whereField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_whereField.gridx = 4;
 		gbc_whereField.gridy = 9;
 		gbc_whereField.gridwidth = 2;
-		this.add(whereField, gbc_whereField);
-		whereField.setColumns(10);
+		this.add(locationField, gbc_whereField);
+		locationField.setColumns(10);
 		
 		
 		JButton btnBookRoom = new JButton("Book room");
@@ -348,7 +349,106 @@ public class EditView extends JPanel/*JFrame*/ {
 	//This function checks the different components
 	private boolean isDataValid()
 		{
-		//if()
+		if(titleField.getText().equals(""))
+			{
+			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
+					_parentContentPane), "Title field is empty!\n" +
+					"Please enter title of appointment.",
+					"Input problem", JOptionPane.ERROR_MESSAGE);
+			
+			return false;
+			}
+		if(dateField.getText().equals(""))
+			{
+			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
+					_parentContentPane), "Date field is empty!\n" +
+					"Please enter date of appointment.",
+					"Input problem", JOptionPane.ERROR_MESSAGE);
+			
+			return false;
+			}
+//		TODO: Check the format of the date field
+//		if(!titleField.getText().equals(""))
+//			{
+//			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
+//					_parentContentPane), "Format of date field is wrong!\n" +
+//					"The correct format is DD-MM-YYYY.",
+//					"Input problem", JOptionPane.ERROR_MESSAGE);
+//			
+//			return false;
+//			}
+		if(startField.getText().equals(""))
+			{
+			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
+					_parentContentPane), "Start field is empty!\n" +
+					"Please enter start of appointment.",
+					"Input problem", JOptionPane.ERROR_MESSAGE);
+			
+			return false;
+			}
+//		TODO: Check if date has not already been
+//		if(!titleField.getText().equals(""))
+//			{
+//			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
+//					_parentContentPane),
+//					"Date is incorrect!\n +
+//					"You can not select a date that has already been."
+//					"The correct format is HH:MM:SS.",
+//					"Input problem", JOptionPane.ERROR_MESSAGE);
+//			
+//			return false;
+//			}	
+//		TODO: Check the format of the start field
+//		if(!titleField.getText().equals(""))
+//			{
+//			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
+//					_parentContentPane), "Format of start field is wrong!\n" +
+//					"The correct format is HH:MM:SS.",
+//					"Input problem", JOptionPane.ERROR_MESSAGE);
+//			
+//			return false;
+//			}	
+		if(endField.getText().equals(""))
+			{
+			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
+					_parentContentPane), "End field is empty!\n" +
+					"Please enter end of appointment.",
+					"Input problem", JOptionPane.ERROR_MESSAGE);
+			
+			return false;
+			}
+//		TODO: Check the format of the end field
+//		if(!endField.getText().equals(""))
+//			{
+//			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
+//					_parentContentPane), "Format of end field is wrong!\n" +
+//					"The correct format is HH:MM:SS.",
+//					"Input problem", JOptionPane.ERROR_MESSAGE);
+//			
+//			return false;
+//			}
+		if(descriptionArea.getText().equals(""))
+			{
+			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
+					_parentContentPane), "Description field is empty!\n" +
+					"Please enter description of appointment.",
+					"Input problem", JOptionPane.ERROR_MESSAGE);
+			
+			return false;
+			}
+		//Question: Do we really need to input location for every appointment?
+		//Keep this for now.
+		if(locationField.getText().equals(""))
+			{
+			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
+					_parentContentPane), "Location field is empty!\n" +
+					"Please enter location of appointment.",
+					"Input problem", JOptionPane.ERROR_MESSAGE);
+			
+			return false;
+			}
+		
+
 		return true;
 		}
 	//**************************************************************************
