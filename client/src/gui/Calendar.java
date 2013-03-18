@@ -1,5 +1,8 @@
 package gui;
 
+import ghostmodels.ApplicationModel;
+import ghostmodels.Employee;
+
 import java.awt.CardLayout;
 
 import javax.swing.JFrame;
@@ -12,9 +15,14 @@ public class Calendar {
 	private static final String EDIT_VIEW = "Edit View";
 	private static final String INFO_VIEW = "Info View";
 	
-
+	private static ApplicationModel model;
+	private static Employee loggedInUser;
+	
+	
 	private static void createAndShowGui()
 		{
+		model = new ApplicationModel();
+		loggedInUser = model.employees.get("email");
 		JFrame frame = new JFrame("Superblaster");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBounds(50, 50, 800, 600);
@@ -25,11 +33,13 @@ public class Calendar {
 		Login login = new Login(contentPane);
 		contentPane.add(login, LOG_IN);
 		
-		CalendarView calendarView = new CalendarView(contentPane);
-		contentPane.add(calendarView, CALENDAR_VIEW);
-		
 		EditView editView = new EditView(contentPane);
 		contentPane.add(editView, EDIT_VIEW);
+		
+		CalendarView calendarView = new CalendarView(contentPane, editView);
+		contentPane.add(calendarView, CALENDAR_VIEW);
+		
+		
 		
 		InfoView infoView = new InfoView(contentPane);
 		contentPane.add(infoView, INFO_VIEW);
@@ -46,6 +56,17 @@ public class Calendar {
 			{
 			public void run()
 				{ createAndShowGui(); }
+				
 			});
 		}
+
+
+	public static ApplicationModel getModel() {
+		return model;
+	}
+
+
+	public static void setModel(ApplicationModel model) {
+		Calendar.model = model;
+	}
 }

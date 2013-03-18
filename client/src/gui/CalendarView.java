@@ -24,6 +24,7 @@ import javax.swing.ListSelectionModel;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -38,6 +39,9 @@ public class CalendarView extends JPanel{
 	private JTextArea textAreaInfo;
 	private JLabel lblWeek, lblMonday, lblTuesday, lblWednesday, lblThursday, lblFriday, lblSaturday, lblSunday, lbl_00, lbl_06, lbl_12, lbl_18, lbl_24;
 	private JPopupMenu menuNotifications, menuCalendars;
+	private ArrayList<JButton> buttonList = new ArrayList<JButton>();
+	private int indexOfSelectedButton;
+	private EditView _editView;
 	
 	/**
 	 * Launch the application.
@@ -56,17 +60,48 @@ public class CalendarView extends JPanel{
 	/**
 	 * Create the application.
 	 */
-	public CalendarView(JPanel parentContentPane) {
-		initialize(parentContentPane);
+	public CalendarView(JPanel parentContentPane, EditView editView) {
 		//updateInfo();
+		initialize(parentContentPane, editView);
+		
 		btnNotifications.setText("Notifications (" + Integer.toString(menuNotifications.getComponentCount()) + ")");
+		
+		for (int key : Calendar.getModel().appointment.keySet()){
+			if (key == 0) {
+				JButton button = new JButton();
+				buttonList.add(button);
+				buttonList.get(buttonList.size()-1).setLayout(new BorderLayout());
+				JLabel label1 = new JLabel(Calendar.getModel().appointment.get(key).getDescription());
+				JLabel label2 = new JLabel(Calendar.getModel().appointment.get(key).getStartTime().toString());
+				buttonList.get(buttonList.size()-1).add(BorderLayout.NORTH,label1);
+				buttonList.get(buttonList.size()-1).add(BorderLayout.SOUTH,label2);
+				buttonList.get(buttonList.size()-1).addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						JButton selectedButton = (JButton) e.getSource();
+						
+						
+						//Load info in the textAreaInfo
+						textAreaInfo.setText("Tekst!");
+						btnMore.setEnabled(true);
+						btnEdit.setEnabled(true);
+					}
+				});
+				GridBagConstraints gbc_btnAppointment = new GridBagConstraints();
+				gbc_btnAppointment.fill = GridBagConstraints.VERTICAL;
+				gbc_btnAppointment.gridx = 0;
+				gbc_btnAppointment.gridy = 2;
+				gbc_btnAppointment.gridheight = 1;
+				calendarPanel.add(button, gbc_btnAppointment);
+			}
+		}
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize(JPanel parentContentPane) {
-		_parentContentPane = parentContentPane;
+	private void initialize(JPanel parentContentPane, EditView editView) {
+		_parentContentPane 	= parentContentPane;
+		_editView 				= editView;
 	
 		this.setBorder(new EmptyBorder(5,5,5,5));
 		this.setBackground(new Color(153, 190, 255));
@@ -111,14 +146,6 @@ public class CalendarView extends JPanel{
 		gbc_btnNotifications.gridy = 0;
 		topLeftPanel.add(btnNotifications, gbc_btnNotifications);
 		
-//		lblNotifications = new JLabel();
-//		GridBagConstraints gbc_lblNotifications = new GridBagConstraints();
-//		gbc_lblNotifications.insets = new Insets(0, 0, 5, 5);
-//		gbc_lblNotifications.gridx = 0;
-//		gbc_lblNotifications.gridy = 0;
-//		topLeftPanel.add(lblNotifications, gbc_lblNotifications);
-//		lblNotifications.setVisible(false);
-		
 		topRightPanel = new JPanel();
 		topRightPanel.setBackground(new Color(153, 190, 255));
 		GridBagConstraints gbc_topRightPanel = new GridBagConstraints();
@@ -146,7 +173,7 @@ public class CalendarView extends JPanel{
 		menuCalendars = new JPopupMenu();
 		menuCalendars.add("Menuitem 1");
 		menuCalendars.add("Menuitem 2");
-		menuCalendars.add(new JMenuItem("Menuitem 3"));
+		menuCalendars.add(new JMenuItem(Calendar.getModel().getEmployee("email").getEmail()));
 
 		btnCalendars.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
@@ -191,6 +218,9 @@ public class CalendarView extends JPanel{
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//Open EditView
+				//We call initialize with the parameter -1 to indicate that we
+				// want to create a new appointment
+				_editView.initialize(-1);
 				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
 				c1.show(_parentContentPane, "Edit View");
 				
@@ -271,6 +301,9 @@ public class CalendarView extends JPanel{
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//Open EditView
+				//We will call intialize with the appointmentID as a parameter.
+				//The number 1 is for testing purposes
+				_editView.initialize(1);
 				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
 				c1.show(_parentContentPane, "Edit View");
 			}
@@ -456,7 +489,4 @@ public class CalendarView extends JPanel{
 		bottomRightPanel.add(lbl_24, gbc_label_5);
 		
 	}
-//	public JPanel getContentPane()
-//		{ return 
-
 }
