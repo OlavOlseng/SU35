@@ -86,7 +86,7 @@ public class XMLAssembler {
 	}
 	
 	public Room assembleRoom(Element meetingRoomElement){
-		Room mr = new Room(null, 0);
+		Room mr = new Room(null, -1);
 		Element element = meetingRoomElement.getFirstChildElement("name");
 		if(element != null){
 			mr.setName(element.getValue());

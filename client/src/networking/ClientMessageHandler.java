@@ -39,7 +39,7 @@ public class ClientMessageHandler extends MessageHandler{
 				addEmployee(e);
 			case "appointment":
 				addAppointment(e);
-			case "meetingroom":
+			case "room":
 				addRoom(e);
 			case "invitation":
 				addInvitation(e);
@@ -74,7 +74,7 @@ public class ClientMessageHandler extends MessageHandler{
 				updateEmployee(e);
 			case "appointment":
 				updateAppointment(e);
-			case "meetingroom":
+			case "room":
 				updateRoom(e);
 			case "invitation":
 				updateInvitation(e);
@@ -118,7 +118,7 @@ public class ClientMessageHandler extends MessageHandler{
 				deleteEmployee(e);
 			case "appointment":
 				deleteAppointment(e);
-			case "meetingroom":
+			case "room":
 				deleteRoom(e);
 			case "invitation":
 				deleteInvitation(e);
@@ -183,7 +183,7 @@ public class ClientMessageHandler extends MessageHandler{
 		if(savedAlarm == null){
 			return;
 		}
-		String id = savedAlarm.getEmployeeEmail() + "," + savedAlarm.getAppointmentID();
+		String id = savedAlarm.getEmployeeEmail() + "¤" + savedAlarm.getAppointmentID();
 		ApplicationModel.getInstance().updateAlarm(id, assembler.assembleAlarm(element));
 	}
 
@@ -204,13 +204,13 @@ public class ClientMessageHandler extends MessageHandler{
 	
 	public void addInvitation(Element element){
 		Invitation i = assembler.assembleInvitation(element);
-		String key = i.getEmployeeEmail() + "," + i.getAppointmentID();
+		String key = i.getEmployeeEmail() + "¤" + i.getAppointmentID();
 		ApplicationModel.getInstance().addInvitation(key, i);
 	}
 	
 	public void addAlarm(Element element){
 		Alarm a = assembler.assembleAlarm(element);
-		String id = a.getEmployeeEmail() + "," + a.getAppointmentID();
+		String id = a.getEmployeeEmail() + "¤" + a.getAppointmentID();
 		ApplicationModel.getInstance().addAlarm(id, a);
 	}
 	
@@ -247,7 +247,7 @@ public class ClientMessageHandler extends MessageHandler{
 		if(savedInvation == null){
 			return;
 		}
-		String key = savedInvation.getEmployeeEmail() + "," + savedInvation.getAppointmentID();
+		String key = savedInvation.getEmployeeEmail() + "¤" + savedInvation.getAppointmentID();
 		ApplicationModel.getInstance().deleteInvitation(key);
 	}
 	
@@ -257,7 +257,7 @@ public class ClientMessageHandler extends MessageHandler{
 		if(savedAlarm == null){
 			return;
 		}
-		String id = savedAlarm.getEmployeeEmail() + "," + savedAlarm.getAppointmentID();
+		String id = savedAlarm.getEmployeeEmail() + "¤" + savedAlarm.getAppointmentID();
 		ApplicationModel.getInstance().deleteAlarm(id);
 	}
 }
