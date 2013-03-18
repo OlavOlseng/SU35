@@ -20,20 +20,20 @@ public class Connection {
 			this.out = new PrintWriter(socket.getOutputStream(),true);
 		}
 	}
-	
+
 	public InetAddress getRemoteAddress() {
 		return socket.getInetAddress();
 	}
-	
+
 	public void connect(String host, int port) throws IOException{
 		socket = new Socket(host, port);
 		this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		this.out = new PrintWriter(socket.getOutputStream(),true);
 	}
-	
+
 	public void send(String msg) throws IOException {
 		if(socket.isBound())
-			out.println(msg);
+			out.print(msg + "£");
 	}
 
 	public void close() throws IOException {
@@ -42,10 +42,17 @@ public class Connection {
 	}
 
 	public String receive() throws IOException {
-		String	msg = in.readLine();
+		String	msg = ""; 
+		char c = 0;
+		do{
+			if (in.ready()){
+				c = (char)in.read();
+				msg += c;
+			}
+		}while(c != '£');
 		return msg;
 	}
-	
+
 	public boolean isClosed() {
 		return socket.isClosed();
 	}

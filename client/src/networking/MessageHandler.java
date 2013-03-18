@@ -1,10 +1,12 @@
 package networking;
 
+import networking.SBPFactory.MessageType;
+
 public abstract class MessageHandler {
 
 	public void handleMessage(String msg) {
 		String[] msga = msg.split("~");
-		
+		if (msga.length != 5) msga[0] = String.valueOf(MessageType.ERROR.c);
 		switch(msga[0]) {
 			case("g"):
 				getEntry(msga);
@@ -23,7 +25,7 @@ public abstract class MessageHandler {
 				break;
 			case("l"):
 				checkLogin(msga);
-			case("e"):
+			default:
 				errorResponse(msga);
 		}
 		return;
@@ -37,6 +39,7 @@ public abstract class MessageHandler {
 	public abstract void checkLogin(String[] data);
 	
 	public void errorResponse(String[] data) {
+		System.err.println("Invalid message format");
 		System.err.println(data);
 	}
 }
