@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import java.awt.Insets;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JDialog;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -37,6 +38,7 @@ public class EditView extends JPanel/*JFrame*/ {
 	private JButton 				removeButton;
 	private JButton 				calendarButton;
 	private JButton 				chooseDate;
+	private JButton 				bookRoomButton;
 	private JList					peopleList;
 	private JPanel 				_parentContentPane;
 	private JPopupMenu 			addPeopleMenu;
@@ -323,18 +325,15 @@ public class EditView extends JPanel/*JFrame*/ {
 		locationField.setColumns(10);
 		
 		
-		JButton btnBookRoom = new JButton("Book room");
-		btnBookRoom.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+		bookRoomButton = new JButton("Book room");
+		bookRoomButton.addActionListener(new BookRoomListener());
 		
 		GridBagConstraints gbc_btnBookRoom = new GridBagConstraints();
 		gbc_btnBookRoom.fill = GridBagConstraints.BOTH;
 		gbc_btnBookRoom.insets = new Insets(0, 0, 5, 5);
 		gbc_btnBookRoom.gridx = 4;
 		gbc_btnBookRoom.gridy = 10;
-		this.add(btnBookRoom, gbc_btnBookRoom);
+		this.add(bookRoomButton, gbc_btnBookRoom);
 		
 		
 		JButton btnUnbook = new JButton("Unbook");
@@ -521,6 +520,27 @@ public class EditView extends JPanel/*JFrame*/ {
 			
 			
 			addPeopleMenu.show(addButton, -290, -135);
+			}
+		}
+	//**************************************************************************
+	class BookRoomListener implements ActionListener
+		{
+		public void actionPerformed(ActionEvent event)
+			{
+			BookRoomDialog bookRoomDialog = new BookRoomDialog(
+					(JFrame) bookRoomButton.getTopLevelAncestor(), true,
+					peopleList.getModel().getSize());
+			bookRoomDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			bookRoomDialog.setVisible(true);
+			
+//			if (bookRoomDialog.getAnswer() == 1) {
+//				//System.out.println(gotoDialog.getWeek());
+//				//Update CalendarView with week from gotoDialog.getWeek()
+//			}
+//			else if (bookRoomDialog.getAnswer() == 2) {
+//				//System.out.println(gotoDialog.getDate());
+//				//Update CalendarView with week from gotoDialog.getWeek()
+//			}
 			}
 		}
 	//**************************************************************************
