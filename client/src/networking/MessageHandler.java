@@ -23,6 +23,8 @@ public abstract class MessageHandler {
 				break;
 			case("l"):
 				checkLogin(msga);
+			case("e"):
+				errorResponse(msga);
 		}
 		return;
 	}
@@ -33,5 +35,9 @@ public abstract class MessageHandler {
 	public abstract void createEntry(String[] data);
 	public abstract void deleteEntry(String[] data);
 	public abstract void checkLogin(String[] data);
+	
+	public void errorResponse(String[] data) {
+		System.err.println(data);
+	}
 }
 
