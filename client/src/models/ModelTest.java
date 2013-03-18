@@ -1,5 +1,9 @@
 package models;
 
+import java.util.Scanner;
+
+import networking.*;
+
 public class ModelTest {
 	public static void main(String args[]) {
 		Appointment app1 = new Appointment(1);
@@ -10,6 +14,7 @@ public class ModelTest {
 		app1.setEndTime("13:15");
 		app1.setMeetingLeader("olav@epost.no");
 		app1.setMeetingRoom("Drivhuset");
+		//ApplicationModel.getInstance().addAppointment(1, app1);
 		
 		Appointment app2 = new Appointment(2);
 		app2.setDate("2013-03-18");
@@ -19,6 +24,7 @@ public class ModelTest {
 		app2.setEndTime("13:55");
 		app2.setMeetingLeader("august@epost.no");
 		app2.setMeetingRoom("R-bygget R-7");
+		//ApplicationModel.getInstance().addAppointment(2, app2);
 		
 		Appointment app3 = new Appointment(3);
 		app3.setDate("2013-03-18");
@@ -56,5 +62,79 @@ public class ModelTest {
 		System.out.println(app4.getFormattedDate());
 		System.out.println(app4.getFormattedStartTime());
 		System.out.println(app4.getFormattedEndTime());
+		
+		Alarm alarm = new Alarm(2, "fredrik@epost.no");
+		alarm.setDescription("Kebab fo shizzles!");
+		alarm.setTime("15");
+		
+		Client client = new Client();
+		System.out.println("Connecting to server...");
+		client.connect();
+		System.out.println("Connected to " + client.getHostAddress());
+		Scanner scanner = new Scanner(System.in);
+		String command = null;
+		boolean exit = false;
+		do {
+			command = scanner.nextLine();
+			switch(command) {
+				case "EXIT": {
+					exit = true;
+				} break;
+				case "GET_EMPLOYEE": {
+					String email = scanner.nextLine();
+					client.sendEmployeeQuery(email);
+				} break;
+				case "GET_APPOINTMENT": {
+					String ID = scanner.nextLine();
+					client.sendAppointmentQuery(ID);
+				} break;
+				case "GET_INVITATION": {
+					String email = scanner.nextLine();
+					if(email.equals("")) email = null;
+					String ID = scanner.nextLine();
+					if(ID.equals("")) ID = null;
+					client.sendInvitationQuery(email, ID);
+				} break;
+				case "GET_ROOM": {
+					String name = scanner.nextLine();
+					client.sendRoomQuery(name);
+				} break;
+				case "GET_ALARM": {
+					String email = scanner.nextLine();
+					String ID = scanner.nextLine();
+					client.sendAlarmQuery(email, ID);
+				} break;
+				case "GET_GROUP": {
+					String email = scanner.nextLine();
+					client.sendGroupQuery(email);
+				} break;
+				case "DELETE_APPOINTMENT": {
+					String ID = scanner.nextLine();
+					client.sendAppointmentDeletion(ID);
+				} break;
+				case "DELETE_INVITATION": {
+					String email = scanner.nextLine();
+					String ID = scanner.nextLine();
+					client.sendInvitationDeletion(email, ID);
+				} break;
+				case "DELETE_ALARM": {
+					String email = scanner.nextLine();
+					String ID = scanner.nextLine();
+					client.sendAlarmDeletion(email, ID);
+				} break;
+				case "CREATE_ALARM": {
+					client.sendAlarmCreation(alarm);
+				} break;
+				default: {
+					System.err.println("UNKNOWN COMMAND");
+				} break;
+			}
+		} while(!exit);
+		/*
+		String msg = "Per#Mathias".split("#")[0];
+		System.out.println(msg);
+		*/
+		System.out.println("Closing connection to server...");
+		client.disconnect();
 	}
 }
