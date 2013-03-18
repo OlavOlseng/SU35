@@ -20,7 +20,7 @@ import models.Room;
 
 public class XMLAssembler {
 	
-	public static Document getDocument(String XML) throws ValidityException, ParsingException, IOException{
+	public Document getDocument(String XML) throws ValidityException, ParsingException, IOException{
 		Document d = new Builder().build(XML);
 		return d;
 	}
