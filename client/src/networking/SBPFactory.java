@@ -69,6 +69,11 @@ public class SBPFactory {
 		
 		msg += errorMsg + "~";
 		msg += option + "~";
+		
+		if(payload == "") {
+			payload = null;
+		}
+		
 		msg += payload;
 		
 		return msg;
