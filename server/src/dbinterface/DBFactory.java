@@ -9,12 +9,9 @@ import models.Invitation.Answer;
 
 public class DBFactory {
 	public ArrayList<Employee> getEmployees(ResultSet rs) throws ClassNotFoundException, SQLException {
-		//String query = "SELECT * FROM Employee WHERE email=" + employeeEmail;
 		if(!rs.first()) throw new SQLException("No matching entry found"); 
-		
 		ArrayList<Employee> employees = new ArrayList<Employee>();
 		rs.beforeFirst();
-			
 		while(rs.next()) {
 			String email = rs.getString(1);
 			String firstName = rs.getString(2);
@@ -23,29 +20,26 @@ public class DBFactory {
 			String mobilePhone = rs.getString(5);
 			employees.add(new Employee(email, firstName, lastName, homePhone, mobilePhone));
 		}
-
 		return employees;
 	}
 	
-	public Room getMeetingRoom(ResultSet rs) throws ClassNotFoundException, SQLException {
-		//String query = "SELECT * FROM Meetingroom WHERE meetingroomID=" + roomID;
-		String roomName ="";
-		int roomSize=0;
+	public ArrayList<Room> getMeetingRooms(ResultSet rs) throws ClassNotFoundException, SQLException {
+		ArrayList<Room> rooms = new ArrayList<Room>();
+		if(!rs.first()) throw new SQLException("No matching entry found");
+		rs.beforeFirst();
 		while(rs.next()) {
-			roomSize = rs.getInt(2);
-			roomName = rs.getString(1);
+			int roomSize = rs.getInt(2);
+			String roomName = rs.getString(1);
+			Room meetingRoom = new Room(roomName, roomSize);
+			meetingRoom.setName(roomName);
+			rooms.add(meetingRoom);
 		}
-		Room meetingRoom = new Room(roomName, roomSize);
-		meetingRoom.setName(roomName);
-		return meetingRoom;
+		return rooms;
 	}
 	
 	public ArrayList<Appointment> getAppointments(ResultSet rs) throws ClassNotFoundException, SQLException {
-		//String query = "SELECT * FROM Appointment WHERE appointmentID=(SELECT appointmentID FROM Employee WHERE email=" + employeeEmail + ")";
 		ArrayList<Appointment> appointments = new ArrayList<Appointment>();
-		
 		if(!rs.first()) throw new SQLException("No matching entry found"); 
-		
 		rs.beforeFirst();
 		while(rs.next())
 		{
@@ -57,7 +51,6 @@ public class DBFactory {
 			String location = rs.getString(5);
 			String meetingRoom = rs.getString(6);
 			String meetingLeaderEmail = rs.getString(7);
-			
 			Appointment appointment = new Appointment(appointmentID);
 			appointment.setDate(date);
 			appointment.setStartTime(startTime);
@@ -66,18 +59,14 @@ public class DBFactory {
 			appointment.setLocation(location);
 			appointment.setMeetingRoom(meetingRoom);
 			appointment.setMeetingLeader(meetingLeaderEmail);
-
 			appointments.add(appointment);
 		}
 		return appointments;
 	}
 
 	public ArrayList<Invitation> getInvitations(ResultSet rs) throws SQLException {
-		// TODO Auto-generated method stub
 		ArrayList<Invitation> invites = new ArrayList<Invitation>();
-		
 		if(!rs.first()) throw new SQLException("No matching entry found"); 
-		
 		rs.beforeFirst();
 		while(rs.next())
 		{
@@ -107,26 +96,25 @@ public class DBFactory {
 		return invites;
 	}
 
-	public Alarm getAlarm(ResultSet rs) throws SQLException {
+	public ArrayList<Alarm> getAlarms(ResultSet rs) throws SQLException {
+		ArrayList<Alarm> alarms = new ArrayList<Alarm>();
 		if(!rs.first()) throw new SQLException("No matching entry found");
 		rs.beforeFirst();
-		String employeeEmail = "";
-		int appointmentID = 0;
-		String date = "";
-		String description = "";
 		while(rs.next()) {
-			employeeEmail = rs.getString(1);
-			appointmentID = rs.getInt(2);
-			date = rs.getString(3);
-			description = rs.getString(4);
+			String employeeEmail = rs.getString(1);
+			int appointmentID = rs.getInt(2);
+			String date = rs.getString(3);
+			String description = rs.getString(4);
+			Alarm alarm = new Alarm(appointmentID, employeeEmail);
+			alarm.setDate(date);
+			alarm.setDescription(description);
+			alarms.add(alarm);
 		}
-		Alarm alarm = new Alarm(appointmentID, employeeEmail);
-		alarm.setDate(date);
-		alarm.setDescription(description);
-		return alarm;
+		return alarms;
 	}
 	
-	public Group getGroup(ResultSet rs) throws SQLException {
+	public ArrayList<Group> getGroups(ResultSet rs) throws SQLException {
+		ArrayList<Group> groups = new ArrayList<Group>();
 		if(!rs.first()) throw new SQLException("No matching entry found");
 		rs.beforeFirst();
 		String groupEmail = "";
@@ -139,6 +127,7 @@ public class DBFactory {
 		for(String member : members) {
 			group.addMember(member);
 		}
-		return group;
+		groups.add(group);
+		return groups;
 	}
 }
