@@ -1,5 +1,4 @@
 package gui;
-import ghostmodels.Employee;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -35,6 +34,7 @@ import java.util.Calendar;
 import javax.swing.SwingConstants;
 
 import models.Appointment;
+import models.Employee;
 
 
 public class EditView extends JPanel/*JFrame*/ {
@@ -658,7 +658,10 @@ public class EditView extends JPanel/*JFrame*/ {
 				{
 				//TODO: Save appointment for this user in database and send message
 				// to relevant employees (employees added to the people-list)
-				
+				//CalendarProgram.getModel().addAppointment(key, value);
+				CalendarProgram.getModel().addEmployee("kenneth@ntnu.no",
+						new Employee("neo@matrix.com", "Thomas A.", "Anderson",
+						"543678904", "456234765"));
 				
 				JOptionPane.showMessageDialog(
 						(JFrame)SwingUtilities.getRoot(_parentContentPane),

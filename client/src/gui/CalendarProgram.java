@@ -8,21 +8,18 @@ import java.awt.CardLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-
-public class Calendar {
+public class CalendarProgram {
 	private static final String LOG_IN = "Login view";
 	private static final String CALENDAR_VIEW = "Calendar View";
 	private static final String EDIT_VIEW = "Edit View";
 	private static final String INFO_VIEW = "Info View";
 	
 	private static ApplicationModel model;
-	public static Employee loggedInUser;
-	
 	
 	private static void createAndShowGui()
 		{
-		model = new ApplicationModel();
-		loggedInUser = model.getEmployee().get("email");
+		model = ApplicationModel.getInstance();
+		model.username = "email";
 		JFrame frame = new JFrame("Superblaster");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBounds(50, 50, 800, 600);
@@ -67,6 +64,6 @@ public class Calendar {
 
 
 	public static void setModel(ApplicationModel model) {
-		Calendar.model = model;
+		CalendarProgram.model = model;
 	}
 }
