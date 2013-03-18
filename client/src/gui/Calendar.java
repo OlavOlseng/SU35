@@ -1,7 +1,7 @@
 package gui;
 
-import ghostmodels.ApplicationModel;
-import ghostmodels.Employee;
+import models.ApplicationModel;
+import models.Employee;
 
 import java.awt.CardLayout;
 
@@ -16,13 +16,13 @@ public class Calendar {
 	private static final String INFO_VIEW = "Info View";
 	
 	private static ApplicationModel model;
-	private static Employee loggedInUser;
+	public static Employee loggedInUser;
 	
 	
 	private static void createAndShowGui()
 		{
 		model = new ApplicationModel();
-		loggedInUser = model.employees.get("email");
+		loggedInUser = model.getEmployee().get("email");
 		JFrame frame = new JFrame("Superblaster");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBounds(50, 50, 800, 600);
