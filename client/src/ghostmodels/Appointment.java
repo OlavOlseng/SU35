@@ -1,6 +1,7 @@
-package models;
+package ghostmodels;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class Appointment {
 	private int appointmentID;
@@ -10,7 +11,7 @@ public class Appointment {
 	private String description;
 	private String location;
 	private String meetingRoom;
-	private String meetingLeader;
+	private Employee meetingLeader;
 	
 	public Appointment(int appointmentID) {
 		this.appointmentID = appointmentID;
@@ -37,23 +38,21 @@ public class Appointment {
 		this.meetingRoom = meetingRoom;
 	}
 
-	public String getMeetingLeader() {
+	public Employee getMeetingLeader() {
 		return meetingLeader;
 	}
 
-	public void setMeetingLeader(String meetingLeader) {
+	public void setMeetingLeader(Employee meetingLeader) {
 		this.meetingLeader = meetingLeader;
 	}
 
 	private void setDate(int year, int month, int day) {
-		date.set(year, month-1, day, 0, 0, 0);
-		startTime.set(year, month-1, day);
-		endTime.set(year, month-1, day);
+		date.set(year, month, day, 0, 0, 0);
 	}
 	
 	public void setDate(String dateString) {
 		String[] temp = dateString.split("-");
-		setDate(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]), Integer.parseInt(temp[2]));
+		setDate(Integer.parseInt(temp[0]), Integer.parseInt(temp[2]), Integer.parseInt(temp[2]));
 	}
 	
 	private void setStartTime(int hour, int minute) {
@@ -63,8 +62,13 @@ public class Appointment {
 	}
 	
 	public void setStartTime(String time) {
-		String[] temp = time.split(":");
+		String[] temp0 = time.split(" ");
+		String[] temp = temp0[1].split(":");
 		setStartTime(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
+	}
+	
+	public Date getStartTime() {
+		return startTime.getTime();
 	}
 	
 	private void setEndTime(int hour, int minute) {
@@ -74,66 +78,13 @@ public class Appointment {
 	}
 	
 	public void setEndTime(String time) {
-		String[] temp = time.split(":");
+		String[] temp0 = time.split(" ");
+		String[] temp = temp0[1].split(":");
 		setEndTime(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
 	}
 	
-	public String getFormattedDate() {
-		String s = "";
-		s += (date.getTime().getYear()+1900) + "-";
-		int month = date.getTime().getMonth();
-		if(month < 9) {
-			s += "0";
-		}
-		s += (month+1) + "-";
-		int day = date.getTime().getDate();
-		if(day < 10) {
-			s += "0";
-		}
-		s += (day);
-		return s;
-	}
-	
-	public String getFormattedStartTime() {
-		String s = "";
-		int hours = startTime.getTime().getHours();
-		if(hours < 10) {
-			s += "0";
-		}
-		s += hours + ":";
-		int minutes = startTime.getTime().getMinutes();
-		if(minutes < 10) {
-			s += "0";
-		}
-		s += minutes;
-		return s;
-	}
-	
-	public String getFormattedEndTime() {
-		String s = "";
-		int hours = endTime.getTime().getHours();
-		if(hours < 10) {
-			s += "0";
-		}
-		s += hours + ":";
-		int minutes = endTime.getTime().getMinutes();
-		if(minutes < 10) {
-			s += "0";
-		}
-		s += minutes;
-		return s;
-	}
-	
-	public Calendar getDate() {
-		return date;
-	}
-	
-	public Calendar getStartTime() {
-		return startTime;
-	}
-	
-	public Calendar getEndTime() {
-		return endTime;
+	public Date getEndTime() {
+		return endTime.getTime();
 	}
 	
 	public void setDescription(String description) {
@@ -158,9 +109,10 @@ public class Appointment {
 				"\nStart time:\t\t\t" + startTime.getTime().toString() + "\nEnd time:\t\t\t" + endTime.getTime().toString() + 
 				"\nAppointment Location:\t\t" + location;
 		if (meetingRoom != null && meetingRoom != "")
-				s +=  "\nMeeting room:\t\t\t" + meetingRoom;
-		if(meetingLeader != null && meetingLeader != "")
-				s += "\nMeeting Leader:\t\t\t" + meetingLeader;
+				s +=  "\nMeeting room:\n" + meetingRoom.toString();
+		if(meetingLeader != null && meetingLeader.getFirstName() != "")
+				s += "\nMeeting Leader:\n" + meetingLeader.toString();
+		System.out.println(date.getTime().toString());
 		return s;
 	}
 }

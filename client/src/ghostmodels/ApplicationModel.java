@@ -1,22 +1,27 @@
-package models;
+package ghostmodels;
 
 import java.util.HashMap;
 
 public class ApplicationModel {
 	private static ApplicationModel model = null;
-	private HashMap<String, Employee> employees;
-	private HashMap<Integer, Appointment> appointment;
+	public HashMap<String, Employee> employees;
+	public HashMap<Integer, Appointment> appointment;
 	private HashMap<String, Room> rooms;
 	private HashMap<String, Invitation> invitations;
-	private HashMap<String, Alarm> alarms;
+	private HashMap<Integer, Alarm> alarms;
 	public String username; 
 	
-	private ApplicationModel(){
+	public ApplicationModel(){
 		employees = new HashMap<String, Employee>();
 		appointment = new HashMap<Integer, Appointment>();
 		rooms = new HashMap<String, Room>();
 		invitations = new HashMap<String, Invitation>();
-		alarms = new HashMap<String, Alarm>();
+		alarms = new HashMap<Integer, Alarm>();
+		
+		employees.put("email", new Employee("email","fornavn","etternavn","12345678","87654321"));
+		appointment.put(0, new Appointment(0));
+		appointment.get(0).setMeetingLeader(employees.get("email"));
+		appointment.get(0).setDescription("Møte");
 	}
 	
 	// key = email
@@ -35,12 +40,6 @@ public class ApplicationModel {
 	public void updateEmployee(String email, Employee e){
 		if(employees.containsKey(email)){
 			employees.put(email, e);
-		}
-	}
-	
-	public void deleteEmployee(String email){
-		if(employees.containsKey(email)){
-			employees.remove(email);
 		}
 	}
 	
@@ -99,7 +98,7 @@ public class ApplicationModel {
 		rooms.put(key, value);
 	}
 	
-	public Room getRoom(String id){
+	public Room getRoom(int id){
 		Room r = rooms.get(id);
 		if(r == null){
 			//TODO add method to clientmessagehandler
@@ -113,14 +112,14 @@ public class ApplicationModel {
 		}
 	}
 	
-	public void deleteRoom(String id){
+	public void deleteRoom(int id){
 		if(rooms.containsKey(id)){
 			rooms.remove(id);
 		}
 	}
 	
 	// key = alarmID
-	public void addAlarm(String key, Alarm value){
+	public void addAlarm(int key, Alarm value){
 		alarms.put(key, value);
 	}
 	
@@ -132,13 +131,13 @@ public class ApplicationModel {
 		return a;
 	}
 	
-	public void updateAlarm(String id, Alarm r){
+	public void updateAlarm(int id, Alarm r){
 		if(alarms.containsKey(id)){
 			alarms.put(id, r);
 		}
 	}
 	
-	public void deleteAlarm(String id){
+	public void deleteAlarm(int id){
 		if(alarms.containsKey(id)){
 			alarms.remove(id);
 		}

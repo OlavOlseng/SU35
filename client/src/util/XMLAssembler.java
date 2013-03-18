@@ -25,8 +25,8 @@ public class XMLAssembler {
 		return d;
 	}
 	
-	public Employee assembleEmployee(Element personElement, Employee e) {
-		
+	public Employee assembleEmployee(Element personElement) {
+		Employee e = new Employee(null, null, null, null, null);
 		Element element = personElement.getFirstChildElement("email");
 		if (element != null) {
 			e.setEmail(element.getValue());
@@ -52,8 +52,8 @@ public class XMLAssembler {
 		
 	}
 	
-	public Appointment assembleAppointment(Element appointmentElement, Appointment a)  {
-		
+	public Appointment assembleAppointment(Element appointmentElement)  {
+		Appointment a = new Appointment(0);
 		Element element = appointmentElement.getFirstChildElement("appointmentID");
 		if (element != null) {
 			a.setAppointmentID(Integer.parseInt(element.getValue()));
@@ -78,14 +78,15 @@ public class XMLAssembler {
 		if(element != null){
 			a.setMeetingLeader(element.getValue());
 		}
-		element = appointmentElement.getFirstChildElement("meetingroom");
+		element = appointmentElement.getFirstChildElement("room");
 		if(element != null){
 			a.setMeetingRoom(element.getValue());
 		}
 		return a;
 	}
 	
-	public Room assembleMeetingRoom(Element meetingRoomElement, Room mr){
+	public Room assembleRoom(Element meetingRoomElement){
+		Room mr = new Room(null, 0);
 		Element element = meetingRoomElement.getFirstChildElement("name");
 		if(element != null){
 			mr.setName(element.getValue());
@@ -97,7 +98,8 @@ public class XMLAssembler {
 		return mr;
 	}
 	
-	public Invitation assembleInvitation(Element invitationElement, Invitation invite){
+	public Invitation assembleInvitation(Element invitationElement){
+		Invitation invite = new Invitation(null, 0);
 		Element element = invitationElement.getFirstChildElement("answer");
 		if(element != null){
 			invite.setAnswer(Answer.valueOf(element.getValue()));
@@ -110,19 +112,25 @@ public class XMLAssembler {
 		if(element != null){
 			invite.setAppointmentID(Integer.parseInt(element.getValue()));
 		}
+		element = invitationElement.getFirstChildElement("message");
+		if(element != null){
+			invite.setMessage(element.getValue());
+		}
 		return invite;
 	}
 	
-	public Alarm assembleAlarm(Element alarmElement, Alarm alarm){
+	public Alarm assembleAlarm(Element alarmElement){
 		Element element = alarmElement.getFirstChildElement("alarmID");
+		String id = null;
 		if(element != null){
-			alarm.setAlarmID(Integer.parseInt(element.getValue()));
+			id = element.getValue();
 		}
 		element = alarmElement.getFirstChildElement("employeeEmail");
+		String email = null;
 		if(element != null){
-			alarm.setEmployeeEmail(element.getValue());
+			email = element.getValue();
 		}
-		return alarm;
+		return new Alarm(Integer.parseInt(id), email);
 	}
 	
 

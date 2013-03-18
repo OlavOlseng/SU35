@@ -1,49 +1,61 @@
 package util;
 
-import java.io.IOException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import java.util.ArrayList;
 
-import org.w3c.dom.DOMImplementation;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
+import models.Appointment;
 import models.Employee;
-import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.ParsingException;
-import nu.xom.ValidityException;
 
 public class XMLFactory {
 	
 	private Element root;
 	
-	public void createNewObject(String name) {
+	private void createNewObject(String name) {
 		root = new Element(name);
 	}
 	
-	public void addChild(String name, String value, String ...values) {
-		Element node = new Element(name);
-		node.appendChild(value);
+	private void addChild(ArrayList<String> values, String ...names) {
+		int count = 0;
 		for (String s : values) {
-			node.appendChild(s);
+			Element element = new Element(names[count]);
+			element.appendChild(s);
+			root.appendChild(element);
+			count++;
 		}
-		root.appendChild(node);
 	}
 	
 	public String makeEmployee(Employee e) {
-		return null;
+		ArrayList<String> employeeInfo = makeStringArray(e.getEmail(), e.getFirstName(), 
+				e.getLastName(),e.getHomePhone(),e.getMobilePhone());
+		createNewObject("employee");
+		addChild(employeeInfo, "email", "firstname", "lastname", "homephone", "mobilephone");
+		return getXML();
 	}
 	
-	public String getXML() {
+	public String makeAppointment(Appointment a){
+		ArrayList<String> appointmentInfo = makeStringArray(Integer.toString(
+				a.getAppointmentID()), a.getFormattedStartTime(), 
+				a.getFormattedEndTime(), a.getDescription(), 
+				a.getLocation(), a.getMeetingLeader(), a.getMeetingRoom());
+		createNewObject("appointment");
+		addChild(appointmentInfo, "appointmentID", "starttime", "endtime", 
+				"description", "location", "meetingleader", "room");
+		return getXML();
+	}
+	
+	private String getXML() {
 		Document d = new Document(root);
 		root = null;
 		return d.toXML();
 	}
 	
-	
+	private ArrayList<String> makeStringArray(String ...values){
+		ArrayList<String> arrValues = new ArrayList<String>();
+		for(String s : values){
+			arrValues.add(s);
+		}
+		return arrValues;
+	}
 }

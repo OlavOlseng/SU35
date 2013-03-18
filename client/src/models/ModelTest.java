@@ -1,7 +1,5 @@
 package models;
 
-import java.util.ArrayList;
-
 public class ModelTest {
 	public static void main(String args[]) {
 		Appointment app1 = new Appointment(1);
@@ -47,13 +45,16 @@ public class ModelTest {
 		roomManager.addAppointment(app1);
 		roomManager.addAppointment(app2);
 		roomManager.addAppointment(app3);
-		roomManager.addRoom("Drivhuset", 30);
-		roomManager.addRoom("R-bygget R-7", 500);
-		roomManager.addRoom("Stripa S-1", 200);
+		roomManager.addRoom(room1.getName(), room1.getRoomSize());
+		roomManager.addRoom(room2.getName(), room2.getRoomSize());
+		roomManager.addRoom(room3.getName(), room3.getRoomSize());
 		
 		String room = roomManager.pickSuitableRoom();
 		app4.setMeetingRoom(room);
 		
 		System.out.println(app4.toString());
+		System.out.println(app4.getFormattedDate());
+		System.out.println(app4.getFormattedStartTime());
+		System.out.println(app4.getFormattedEndTime());
 	}
 }

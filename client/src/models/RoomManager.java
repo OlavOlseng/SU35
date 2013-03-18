@@ -29,7 +29,7 @@ public class RoomManager {
 	public void addAppointment(Appointment appointment) {
 		if(appointment.getStartTime().getTime().getYear() == date.getTime().getYear() &&
 				appointment.getStartTime().getTime().getMonth() == date.getTime().getMonth() &&
-				appointment.getStartTime().getTime().getDay() == date.getTime().getDay()) {
+				appointment.getStartTime().getTime().getDate() == date.getTime().getDate()) {
 				appointments.add(appointment);
 		}
 	}
