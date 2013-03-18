@@ -64,16 +64,9 @@ public class Appointment {
 	}
 	
 	public void setStartTime(String time) {
-		//String[] temp0 = time.split(" ");
 		String[] temp = time.split(":");
 		setStartTime(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
 	}
-	
-	/*
-	public Date getStartTime() {
-		return startTime.getTime();
-	}
-	*/
 	
 	private void setEndTime(int hour, int minute) {
 		endTime.setTime(date.getTime());
@@ -82,16 +75,9 @@ public class Appointment {
 	}
 	
 	public void setEndTime(String time) {
-		//String[] temp0 = time.split(" ");
 		String[] temp = time.split(":");
 		setEndTime(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
 	}
-	
-	/*
-	public Date getEndTime() {
-		return endTime.getTime();
-	}
-	*/
 	
 	public Calendar getDate() {
 		return date;
