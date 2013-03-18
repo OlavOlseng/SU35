@@ -116,10 +116,10 @@ public class DBFactory {
 	public ArrayList<Group> getGroups(ResultSet rs) throws SQLException {
 		ArrayList<Group> groups = new ArrayList<Group>();
 		if(!rs.first()) throw new SQLException("No matching entry found");
-		rs.beforeFirst();
 		String groupEmail = "";
 		ArrayList<String> members = new ArrayList<String>();
 		groupEmail = rs.getString(1);
+		rs.beforeFirst();
 		while(rs.next()) {
 			members.add(rs.getString(2));
 		}

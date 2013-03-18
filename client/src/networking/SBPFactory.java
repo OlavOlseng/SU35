@@ -8,6 +8,7 @@ public class SBPFactory {
 		UPDATE('u'),
 		CREATE('c'),
 		BATCH_UPDATE('b'),
+		ERROR('e'),
 		DELETE('d');
 		
 		char c;
@@ -28,6 +29,7 @@ public class SBPFactory {
 	public final static String OPTION_INVITATIONS_BY_APPOINTMENT = "invitationA";
 	public final static String OPTION_ROOM = "room";
 	public final static String OPTION_ALARM = "alarm";
+	public final static String OPTION_GROUP = "group";
 	
 	public String makeLoginMessage(String user, String password) {
 		String payload = String.format("%s¤%s", user, password);

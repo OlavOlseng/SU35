@@ -5,19 +5,29 @@ TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 1. implement getting features:
     [x] Appointment by ID           
     [x] Employee by ID              
-    [x] Alarm by Employee           
-    [ ] Invitations Employee        
-    [ ] Invitations by appointment
-    [ ] Invitations by appointment and employee
-    [ ] Groups
-    [ ] Finalized
+    [x] Alarm by Employee and Appointment           
+    [x] Invitations Employee        
+    [x] Invitations by appointment
+    [x] Invitations by appointment and employee
+    [x] Groups
+    [x] Rooms
+    [x] Finalized
     
     
 2. implement update features:
+    [ ] Appointment
+    [ ] Invitation
+    [ ] Alarm
     [ ] Finalized
     
 3.  Implement create features:
+    [ ] Appointment
+    [ ] Invitation
+    [ ] Alarm
     [ ] Finalized
     
 4. Implement deletion features:
+    [ ] Appointment
+    [ ] Invitation
+    [ ] Alarm
     [ ] Finalized
