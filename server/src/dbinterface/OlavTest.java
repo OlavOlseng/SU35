@@ -36,6 +36,7 @@ public class OlavTest {
 	}
 	
 	public void readTest() {
+		/*
 		try {
 			String sql="select * from employee";
 			ResultSet rs = dbc.makeSingleQuery(sql);
@@ -60,7 +61,7 @@ public class OlavTest {
 		}
 		
 		System.out.println();
-		
+		*/
 	}
 }
 

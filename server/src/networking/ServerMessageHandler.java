@@ -36,51 +36,55 @@ public class ServerMessageHandler extends MessageHandler{
 	@Override
 	public void getEntry(String[] data) {
 		String what = data[3];
-		String response = null;
+		ArrayList<String> response = new ArrayList<String>();
 		switch(what) {
 		case(SBPFactory.OPTION_EMPLOYEE): 
-			getEmployees(data);
+			response = getEmployees(data);
 		break;
 		case(SBPFactory.OPTION_APPOINTMENT):
-			getAppointments(data);
+			response = getAppointments(data);
 		break;
 		case(SBPFactory.OPTION_INVITATION):
-			getInvitation(data);
+			response = getInvitation(data);
 		break;
 		case(SBPFactory.OPTION_INVITATIONS_BY_EMPLOYEE):
-			getInvitationsByEmployee(data);
+			response = getInvitationsByEmployee(data);
 		break;
 		case(SBPFactory.OPTION_INVITATIONS_BY_APPOINTMENT):
-			getInvitationsByAppointment(data);
+			response = getInvitationsByAppointment(data);
 		break;
 		case(SBPFactory.OPTION_ALARM):
-			getAlarm(data);
+			response = getAlarm(data);
 		break;
 		case(SBPFactory.OPTION_ROOM):
-			getRooms(data);
+			response = getRooms(data);
 		break;
 		case(SBPFactory.OPTION_GROUP):
-			getGroup(data);
+			response = getGroup(data);
 		break;
 		default:
-			response = msgFactory.createMessage(MessageType.ERROR, true, "No matching command found", data[3], null);
-			try {
-				bridge.send(response);
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			response.add(msgFactory.createMessage(MessageType.ERROR, true, "No matching command found", data[3], null));
+		}
+
+		try {
+			for (String s : response){
+				bridge.send(s);
 			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
 
 	}
 
 
-	public void getEmployees(String[] data) {
+	public ArrayList<String> getEmployees(String[] data) {
 		boolean error = true;
 		String errorMsg = "Unknown error...";
 		String id = data[4];
 		String payload = null;
 		String response;
 		ArrayList<Employee> employees = new ArrayList<Employee>();
+		ArrayList<String> messages = new ArrayList<String>();
 
 		try {
 			String query = String.format("SELECT * FROM employee WHERE email='%s'", id);
@@ -96,29 +100,26 @@ public class ServerMessageHandler extends MessageHandler{
 			errorMsg = e.getMessage();
 
 		} finally {
-			try {
-				if(employees.size() < 1) {
-					response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_EMPLOYEE, payload);
-					this.bridge.send(response);
-				}
-				for(Employee e : employees){
-					//TODO make serializer work properly
-					payload = (e.toString());
-					response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_EMPLOYEE, payload);
-					this.bridge.send(response);
-				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			if(employees.size() < 1) {
+				response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_EMPLOYEE, payload);
+				messages.add(response);
+			}
+			for(Employee e : employees){
+				//TODO make serializer work properly
+				payload = (e.toString());
+				messages.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_EMPLOYEE, payload));
+
 			}
 		}
+		return messages;
 	}
 
-	public void getAppointments(String[] data) {
+	public ArrayList<String> getAppointments(String[] data) {
 		boolean error = true;
 		String errorMsg = "Unknown error...";
 		String id = data[4];
 		String payload = null;
-		String response;
+		ArrayList<String> response = new ArrayList<String>();
 		ArrayList<Appointment> apps = new ArrayList<Appointment>();
 
 		String query = String.format("SELECT * FROM appointment WHERE ID='%s'", id);
@@ -136,29 +137,24 @@ public class ServerMessageHandler extends MessageHandler{
 			error = true;
 			errorMsg = e.getMessage();
 		} finally {
-			try {
-				if(apps.size() < 1) {
-					response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_APPOINTMENT, null);
-					this.bridge.send(response);
-				}
-				for(Appointment a : apps){
-					//TODO make serializer work properly
-					payload = (a.toString());
-					response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_APPOINTMENT, payload);
-					this.bridge.send(response);
-				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			if(apps.size() < 1) {
+				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_APPOINTMENT, null));
+			}
+			for(Appointment a : apps){
+				//TODO make serializer work properly
+				payload = (a.toString());
+				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_APPOINTMENT, payload));
 			}
 		}
+		return response;
 	}
 
-	public void getInvitation(String[] data) {
+	public ArrayList<String> getInvitation(String[] data) {
 		boolean error = true;
 		String errorMsg = "Unknown error...";
 		String ids[] = data[4].split("¤");
 		String payload = null;
-		String response;
+		ArrayList<String> response = new ArrayList<String>();
 		ArrayList<Invitation> invites = new ArrayList<Invitation>();
 
 		String query = String.format("SELECT * FROM invitation WHERE employee_email='%s' AND appointment_ID='%s'", ids[0], ids[1]);
@@ -176,30 +172,25 @@ public class ServerMessageHandler extends MessageHandler{
 			error = true;
 			errorMsg = e.getMessage();
 		} finally {
-			try {
-				if ((invites.size() < 1)) {
-					response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_INVITATION, null);
-					this.bridge.send(response);
-				}
-				for(Invitation i : invites){
-					//TODO make serializer work properly
-					payload = (i.toString());
-					response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_INVITATION, payload);
-					this.bridge.send(response);
-				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			if ((invites.size() < 1)) {
+				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_INVITATION, null));
+			}
+			for(Invitation i : invites){
+				//TODO make serializer work properly
+				payload = (i.toString());
+				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_INVITATION, payload));
 			}
 		}
+		return response;
 	}
 
-	
-	public void getInvitationsByEmployee(String[] data) {
+
+	public ArrayList<String> getInvitationsByEmployee(String[] data) {
 		boolean error = true;
 		String errorMsg = "Unknown error...";
 		String id = data[4];
 		String payload = null;
-		String response;
+		ArrayList<String> response = new ArrayList<String>();
 		ArrayList<Invitation> invites = new ArrayList<Invitation>();
 
 		String query = String.format("SELECT * FROM invitation WHERE employee_email='%s'", id);
@@ -217,29 +208,24 @@ public class ServerMessageHandler extends MessageHandler{
 			error = true;
 			errorMsg = e.getMessage();
 		} finally {
-			try {
-				if ((invites.size() < 1)) {
-					response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_INVITATION, null);
-					this.bridge.send(response);
-				}
-				for(Invitation i : invites){
-					//TODO make serializer work properly
-					payload = (i.toString());
-					response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_INVITATION, payload);
-					this.bridge.send(response);
-				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			if ((invites.size() < 1)) {
+				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_INVITATION, null));
+			}
+			for(Invitation i : invites){
+				//TODO make serializer work properly
+				payload = (i.toString());
+				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_INVITATION, payload));
 			}
 		}
+		return response;
 	}
 
-	private void getInvitationsByAppointment(String[] data) {
+	private ArrayList<String> getInvitationsByAppointment(String[] data) {
 		boolean error = true;
 		String errorMsg = "Unknown error...";
 		String id = data[4];
 		String payload = null;
-		String response;
+		ArrayList<String> response = new ArrayList<String>();
 		ArrayList<Invitation> invites = new ArrayList<Invitation>();
 
 		String query = String.format("SELECT * FROM invitation WHERE appointment_ID='%s'", id);
@@ -257,29 +243,24 @@ public class ServerMessageHandler extends MessageHandler{
 			error = true;
 			errorMsg = e.getMessage();
 		} finally {
-			try {
-				if ((invites.size() < 1)) {
-					response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_INVITATION, null);
-					this.bridge.send(response);
-				}
-				for(Invitation i : invites){
-					//TODO make serializer work properly
-					payload = (i.toString());
-					response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_INVITATION, payload);
-					this.bridge.send(response);
-				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			if ((invites.size() < 1)) {
+				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_INVITATION, null));
+			}
+			for(Invitation i : invites){
+				//TODO make serializer work properly
+				payload = (i.toString());
+				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_INVITATION, payload));
 			}
 		}
+		return response;
 	}
 
-	private void getAlarm(String[] data) {
+	private ArrayList<String> getAlarm(String[] data) {
 		boolean error = true;
 		String errorMsg = "Unknown error...";
 		String ids[] = data[4].split("¤");
 		String payload = null;
-		String response;
+		ArrayList<String> response = new ArrayList<String>();
 		ArrayList<Alarm> alarms = new ArrayList<Alarm>();
 
 		String query = String.format("SELECT * FROM alarm WHERE employee_email ='%s' AND appointment_ID='%s'", ids[0], ids[1]);
@@ -297,29 +278,24 @@ public class ServerMessageHandler extends MessageHandler{
 			error = true;
 			errorMsg = e.getMessage();
 		} finally {
-			try {
-				if ((alarms.size() < 1)) {
-					response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_ALARM, null);
-					this.bridge.send(response);
-				}
-				for(Alarm i : alarms){
-					//TODO make serializer work properly
-					payload = (i.toString());
-					response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_ALARM, payload);
-					this.bridge.send(response);
-				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			if ((alarms.size() < 1)) {
+				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_ALARM, null));
+			}
+			for(Alarm i : alarms){
+				//TODO make serializer work properly
+				payload = (i.toString());
+				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_ALARM, payload));
 			}
 		}
+		return response;
 	}
-	
-	private void getGroup(String[] data) {
+
+	private ArrayList<String> getGroup(String[] data) {
 		boolean error = true;
 		String errorMsg = "Unknown error...";
 		String id = data[4];
 		String payload = null;
-		String response;
+		ArrayList<String> response = new ArrayList<String>(); 
 		ArrayList<Group> groups = new ArrayList<Group>();
 
 		String query = String.format("SELECT group_email, employee_email FROM member WHERE group_email='%s'", id);
@@ -337,29 +313,23 @@ public class ServerMessageHandler extends MessageHandler{
 			error = true;
 			errorMsg = e.getMessage();
 		} finally {
-			try {
-				if ((groups.size() < 1)) {
-					response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_GROUP, null);
-					this.bridge.send(response);
-				}
-				for(Group i : groups){
-					//TODO make serializer work properly
-					payload = (i.toString());
-					response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_GROUP, payload);
-					this.bridge.send(response);
-				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			if ((groups.size() < 1)) {
+				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_GROUP, null));
+			}for(Group i : groups){
+				//TODO make serializer work properly
+				payload = (i.toString());
+				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_GROUP, payload));
 			}
 		}
+		return response;
 	}
 
-	
-	public void getRooms(String[] data) {
+
+	public ArrayList<String> getRooms(String[] data) {
 		boolean error = true;
 		String errorMsg = "Unknown error...";
 		String payload = null;
-		String response;
+		ArrayList<String>  response = new ArrayList<String>();
 		ArrayList<Room> rooms = new ArrayList<Room>();
 
 		String query = String.format("SELECT * FROM room");
@@ -377,26 +347,20 @@ public class ServerMessageHandler extends MessageHandler{
 			error = true;
 			errorMsg = e.getMessage();
 		} finally {
-			try {
-				if ((rooms.size() < 1)) {
-					response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_ROOM, null);
-					this.bridge.send(response);
-				}
-				for(Room i : rooms){
-					//TODO make serializer work properly
-					payload = (i.toString());
-					response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_ROOM, payload);
-					this.bridge.send(response);
-				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			if ((rooms.size() < 1)) {
+				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_ROOM, null));
+			}
+			for(Room i : rooms){
+				//TODO make serializer work properly
+				payload = (i.toString());
+				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_ROOM, payload));
 			}
 		}
+		return response;
 	}
-	
+
 	@Override
 	public void updateEntry(String[] data) {
-		// TODO Auto-generated method stub
 
 	}
 
