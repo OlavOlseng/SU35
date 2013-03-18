@@ -8,7 +8,7 @@ public class ApplicationModel {
 	private HashMap<Integer, Appointment> appointment;
 	private HashMap<String, Room> rooms;
 	private HashMap<String, Invitation> invitations;
-	private HashMap<Integer, Alarm> alarms;
+	private HashMap<String, Alarm> alarms;
 	public String username; 
 	
 	private ApplicationModel(){
@@ -16,7 +16,7 @@ public class ApplicationModel {
 		appointment = new HashMap<Integer, Appointment>();
 		rooms = new HashMap<String, Room>();
 		invitations = new HashMap<String, Invitation>();
-		alarms = new HashMap<Integer, Alarm>();
+		alarms = new HashMap<String, Alarm>();
 	}
 	
 	// key = email
@@ -35,6 +35,12 @@ public class ApplicationModel {
 	public void updateEmployee(String email, Employee e){
 		if(employees.containsKey(email)){
 			employees.put(email, e);
+		}
+	}
+	
+	public void deleteEmployee(String email){
+		if(employees.containsKey(email)){
+			employees.remove(email);
 		}
 	}
 	
@@ -93,7 +99,7 @@ public class ApplicationModel {
 		rooms.put(key, value);
 	}
 	
-	public Room getRoom(int id){
+	public Room getRoom(String id){
 		Room r = rooms.get(id);
 		if(r == null){
 			//TODO add method to clientmessagehandler
@@ -107,14 +113,14 @@ public class ApplicationModel {
 		}
 	}
 	
-	public void deleteRoom(int id){
+	public void deleteRoom(String id){
 		if(rooms.containsKey(id)){
 			rooms.remove(id);
 		}
 	}
 	
 	// key = alarmID
-	public void addAlarm(int key, Alarm value){
+	public void addAlarm(String key, Alarm value){
 		alarms.put(key, value);
 	}
 	
@@ -126,13 +132,13 @@ public class ApplicationModel {
 		return a;
 	}
 	
-	public void updateAlarm(int id, Alarm r){
+	public void updateAlarm(String id, Alarm r){
 		if(alarms.containsKey(id)){
 			alarms.put(id, r);
 		}
 	}
 	
-	public void deleteAlarm(int id){
+	public void deleteAlarm(String id){
 		if(alarms.containsKey(id)){
 			alarms.remove(id);
 		}

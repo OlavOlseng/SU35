@@ -3,6 +3,6 @@ All client stuff goes here
 TODO: 
 1. Implement functionality supporting sending messages to server that uses our 
    application-protocol.
-2. Implement functionality converting from XML-strings to groups. (Sindre)
-3. Implement functionality for parsing Group-object. (Sindre)
-4. Implement functionality for adding objects to HashMaps. (Sindre)
+2. Implement functionality converting from XML-strings to groups. (Sindre, ikke viktig)
+3. Implement functionality for parsing Group-object. (Sindre, ikke viktig)
+4. Implement functionality for adding objects to HashMaps. (Sindre) [X]
