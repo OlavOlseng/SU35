@@ -18,7 +18,7 @@ public class Calendar {
 	private static ApplicationModel model;
 	private static Employee loggedInUser;
 	
-
+	
 	private static void createAndShowGui()
 		{
 		model = new ApplicationModel();
@@ -33,11 +33,13 @@ public class Calendar {
 		Login login = new Login(contentPane);
 		contentPane.add(login, LOG_IN);
 		
-		CalendarView calendarView = new CalendarView(contentPane);
-		contentPane.add(calendarView, CALENDAR_VIEW);
-		
 		EditView editView = new EditView(contentPane);
 		contentPane.add(editView, EDIT_VIEW);
+		
+		CalendarView calendarView = new CalendarView(contentPane, editView);
+		contentPane.add(calendarView, CALENDAR_VIEW);
+		
+		
 		
 		InfoView infoView = new InfoView(contentPane);
 		contentPane.add(infoView, INFO_VIEW);

@@ -349,7 +349,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		{
 		//If appointmentID is -1 this means that this is a new appointment and we
 		// need to make sure that the fields are empty 
-		if(appointmentID == -1)
+		if(appointmentID <= 0)
 			{ resetPanel(); }
 		//This is an appointment that we might want to edit.  Get data from
 		// appointment with the specified appointmentID and put data in the
@@ -374,7 +374,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		locationField.setText("");
 		
 		//Make sure peopleList is empty
-		peopleList.removeAll();
+		//peopleList.removeAll();
 		}
 	//--------------------------------------------------------------------------
 	//This function checks the different components

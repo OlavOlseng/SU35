@@ -41,6 +41,7 @@ public class CalendarView extends JPanel{
 	private JPopupMenu menuNotifications, menuCalendars;
 	private ArrayList<JButton> buttonList = new ArrayList<JButton>();
 	private int indexOfSelectedButton;
+	private EditView _editView;
 	
 	/**
 	 * Launch the application.
@@ -59,9 +60,9 @@ public class CalendarView extends JPanel{
 	/**
 	 * Create the application.
 	 */
-	public CalendarView(JPanel parentContentPane) {
+	public CalendarView(JPanel parentContentPane, EditView editView) {
 		//updateInfo();
-		initialize(parentContentPane);
+		initialize(parentContentPane, editView);
 		
 		btnNotifications.setText("Notifications (" + Integer.toString(menuNotifications.getComponentCount()) + ")");
 		
@@ -98,8 +99,9 @@ public class CalendarView extends JPanel{
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize(JPanel parentContentPane) {
-		_parentContentPane = parentContentPane;
+	private void initialize(JPanel parentContentPane, EditView editView) {
+		_parentContentPane 	= parentContentPane;
+		_editView 				= editView;
 	
 		this.setBorder(new EmptyBorder(5,5,5,5));
 		this.setBackground(new Color(153, 190, 255));
@@ -216,6 +218,9 @@ public class CalendarView extends JPanel{
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//Open EditView
+				//We call initialize with the parameter -1 to indicate that we
+				// want to create a new appointment
+				_editView.initialize(-1);
 				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
 				c1.show(_parentContentPane, "Edit View");
 				
@@ -296,6 +301,9 @@ public class CalendarView extends JPanel{
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//Open EditView
+				//We will call intialize with the appointmentID as a parameter.
+				//The number 1 is for testing purposes
+				_editView.initialize(1);
 				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
 				c1.show(_parentContentPane, "Edit View");
 			}

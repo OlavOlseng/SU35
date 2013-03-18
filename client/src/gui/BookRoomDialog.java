@@ -145,6 +145,7 @@ public class BookRoomDialog extends JDialog
 		contentPane.add(cancelButton, gbc_cancelButton);
 		
 		}
+	
 	//**************************************************************************
 	class CancelListener implements ActionListener
 		{
