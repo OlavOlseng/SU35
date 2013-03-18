@@ -42,7 +42,6 @@ public class SocketTest implements MessageListener{
 					System.out.println("Should fail");
 					msg = test.fac.makeGetMessage("employee", "sindr@epost.no");
 				}
-				
 				if (msg.equals("app1")) {
 					System.out.println("Should work");
 					msg = test.fac.makeGetMessage(SBPFactory.OPTION_APPOINTMENT, "2");
@@ -51,7 +50,6 @@ public class SocketTest implements MessageListener{
 					System.out.println("Should fail");
 					msg = test.fac.makeGetMessage(SBPFactory.OPTION_APPOINTMENT, "0");
 				}
-				
 				if (msg.equals("inv1")) {
 					System.out.println("Should work");
 					msg = test.fac.makeGetMessage(SBPFactory.OPTION_INVITATIONS_BY_APPOINTMENT, "2");
@@ -84,11 +82,6 @@ public class SocketTest implements MessageListener{
 					System.out.println("Should work");
 					msg = test.fac.makeGetMessage(SBPFactory.OPTION_ALARM, "kenneth@epost.no¤2");
 				}
-				
-				
-				
-				
-				
 				if (msg.equals("login1")) {
 					System.out.println("Logging in");
 					msg = test.fac.makeLoginMessage("Leif", "1");

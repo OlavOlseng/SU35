@@ -1,4 +1,6 @@
 package gui;
+import models.Appointment;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -66,31 +68,39 @@ public class CalendarView extends JPanel{
 		
 		btnNotifications.setText("Notifications (" + Integer.toString(menuNotifications.getComponentCount()) + ")");
 		
-		for (int key : Calendar.getModel().appointment.keySet()){
-			if (key == 0) {
-				JButton button = new JButton();
+		//Finds the appointments for the logged in user
+		for (int key : Calendar.getModel().getAppointment.keySet()) {
+			if (Calendar.getModel().getAppointment.get(key).getMeetingLeader() == Calendar.loggedInUser.getEmail()) {
+				CustomCalendarButton button = new CustomCalendarButton();
 				buttonList.add(button);
+				button.keyOfRelatedAppointment = key;
 				buttonList.get(buttonList.size()-1).setLayout(new BorderLayout());
-				JLabel label1 = new JLabel(Calendar.getModel().appointment.get(key).getDescription());
-				JLabel label2 = new JLabel(Calendar.getModel().appointment.get(key).getStartTime().toString());
+				JLabel label1 = new JLabel(Calendar.getModel().getAppointment.get(key).getDescription());
+				JLabel label2 = new JLabel(Calendar.getModel().getAppointment.get(key).getFormattedStartTime().toString());
 				buttonList.get(buttonList.size()-1).add(BorderLayout.NORTH,label1);
 				buttonList.get(buttonList.size()-1).add(BorderLayout.SOUTH,label2);
 				buttonList.get(buttonList.size()-1).addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						JButton selectedButton = (JButton) e.getSource();
-						
-						
-						//Load info in the textAreaInfo
-						textAreaInfo.setText("Tekst!");
+						//indexOfSelectedButton = 0;
+						CustomCalendarButton tempButton = (CustomCalendarButton) e.getSource();
+						int key2 = tempButton.keyOfRelatedAppointment;
+						Appointment tempAppointment = Calendar.getModel().getAppointment.get(key2);
+						textAreaInfo.setText("Owner:\n" + tempAppointment.getMeetingLeader() + "\n\nDescription:\n" +
+								tempAppointment.getDescription() + "\n\nStart:\n" + tempAppointment.getFormattedStartTime()
+								+ "\n\nEnd:\n" + tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation());
 						btnMore.setEnabled(true);
-						btnEdit.setEnabled(true);
+						if (Calendar.loggedInUser.getEmail() == tempAppointment.getMeetingLeader()) {
+							btnEdit.setEnabled(true);
+						}
 					}
 				});
 				GridBagConstraints gbc_btnAppointment = new GridBagConstraints();
 				gbc_btnAppointment.fill = GridBagConstraints.VERTICAL;
 				gbc_btnAppointment.gridx = 0;
 				gbc_btnAppointment.gridy = 2;
-				gbc_btnAppointment.gridheight = 1;
+				gbc_btnAppointment.gridheight = 3;
+//						((int) (Calendar.getModel().appointment.get(key).getEndTime().getTimeInMillis() -
+//						Calendar.getModel().appointment.get(key).getStartTime().getTimeInMillis())) / 1000*60*60;
 				calendarPanel.add(button, gbc_btnAppointment);
 			}
 		}
@@ -173,7 +183,7 @@ public class CalendarView extends JPanel{
 		menuCalendars = new JPopupMenu();
 		menuCalendars.add("Menuitem 1");
 		menuCalendars.add("Menuitem 2");
-		menuCalendars.add(new JMenuItem(Calendar.getModel().getEmployee("email").getEmail()));
+		//menuCalendars.add(new JMenuItem(Calendar.getModel().getEmployee("email").getEmail()));
 
 		btnCalendars.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
@@ -435,30 +445,10 @@ public class CalendarView extends JPanel{
 		
 		GridBagLayout gbl_calendarPanel = new GridBagLayout();
 		gbl_calendarPanel.columnWidths = new int[]{80, 80, 80, 80, 80, 80, 80};
-		gbl_calendarPanel.rowHeights = new int[]{80, 80, 80, 80, 80};
-		gbl_calendarPanel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gbl_calendarPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_calendarPanel.rowHeights = new int[]{17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17};
+		//gbl_calendarPanel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		//gbl_calendarPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		calendarPanel.setLayout(gbl_calendarPanel);
-		
-		JButton b = new JButton();
-		b.setLayout(new BorderLayout());
-		JLabel label1 = new JLabel("Meet People");
-		JLabel label2 = new JLabel("18:00-20:00");
-		b.add(BorderLayout.NORTH,label1);
-		b.add(BorderLayout.SOUTH,label2);
-		b.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				//Load info in the infoTextArea
-				btnMore.setEnabled(true);
-				btnEdit.setEnabled(true);
-			}
-		});
-		GridBagConstraints gbc_btnAppointment = new GridBagConstraints();
-		gbc_btnAppointment.fill = GridBagConstraints.VERTICAL;
-		gbc_btnAppointment.gridx = 2;
-		gbc_btnAppointment.gridy = 3;
-		gbc_btnAppointment.gridheight = 1;
-		calendarPanel.add(b, gbc_btnAppointment);
 		
 		lbl_06 = new JLabel("06:00");
 		GridBagConstraints gbc_label_2 = new GridBagConstraints();
