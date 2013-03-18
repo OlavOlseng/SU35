@@ -6,8 +6,8 @@ TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     [x] Appointment by ID           
     [x] Employee by ID              
     [x] Alarm by Employee           
-    [ ] Invitations Employee        
-    [ ] Invitations by appointment
+    [x] Invitations Employee        
+    [x] Invitations by appointment
     [ ] Invitations by appointment and employee
     [ ] Groups
     [ ] Finalized
