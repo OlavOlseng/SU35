@@ -103,10 +103,11 @@ public class DBFactory {
 		while(rs.next()) {
 			String employeeEmail = rs.getString(1);
 			int appointmentID = rs.getInt(2);
-			String date = rs.getString(3);
+			String time = rs.getString(3);
 			String description = rs.getString(4);
+			
 			Alarm alarm = new Alarm(appointmentID, employeeEmail);
-			alarm.setDate(date);
+			alarm.setTime(time);
 			alarm.setDescription(description);
 			alarms.add(alarm);
 		}

@@ -1,4 +1,6 @@
 package gui;
+import ghostmodels.Employee;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.EventQueue;
@@ -28,7 +30,11 @@ import javax.swing.SwingUtilities;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.Calendar;
+
 import javax.swing.SwingConstants;
+
+import models.Appointment;
 
 
 public class EditView extends JPanel/*JFrame*/ {
@@ -337,6 +343,10 @@ public class EditView extends JPanel/*JFrame*/ {
 		
 		
 		JButton btnUnbook = new JButton("Unbook");
+		btnUnbook.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
 		GridBagConstraints gbc_btnUnbook = new GridBagConstraints();
 		gbc_btnUnbook.fill = GridBagConstraints.BOTH;
 		gbc_btnUnbook.insets = new Insets(0, 0, 5, 5);
@@ -345,18 +355,26 @@ public class EditView extends JPanel/*JFrame*/ {
 		this.add(btnUnbook, gbc_btnUnbook);
 		}
 	//--------------------------------------------------------------------------
-	public void initialize(int appointmentID)
+	//TODO: receive parameter of type Appointment instead of appointmentID
+	public void initialize(int appointmentID)//Appointment appointment)
 		{
 		//If appointmentID is -1 this means that this is a new appointment and we
 		// need to make sure that the fields are empty 
 		if(appointmentID <= 0)
 			{ resetPanel(); }
 		//This is an appointment that we might want to edit.  Get data from
-		// appointment with the specified appointmentID and put data in the
-		// fields
+		// the specified appointment 
 		else
 			{
-			//TODO: Load data into fields
+
+//			titleField.setText(appointment.getTitle());
+//			dateField.setText(appointment.getDate());
+//			startField.setText(appointment.getStartTime());
+//			endField.setText(appointment.getEndTime());
+//			descriptionArea.setText(appointment.getDescription());
+//			locationField.setText(appointment.getLocation());
+//			
+//			Employee[] employees = appointment.getPeople();
 			}
 		}
 	//--------------------------------------------------------------------------
@@ -544,6 +562,27 @@ public class EditView extends JPanel/*JFrame*/ {
 //				//System.out.println(gotoDialog.getDate());
 //				//Update CalendarView with week from gotoDialog.getWeek()
 //			}
+			}
+		}
+	//**************************************************************************
+	class unbookRoomListener implements ActionListener
+		{
+		public void actionPerformed(ActionEvent event)
+			{
+//			public Appointment(int appointmentID, Calendar date, Calendar startTime,
+//					Calendar endTime, String description, String location,
+//					String meetingRoom, Employee meetingLeader)
+//				{
+//				this.appointmentID = appointmentID;
+//				this.date = Calendar.getInstance();//date;
+//				this.startTime = Calendar.getInstance();//startTime;
+//				this.endTime = Calendar.getInstance();//endTime;
+//				this.description = description;
+//				this.location = location;
+//				this.meetingRoom = meetingRoom;
+//				this.meetingLeader = meetingLeader;	
+//				}
+			
 			}
 		}
 	//**************************************************************************
