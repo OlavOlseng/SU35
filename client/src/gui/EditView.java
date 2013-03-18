@@ -360,6 +360,9 @@ public class EditView extends JPanel/*JFrame*/ {
 			}
 		}
 	//--------------------------------------------------------------------------
+	public void setLoacationField(String location)
+		{ locationField.setText(location); }
+	//--------------------------------------------------------------------------
 	private void resetPanel()
 		{
 		//Set all fields to empty fields
@@ -529,7 +532,7 @@ public class EditView extends JPanel/*JFrame*/ {
 			{
 			BookRoomDialog bookRoomDialog = new BookRoomDialog(
 					(JFrame) bookRoomButton.getTopLevelAncestor(), true,
-					peopleList.getModel().getSize());
+					peopleList.getModel().getSize(), EditView.this);
 			bookRoomDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			bookRoomDialog.setVisible(true);
 			

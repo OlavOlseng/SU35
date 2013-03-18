@@ -2,9 +2,11 @@ package gui;
 
 import java.awt.EventQueue;
 
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
@@ -14,15 +16,20 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
 
 public class BookRoomDialog extends JDialog
 	{
-	private int 		_nPeople;
-	private JButton 	cancelButton;
-	private JPanel		contentPane;
+	private int 					_nPeople;
+	private String[]				_roomList;
+	private JButton 				cancelButton;
+	private JComboBox 			roomComboBox;
+	private JPanel					contentPane;
+	private EditView  			_editView;
 	/**
 	 * Launch the application.
 	 */
@@ -48,12 +55,14 @@ public class BookRoomDialog extends JDialog
 	/**
 	 * Create the dialog.
 	 */
-	public BookRoomDialog(JFrame frame, boolean modal, int nPeople)
+	public BookRoomDialog(JFrame frame, boolean modal, int nPeople, EditView editView)
 		{
 		super(frame, modal);
 		
 		contentPane = new JPanel();
 		nPeople		= nPeople;
+		_editView   = editView;
+		
 		
 		setTitle("Room booking");
 		setBounds(100, 100, 450, 300);
@@ -62,23 +71,10 @@ public class BookRoomDialog extends JDialog
 		getContentPane().add(contentPane, BorderLayout.CENTER);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{15, 60, 60, 60, 60, 60, 60, 60, 15};
-		gridBagLayout.rowHeights = new int[]{15, 45, 45, 45, 45, 45, 45, 15,};
+		gridBagLayout.rowHeights = new int[]{25, 25, 25, 25, 25, 25, 25, 25, 25, 25};
 		gridBagLayout.columnWeights = new double[]{Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{Double.MIN_VALUE, 0.0, 0.0, 0.0, 0.0, 0.0};
 		contentPane.setLayout(gridBagLayout);
-		
-		
-		JLabel informationLabel = new JLabel(
-				"Select a room from the dropdown menu");//,\n" +
-//				"or press AutoBook to have the system select\n" +
-//				"a room of proper size automatically");
-		GridBagConstraints gbc_informationLabel = new GridBagConstraints();
-		gbc_informationLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_informationLabel.gridx = 2;
-		gbc_informationLabel.gridy = 2;
-		gbc_informationLabel.gridwidth = 6;
-		gbc_informationLabel.gridheight = 3;
-		contentPane.add(informationLabel, gbc_informationLabel);
 		
 		
 		JButton autoBookButton = new JButton("Auto Book");
@@ -86,17 +82,58 @@ public class BookRoomDialog extends JDialog
 		if(_nPeople == 0)
 			{ autoBookButton.setEnabled(false); }
 		
+		
+		JLabel text1Label = new JLabel("Select a room from the dropdown menu,");
+		GridBagConstraints gbc_text1Label = new GridBagConstraints();
+		gbc_text1Label.insets = new Insets(0, 0, 5, 5);
+		gbc_text1Label.gridx = 2;
+		gbc_text1Label.gridy = 1;
+		gbc_text1Label.gridwidth = 5;
+		
+		contentPane.add(text1Label, gbc_text1Label);
+		
+		
+		JLabel text2Label = new JLabel("or press AutoBook to have the system select");
+		GridBagConstraints gbc_text2Label = new GridBagConstraints();
+		gbc_text2Label.insets = new Insets(0, 0, 5, 5);
+		gbc_text2Label.gridx = 2;
+		gbc_text2Label.gridy = 2;
+		gbc_text2Label.gridwidth = 5;
+		contentPane.add(text2Label, gbc_text2Label);
+		
+		
+		JLabel text3Label = new JLabel("a room of proper size automatically.");
+		GridBagConstraints gbc_text3Label = new GridBagConstraints();
+		gbc_text3Label.insets = new Insets(0, 0, 5, 5);
+		gbc_text3Label.gridx = 2;
+		gbc_text3Label.gridy = 3;
+		gbc_text3Label.gridwidth = 5;
+		contentPane.add(text3Label, gbc_text3Label);
+		
+		String[] rooms = { "Room 1", "Room 2", "Room 3", "Room 4" };
+		 _roomList = rooms;
+		//_roomList	= new ArrayList<String>(Arrays.asList(rooms));
+		
+		roomComboBox = new JComboBox(_roomList);
+		GridBagConstraints gbc_roomCoboBox = new GridBagConstraints();
+		gbc_roomCoboBox.insets = new Insets(0, 0, 5, 5);
+		gbc_roomCoboBox.gridx = 2;
+		gbc_roomCoboBox.gridy = 5;
+		gbc_roomCoboBox.gridwidth = 5;
+		contentPane.add(roomComboBox, gbc_roomCoboBox);
+		
 		GridBagConstraints gbc_autoBookButton = new GridBagConstraints();
 		gbc_autoBookButton.insets = new Insets(0, 0, 5, 5);
 		gbc_autoBookButton.gridx = 3;
-		gbc_autoBookButton.gridy = 6;
+		gbc_autoBookButton.gridy = 7;
 		contentPane.add(autoBookButton, gbc_autoBookButton);
 		
 		JButton okButton = new JButton("Ok");
+		okButton.addActionListener(new OkListener());
 		GridBagConstraints gbc_okButton = new GridBagConstraints();
 		gbc_okButton.insets = new Insets(0, 0, 5, 5);
 		gbc_okButton.gridx = 4;
-		gbc_okButton.gridy = 6;
+		gbc_okButton.gridy = 7;
 		contentPane.add(okButton, gbc_okButton);
 		
 		cancelButton = new JButton("Cancel");
@@ -104,7 +141,7 @@ public class BookRoomDialog extends JDialog
 		GridBagConstraints gbc_cancelButton = new GridBagConstraints();
 		gbc_cancelButton.insets = new Insets(0, 0, 5, 5);
 		gbc_cancelButton.gridx = 5;
-		gbc_cancelButton.gridy = 6;
+		gbc_cancelButton.gridy = 7;
 		contentPane.add(cancelButton, gbc_cancelButton);
 		
 		}
@@ -113,5 +150,17 @@ public class BookRoomDialog extends JDialog
 		{
 		public void actionPerformed(ActionEvent event)
 			{ BookRoomDialog.this.dispose(); }
+		}
+	//**************************************************************************
+	class OkListener implements ActionListener
+		{
+		public void actionPerformed(ActionEvent event)
+			{
+			//JComboBox selectedRoom = (JComboBox)event.getSource();
+			int index = roomComboBox.getSelectedIndex();
+			_editView.setLoacationField(_roomList[index]); 
+			
+			BookRoomDialog.this.dispose();
+			}
 		}
 	}
