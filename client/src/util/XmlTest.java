@@ -12,7 +12,7 @@ public class XmlTest {
 		Invitation i = new Invitation("sindrma@gmail.com", 1);
 		i.setMessage("invited to meeting");
 		Alarm a = new Alarm(1, "sindrma@gmail.com");
-		a.setDate("17:00");
+		a.setTime("15 min før");
 		a.setDescription("møte");
 		System.out.println(factory.makeRoomXML(r));
 		System.out.println(factory.makeInvitationXML(i));
