@@ -66,15 +66,7 @@ public class DBFactory {
 			appointment.setLocation(location);
 			appointment.setMeetingRoom(meetingRoom);
 			appointment.setMeetingLeader(meetingLeaderEmail);
-			
-			/*
-			// get the MeetingRoom object associated with the appointment
-			MeetingRoom meetingRoom = getMeetingRoom(meetingRoomID);
-			appointment.setMeetingRoom(meetingRoom);
-			// get the Employee object assigned as appointment leader
-			Employee meetingLeader = getEmployee(meetingLeaderEmail);
-			appointment.setMeetingLeader(meetingLeader);
-			*/
+
 			appointments.add(appointment);
 		}
 		return appointments;
@@ -113,5 +105,40 @@ public class DBFactory {
 			invites.add(i);
 		}
 		return invites;
+	}
+
+	public Alarm getAlarm(ResultSet rs) throws SQLException {
+		if(!rs.first()) throw new SQLException("No matching entry found");
+		rs.beforeFirst();
+		String employeeEmail = "";
+		int appointmentID = 0;
+		String date = "";
+		String description = "";
+		while(rs.next()) {
+			employeeEmail = rs.getString(1);
+			appointmentID = rs.getInt(2);
+			date = rs.getString(3);
+			description = rs.getString(4);
+		}
+		Alarm alarm = new Alarm(appointmentID, employeeEmail);
+		alarm.setDate(date);
+		alarm.setDescription(description);
+		return alarm;
+	}
+	
+	public Group getGroup(ResultSet rs) throws SQLException {
+		if(!rs.first()) throw new SQLException("No matching entry found");
+		rs.beforeFirst();
+		String groupEmail = "";
+		ArrayList<String> members = new ArrayList<String>();
+		groupEmail = rs.getString(1);
+		while(rs.next()) {
+			members.add(rs.getString(2));
+		}
+		Group group = new Group(groupEmail);
+		for(String member : members) {
+			group.addMember(member);
+		}
+		return group;
 	}
 }

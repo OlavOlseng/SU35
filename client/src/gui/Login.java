@@ -134,6 +134,7 @@ public class Login extends JPanel/*JFrame*/ {
 		gbc_password.gridy = 4;
 		this.add(password, gbc_password);
 		password.setColumns(20);
+		
 		logInButton.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		GridBagConstraints gbc_logInButton = new GridBagConstraints();
 		gbc_logInButton.fill = GridBagConstraints.BOTH;

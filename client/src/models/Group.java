@@ -3,14 +3,12 @@ package models;
 import java.util.ArrayList;
 
 public class Group {
-	private final int groupID;
-	private String name;
+	private final String groupID;
 	private ArrayList<String> members;
 	
-	public Group(int groupID) {
+	public Group(String groupID) {
 		this.groupID = groupID;
 		members = new ArrayList<String>();
-		name = "";
 	}
 	
 	public void addMember(String id){
@@ -22,16 +20,8 @@ public class Group {
 		return members;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
 	public String toString() {
-		String ret = "Group ID:\t" + groupID + "\nGroup name:\t" + name + "\nGroup members:\t";
+		String ret = "Group ID:\t" + groupID + "\nGroup members:\t";
 		for(String e : members) {
 			ret += e.toString() + ", ";
 		}
