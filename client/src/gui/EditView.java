@@ -360,13 +360,12 @@ public class EditView extends JPanel/*JFrame*/ {
 		{
 		//If appointmentID is -1 this means that this is a new appointment and we
 		// need to make sure that the fields are empty 
-		if(appointmentID <= 0)
+		if(appointmentID <= 0/*appointment == null*/)
 			{ resetPanel(); }
 		//This is an appointment that we might want to edit.  Get data from
 		// the specified appointment 
 		else
 			{
-
 //			titleField.setText(appointment.getTitle());
 //			dateField.setText(appointment.getDate());
 //			startField.setText(appointment.getStartTime());
@@ -374,7 +373,15 @@ public class EditView extends JPanel/*JFrame*/ {
 //			descriptionArea.setText(appointment.getDescription());
 //			locationField.setText(appointment.getLocation());
 //			
+			//We also need to fill the peopleList with employees
 //			Employee[] employees = appointment.getPeople();
+//			CalendarProgram.getModel().???;
+//			
+			//			Do we receive array with people from Calendarprogram.getModel().???
+//			for(int i = 0; i < array?; <i++>)
+//				{	peopleListModel.addElement(array[i]); }
+
+//			removeButton.setEnabled(true);
 			}
 		}
 	//--------------------------------------------------------------------------
@@ -392,7 +399,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		locationField.setText("");
 		
 		//Make sure peopleList is empty
-		//peopleList.removeAll();
+		peopleList.removeAll();
 		}
 	//--------------------------------------------------------------------------
 	//This function checks the different components
@@ -485,8 +492,6 @@ public class EditView extends JPanel/*JFrame*/ {
 			
 			return false;
 			}
-		//Question: Do we really need to input location for every appointment?
-		//Keep this for now.
 		if(locationField.getText().equals(""))
 			{
 			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
@@ -618,7 +623,7 @@ public class EditView extends JPanel/*JFrame*/ {
 					
 			//We need to check if the emailaddress is already in the peopleList
 			//NB! Could be handled differently where already chosen
-			// emailaddresses are not available in addPeopleMenu
+			// emailaddresses would not be available in addPeopleMenu
 			for(int i = 0; i < peopleList.getModel().getSize(); i++)
 				{
 				String element = (String)peopleList.getModel().getElementAt(i);
