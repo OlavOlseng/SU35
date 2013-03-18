@@ -27,9 +27,9 @@ public class RoomManager {
 	}
 	
 	public void addAppointment(Appointment appointment) {
-		if(appointment.getStartTime().getYear() == date.getTime().getYear() &&
-				appointment.getStartTime().getMonth() == date.getTime().getMonth() &&
-				appointment.getStartTime().getDay() == date.getTime().getDay()) {
+		if(appointment.getStartTime().getTime().getYear() == date.getTime().getYear() &&
+				appointment.getStartTime().getTime().getMonth() == date.getTime().getMonth() &&
+				appointment.getStartTime().getTime().getDay() == date.getTime().getDay()) {
 				appointments.add(appointment);
 		}
 	}
@@ -37,8 +37,8 @@ public class RoomManager {
 	public ArrayList<String> findSuitableRooms() {
 		ArrayList<String> suitableRooms = rooms;
 		for(Appointment appointment : appointments) {
-			if((appointment.getStartTime().after(startTime.getTime()) && appointment.getStartTime().before(endTime.getTime())) ||
-				(appointment.getEndTime().after(startTime.getTime()) && appointment.getEndTime().before(endTime.getTime()))) {
+			if((startTime.after(appointment.getStartTime()) && startTime.before(appointment.getEndTime())) ||
+				(endTime.after(appointment.getStartTime()) && endTime.before(appointment.getEndTime()))) {
 				suitableRooms.remove(appointment.getMeetingRoom());
 			}
 		}

@@ -48,11 +48,13 @@ public class Appointment {
 
 	private void setDate(int year, int month, int day) {
 		date.set(year, month, day, 0, 0, 0);
+		startTime.set(year, month, day);
+		endTime.set(year, month, day);
 	}
 	
 	public void setDate(String dateString) {
 		String[] temp = dateString.split("-");
-		setDate(Integer.parseInt(temp[0]), Integer.parseInt(temp[2]), Integer.parseInt(temp[2]));
+		setDate(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]), Integer.parseInt(temp[2]));
 	}
 	
 	private void setStartTime(int hour, int minute) {
@@ -62,14 +64,16 @@ public class Appointment {
 	}
 	
 	public void setStartTime(String time) {
-		String[] temp0 = time.split(" ");
-		String[] temp = temp0[1].split(":");
+		//String[] temp0 = time.split(" ");
+		String[] temp = time.split(":");
 		setStartTime(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
 	}
 	
+	/*
 	public Date getStartTime() {
 		return startTime.getTime();
 	}
+	*/
 	
 	private void setEndTime(int hour, int minute) {
 		endTime.setTime(date.getTime());
@@ -78,13 +82,27 @@ public class Appointment {
 	}
 	
 	public void setEndTime(String time) {
-		String[] temp0 = time.split(" ");
-		String[] temp = temp0[1].split(":");
+		//String[] temp0 = time.split(" ");
+		String[] temp = time.split(":");
 		setEndTime(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
 	}
 	
+	/*
 	public Date getEndTime() {
 		return endTime.getTime();
+	}
+	*/
+	
+	public Calendar getDate() {
+		return date;
+	}
+	
+	public Calendar getStartTime() {
+		return startTime;
+	}
+	
+	public Calendar getEndTime() {
+		return endTime;
 	}
 	
 	public void setDescription(String description) {
@@ -109,9 +127,9 @@ public class Appointment {
 				"\nStart time:\t\t\t" + startTime.getTime().toString() + "\nEnd time:\t\t\t" + endTime.getTime().toString() + 
 				"\nAppointment Location:\t\t" + location;
 		if (meetingRoom != null && meetingRoom != "")
-				s +=  "\nMeeting room:\n" + meetingRoom.toString();
+				s +=  "\nMeeting room:\t\t\t" + meetingRoom;
 		if(meetingLeader != null && meetingLeader != "")
-				s += "\nMeeting Leader:\n" + meetingLeader.toString();
+				s += "\nMeeting Leader:\t\t\t" + meetingLeader;
 		System.out.println(date.getTime().toString());
 		return s;
 	}
