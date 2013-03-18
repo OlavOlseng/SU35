@@ -69,14 +69,14 @@ public class CalendarView extends JPanel{
 		btnNotifications.setText("Notifications (" + Integer.toString(menuNotifications.getComponentCount()) + ")");
 		
 		//Finds the appointments for the logged in user
-		for (int key : Calendar.getModel().getAppointment.keySet()) {
-			if (Calendar.getModel().getAppointment.get(key).getMeetingLeader() == Calendar.loggedInUser.getEmail()) {
+		for (int key : CalendarProgram.getModel().getAppointment.keySet()) {
+			if (CalendarProgram.getModel().getAppointment.get(key).getMeetingLeader() == CalendarProgram.getModel().username) {
 				CustomCalendarButton button = new CustomCalendarButton();
 				buttonList.add(button);
 				button.keyOfRelatedAppointment = key;
 				buttonList.get(buttonList.size()-1).setLayout(new BorderLayout());
-				JLabel label1 = new JLabel(Calendar.getModel().getAppointment.get(key).getDescription());
-				JLabel label2 = new JLabel(Calendar.getModel().getAppointment.get(key).getFormattedStartTime().toString());
+				JLabel label1 = new JLabel(CalendarProgram.getModel().getAppointment.get(key).getDescription());
+				JLabel label2 = new JLabel(CalendarProgram.getModel().getAppointment.get(key).getFormattedStartTime().toString());
 				buttonList.get(buttonList.size()-1).add(BorderLayout.NORTH,label1);
 				buttonList.get(buttonList.size()-1).add(BorderLayout.SOUTH,label2);
 				buttonList.get(buttonList.size()-1).addActionListener(new ActionListener() {
@@ -84,12 +84,12 @@ public class CalendarView extends JPanel{
 						//indexOfSelectedButton = 0;
 						CustomCalendarButton tempButton = (CustomCalendarButton) e.getSource();
 						int key2 = tempButton.keyOfRelatedAppointment;
-						Appointment tempAppointment = Calendar.getModel().getAppointment.get(key2);
+						Appointment tempAppointment = CalendarProgram.getModel().getAppointment.get(key2);
 						textAreaInfo.setText("Owner:\n" + tempAppointment.getMeetingLeader() + "\n\nDescription:\n" +
 								tempAppointment.getDescription() + "\n\nStart:\n" + tempAppointment.getFormattedStartTime()
 								+ "\n\nEnd:\n" + tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation());
 						btnMore.setEnabled(true);
-						if (Calendar.loggedInUser.getEmail() == tempAppointment.getMeetingLeader()) {
+						if (CalendarProgram.getModel().username == tempAppointment.getMeetingLeader()) {
 							btnEdit.setEnabled(true);
 						}
 					}
