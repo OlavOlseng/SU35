@@ -23,11 +23,6 @@ public class Connection {
 			this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			this.out = new PrintWriter(socket.getOutputStream(),true);
 		}
-		
-		BufferedOutputStream bos = new BufferedOutputStream(socket.getOutputStream());
-		BufferedInputStream bis = new BufferedInputStream(socket.getInputStream());
-		BufferedWriter bw = new BufferedWriter(out);
-		InputStreamReader r = new InputStreamReader(socket.getInputStream());
 	}
 	
 	public InetAddress getRemoteAddress() {
