@@ -7,7 +7,13 @@ import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import util.XMLAssembler;
+import util.XMLFactory;
+
 import networking.SBPFactory.MessageType;
+import nu.xom.Document;
+import nu.xom.ParsingException;
+import nu.xom.ValidityException;
 
 import models.Alarm;
 import models.Appointment;
@@ -25,12 +31,17 @@ public class ServerMessageHandler extends MessageHandler{
 	DBConnection conn;
 	DBFactory dbFactory;
 	SBPFactory msgFactory;
+	XMLFactory xmlFactory;
+	XMLAssembler xmlAssembler;
 
 	public ServerMessageHandler(ConnectionBridge bridge) {
 		this.bridge = bridge;
 		this.conn = bridge.getDBConnection();
 		this.dbFactory = new DBFactory();
 		this.msgFactory = new SBPFactory();
+		this.xmlFactory = new XMLFactory();
+		this.xmlAssembler = new XMLAssembler();
+
 	}
 
 	@Override
@@ -101,7 +112,7 @@ public class ServerMessageHandler extends MessageHandler{
 
 		} finally {
 			if(employees.size() < 1) {
-				response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_EMPLOYEE, payload);
+				response = msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_EMPLOYEE, data[4]);
 				messages.add(response);
 			}
 			for(Employee e : employees){
@@ -138,7 +149,7 @@ public class ServerMessageHandler extends MessageHandler{
 			errorMsg = e.getMessage();
 		} finally {
 			if(apps.size() < 1) {
-				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_APPOINTMENT, null));
+				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_APPOINTMENT, data[4]));
 			}
 			for(Appointment a : apps){
 				//TODO make serializer work properly
@@ -173,7 +184,7 @@ public class ServerMessageHandler extends MessageHandler{
 			errorMsg = e.getMessage();
 		} finally {
 			if ((invites.size() < 1)) {
-				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_INVITATION, null));
+				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_INVITATION, data[4]));
 			}
 			for(Invitation i : invites){
 				//TODO make serializer work properly
@@ -209,7 +220,7 @@ public class ServerMessageHandler extends MessageHandler{
 			errorMsg = e.getMessage();
 		} finally {
 			if ((invites.size() < 1)) {
-				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_INVITATION, null));
+				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_INVITATION, data[4]));
 			}
 			for(Invitation i : invites){
 				//TODO make serializer work properly
@@ -244,7 +255,7 @@ public class ServerMessageHandler extends MessageHandler{
 			errorMsg = e.getMessage();
 		} finally {
 			if ((invites.size() < 1)) {
-				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_INVITATION, null));
+				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_INVITATION, data[4]));
 			}
 			for(Invitation i : invites){
 				//TODO make serializer work properly
@@ -279,7 +290,7 @@ public class ServerMessageHandler extends MessageHandler{
 			errorMsg = e.getMessage();
 		} finally {
 			if ((alarms.size() < 1)) {
-				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_ALARM, null));
+				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_ALARM, data[4]));
 			}
 			for(Alarm i : alarms){
 				//TODO make serializer work properly
@@ -314,7 +325,7 @@ public class ServerMessageHandler extends MessageHandler{
 			errorMsg = e.getMessage();
 		} finally {
 			if ((groups.size() < 1)) {
-				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_GROUP, null));
+				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_GROUP, data[4]));
 			}for(Group i : groups){
 				//TODO make serializer work properly
 				payload = (i.toString());
@@ -348,7 +359,7 @@ public class ServerMessageHandler extends MessageHandler{
 			errorMsg = e.getMessage();
 		} finally {
 			if ((rooms.size() < 1)) {
-				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_ROOM, null));
+				response.add(msgFactory.createMessage(MessageType.GET, error, errorMsg, SBPFactory.OPTION_ROOM, data[4]));
 			}
 			for(Room i : rooms){
 				//TODO make serializer work properly
@@ -359,10 +370,92 @@ public class ServerMessageHandler extends MessageHandler{
 		return response;
 	}
 
+	//GET CODE END
+
+	//UPDATE CODE START
+
 	@Override
 	public void updateEntry(String[] data) {
+		if (data.length < 4) {
+			data[3] = "error";
+		}
+		boolean broadcast = true;
+
+		ArrayList<String> response = new ArrayList<String>();
+		String what = data[3];
+
+		switch(what) {
+		case(SBPFactory.OPTION_APPOINTMENT):
+			response = updateAppointment(data);
+		break;
+		case(SBPFactory.OPTION_INVITATION):
+			response = updateInvitation(data);
+		break;
+		case(SBPFactory.OPTION_ALARM):
+			response = updateAlarm(data);
+		broadcast = false;
+		break;
+		default:
+			response.add(msgFactory.createMessage(MessageType.ERROR, true, "No matching command found", data[3], null));
+		}
+		try {
+			for (String s : response){
+				if(broadcast) {
+					ConnectionPool.getInstance().broadcast(s);
+				} else {
+					bridge.send(s);
+				}
+			}
+		} catch (IOException | SQLException e1) {
+			e1.printStackTrace();
+
+		}
 
 	}
+
+	public ArrayList<String> updateAppointment(String[] data) {
+		//TODO implement
+		ArrayList<String> response = new ArrayList<String>();
+
+
+		return response;
+	}
+	public ArrayList<String> updateInvitation(String[] data) {
+		//TODO implement
+		ArrayList<String> response = new ArrayList<String>();
+
+		return response;
+	}
+	public ArrayList<String> updateAlarm(String[] data) {
+		ArrayList<String> response = new ArrayList<String>();
+		boolean error = true;
+		String errorMsg = "Unknown error...";
+
+		try {
+			Document d = xmlAssembler.getDocument(data[4]);
+			Alarm al = xmlAssembler.assembleAlarm(d.getRootElement());
+
+			String time = al.getTime();
+			int appID = al.getAppointmentID();
+			String empEmail = al.getEmployeeEmail();
+			String desc = al.getDescription();
+
+			String sql = String.format("UPDATE alarm SET time='%s', description='%s' WHERE employee_email='%s' AND appointment_ID='%d'", time, desc, empEmail, appID);
+			conn.makeSingleUpdate(sql);
+			error = false;
+			errorMsg = null;
+
+		} catch (SQLException | ParsingException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			error = true;
+			errorMsg = e.getMessage();
+		} finally {
+			response.add(msgFactory.createMessage(MessageType.UPDATE, error, errorMsg, data[3], data[4]));
+		}
+		return response;
+	}
+
 
 	@Override
 	public void makeBatchUpdate(String[] data) {
@@ -372,8 +465,70 @@ public class ServerMessageHandler extends MessageHandler{
 
 	@Override
 	public void createEntry(String[] data) {
-		// TODO Auto-generated method stub
+		if (data.length < 4) {
+			data[3] = "error";
+		}
+		boolean broadcast = true;
 
+		ArrayList<String> response = new ArrayList<String>();
+		String what = data[3];
+
+		switch(what) {
+		case(SBPFactory.OPTION_APPOINTMENT):
+			//			response = updateAppointment(data);
+			break;
+		case(SBPFactory.OPTION_INVITATION):
+			//			response = updateInvitation(data);
+			break;
+		case(SBPFactory.OPTION_ALARM):
+			response = createAlarm(data);
+		broadcast = false;
+		break;
+		default:
+			response.add(msgFactory.createMessage(MessageType.ERROR, true, "No matching command found", data[3], null));
+		}
+		try {
+			for (String s : response){
+				if(broadcast) {
+					ConnectionPool.getInstance().broadcast(s);
+				} else {
+					bridge.send(s);
+				}
+			}
+		} catch (IOException | SQLException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	public ArrayList<String> createAlarm(String[] data) {
+		ArrayList<String> response = new ArrayList<String>();
+		boolean error = true;
+		String errorMsg = "Unknown error...";
+
+		try {
+
+			Document d = xmlAssembler.getDocument(data[4]);
+			Alarm al = xmlAssembler.assembleAlarm(d.getRootElement());
+
+			String time = al.getTime();
+			int appID = al.getAppointmentID();
+			String empEmail = al.getEmployeeEmail();
+			String desc = al.getDescription();
+
+			
+			System.out.println("INSERTING INTO DATABASE!");
+			conn.makeSingleUpdate(sql);
+			error = false;
+			errorMsg = null;
+		} catch (SQLException | ParsingException | IOException e) {
+			e.printStackTrace();
+			error = true;
+			errorMsg = e.getMessage();
+		} finally {
+			response.add(msgFactory.createMessage(MessageType.CREATE, error, errorMsg, data[3], data[4]));
+		}
+
+		return response;
 	}
 
 	@Override
@@ -405,11 +560,22 @@ public class ServerMessageHandler extends MessageHandler{
 		finally{
 			response = msgFactory.createMessage(MessageType.LOGIN, error, errorMsg, data[3], null);
 		}
-
 		try {
 			bridge.send(response);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public void errorResponse(String[] data) {
+		String response = msgFactory.createMessage(MessageType.ERROR, true, "You shall not pass!!!!", null, null);
+		try {
+			bridge.send(response);
+			bridge.close();
+		} catch (IOException | SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 }
