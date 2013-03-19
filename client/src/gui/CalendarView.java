@@ -27,6 +27,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -44,6 +45,7 @@ public class CalendarView extends JPanel{
 	private ArrayList<JButton> buttonList = new ArrayList<JButton>();
 	private int indexOfSelectedButton;
 	private EditView _editView;
+	private int selectedWeek = Calendar.getInstance().WEEK_OF_YEAR;
 	
 	/**
 	 * Launch the application.
@@ -63,9 +65,10 @@ public class CalendarView extends JPanel{
 	 * Create the application.
 	 */
 	public CalendarView(JPanel parentContentPane) {
-		//updateInfo();
 		initialize(parentContentPane);
-		
+		updateInfo();
+			}
+	public void updateInfo() {
 		btnNotifications.setText("Notifications (" + Integer.toString(menuNotifications.getComponentCount()) + ")");
 		
 		//Finds the appointments for the logged in user

@@ -1,6 +1,9 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import models.Invitation.Answer;
 
 public class ApplicationModel {
 	private static ApplicationModel model = null;
@@ -82,6 +85,17 @@ public class ApplicationModel {
 			// TODO add method to clientmessagehandler
 		}
 		return i;
+	}
+	
+	public ArrayList<Appointment> getAppointmentsForUser(String email) {
+		ArrayList<Appointment> array = new ArrayList<Appointment>();
+		for (String key : invitations.keySet()) {
+			if (invitations.get(key).getEmployeeEmail() == email && invitations.get(key).getAnswer() != Answer.DECLINED) {
+				int appointmentKey = (invitations.get(key).getAppointmentID());
+				array.add(appointment.get(appointmentKey));
+			}
+		}
+		return array;
 	}
 	
 	public void updateInvitation(String email, int appointmentID, Invitation i){
