@@ -136,7 +136,13 @@ public class ClientMessageHandler extends MessageHandler{
 
 	@Override
 	public void checkLogin(String[] data) {
-		// TODO Auto-generated method stub
+		if(data[1].equals("0")) {
+			ApplicationModel.getInstance().username = data[4];
+			System.out.println("Login successful");
+		}
+		else {
+			System.err.println("Login failed");
+		}
 	}
 
 	

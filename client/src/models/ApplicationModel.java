@@ -188,7 +188,8 @@ public class ApplicationModel {
 		keys += "\nInvitation keys:\n";
 		keys += invitations.keySet();
 		keys += "\nAlarm keys:\n";
-		keys += alarms.keySet()+"\n";
+		keys += alarms.keySet();
+		keys += "\nCurrent user: " + username;
 		return keys;
 	}
 	

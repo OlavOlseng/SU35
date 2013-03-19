@@ -17,6 +17,13 @@ public class ModelTest {
 				case "EXIT": {
 					exit = true;
 				} break;
+				case "LOGIN": {
+					System.out.print("Username: ");
+					String username = scanner.nextLine();
+					System.out.print("Password: ");
+					String password = scanner.nextLine();
+					client.sendLoginQuery(username, password);
+				} break;
 				case "GET_EMPLOYEE": {
 					System.out.print("Employee email: ");
 					String email = scanner.nextLine();
