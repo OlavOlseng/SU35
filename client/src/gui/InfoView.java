@@ -350,7 +350,7 @@ public class InfoView extends JPanel/*JFrame*/
 	}
 	//--------------------------------------------------------------------------
 	//Here we initialize the different fields, lists and so on.
-	public void intitialize(int appointmentId)
+	public void initialize(int appointmentId)
 		{ 
 		Appointment appointment = 
 				ApplicationModel.getInstance().getAppointment(appointmentId);
@@ -359,8 +359,8 @@ public class InfoView extends JPanel/*JFrame*/
 		titleField.setText(appointment.getTitle());
 		dateField.setText(appointment.getFormattedDate());
 		locationField.setText(appointment.getLocation());
-		alarmField.setText(ApplicationModel.getInstance().getAlarm(
-				CalendarProgram.loggedInUser, appointmentId).getTime());
+//		alarmField.setText(ApplicationModel.getInstance().getAlarm(
+//				CalendarProgram.loggedInUser, appointmentId).getTime());
 		
 		//TODO: Receive usernames/emails from attending, declined and not
 		// answered employees

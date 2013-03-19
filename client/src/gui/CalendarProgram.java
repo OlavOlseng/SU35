@@ -23,34 +23,9 @@ public class CalendarProgram {
 	private static void createAndShowGui()
 		{
 		//model = ApplicationModel.getInstance();
-		loggedInUser = "kenneth@ntnu.no";
-		JFrame frame = new JFrame("Superblaster");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setBounds(50, 50, 800, 600);
-		
-		final JPanel contentPane = new JPanel();
-		contentPane.setLayout(new CardLayout());
-						
-		Login login = new Login(contentPane);
-		contentPane.add(login, LOG_IN);
-		
-		EditView editView = new EditView(contentPane);
-		contentPane.add(editView, EDIT_VIEW);
-		
-		CalendarView calendarView = new CalendarView(contentPane);
-		contentPane.add(calendarView, CALENDAR_VIEW);
-		
-		InfoView infoView = new InfoView(contentPane);
-		contentPane.add(infoView, INFO_VIEW);
-		
-		calendarView.setEditView(editView);
-		
-		frame.add(contentPane);
-		frame.pack();
-		frame.setVisible(true);
-		
-		
 		//Testdata for employees
+		loggedInUser = "kenneth@ntnu.no";
+		
 		ApplicationModel.getInstance().addEmployee("fredrik@ntnu.no", new Employee("fredrik@ntnu.no",
 				"Fredrik", "Haave", "54576859", "54367867"));
 		ApplicationModel.getInstance().addEmployee("sindre@ntnu.no", new Employee("sindre@ntnu.no",
@@ -72,6 +47,7 @@ public class CalendarProgram {
 		
 		//Testdata for appointment 1
 		Appointment appointment1 = new Appointment(0);
+		appointment1.setTitle("Moete");
 		appointment1.setDate("22-03-13");
 		appointment1.setStartTime("14:00:00");
 		appointment1.setEndTime("15:00:00");
@@ -85,14 +61,15 @@ public class CalendarProgram {
 		
 		//Testdata for appointment2
 		Appointment appointment2 = new Appointment(1);
-		appointment1.setDate("12-04-13");
-		appointment1.setStartTime("16:00:00");
-		appointment1.setEndTime("18:00:00");
-		appointment1.setDescription("Et moete der vi tar opp aktuelle " +
+		appointment2.setTitle("Moete");
+		appointment2.setDate("12-04-13");
+		appointment2.setStartTime("16:00:00");
+		appointment2.setEndTime("18:00:00");
+		appointment2.setDescription("Et moete der vi tar opp aktuelle " +
 				"spoersmaal angaaende ulike problemstillinger.");
-		appointment1.setLocation("Room K2");
-		appointment1.setMeetingRoom("Room K2");
-		appointment1.setMeetingLeader("Sindre Magnussen");
+		appointment2.setLocation("Room K2");
+		appointment2.setMeetingRoom("Room K2");
+		appointment2.setMeetingLeader("Sindre Magnussen");
 		
 		ApplicationModel.getInstance().addAppointment(appointment2.getAppointmentID(), appointment2);
 		
@@ -119,7 +96,35 @@ public class CalendarProgram {
 						appointment2.getAppointmentID()));		
 		ApplicationModel.getInstance().addInvitation("yngve@ntnu.no", appointment2.getAppointmentID(),
 				new Invitation("yngve@ntnu.no", 
-						appointment2.getAppointmentID()));	
+						appointment2.getAppointmentID()));
+		
+		
+		
+		JFrame frame = new JFrame("Superblaster");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setBounds(50, 50, 800, 600);
+		
+		final JPanel contentPane = new JPanel();
+		contentPane.setLayout(new CardLayout());
+						
+		Login login = new Login(contentPane);
+		contentPane.add(login, LOG_IN);
+		
+		EditView editView = new EditView(contentPane);
+		contentPane.add(editView, EDIT_VIEW);
+		
+		CalendarView calendarView = new CalendarView(contentPane);
+		contentPane.add(calendarView, CALENDAR_VIEW);
+		
+		InfoView infoView = new InfoView(contentPane);
+		contentPane.add(infoView, INFO_VIEW);
+		
+		calendarView.setEditView(editView);
+		calendarView.setInfoView(infoView);
+		
+		frame.add(contentPane);
+		frame.pack();
+		frame.setVisible(true);
 		}
 	
 	
