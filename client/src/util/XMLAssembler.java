@@ -66,6 +66,12 @@ public class XMLAssembler {
 		if(element != null){
 			a.setEndTime(element.getValue());
 		}
+		
+		element = appointmentElement.getFirstChildElement("title");
+		if(element != null){
+			a.setTitle(element.getValue());
+		}
+		
 		element = appointmentElement.getFirstChildElement("description");
 		if(element != null){
 			a.setDescription(element.getValue());

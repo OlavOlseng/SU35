@@ -7,6 +7,7 @@ public class Appointment {
 	private Calendar date;
 	private Calendar startTime;
 	private Calendar endTime;
+	private String title;
 	private String description;
 	private String location;
 	private String meetingRoom;
@@ -150,6 +151,14 @@ public class Appointment {
 
 	public String getLocation() {
 		return location;
+	}
+	
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	// May cause null-pointer hell, too lazy to fix. <--- TRUE DAT
