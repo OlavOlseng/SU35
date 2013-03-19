@@ -23,7 +23,7 @@ public class CalendarProgram {
 	private static void createAndShowGui()
 		{
 		model = ApplicationModel.getInstance();
-		loggedInUser = "email";
+		loggedInUser = "kenneth@ntnu.no";
 		JFrame frame = new JFrame("Superblaster");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBounds(50, 50, 800, 600);

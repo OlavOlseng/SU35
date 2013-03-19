@@ -89,8 +89,9 @@ public class ApplicationModel {
 	
 	public ArrayList<Appointment> getAppointmentsForUser(String email) {
 		ArrayList<Appointment> array = new ArrayList<Appointment>();
+		System.out.println(invitations.keySet());
 		for (String key : invitations.keySet()) {
-			if (invitations.get(key).getEmployeeEmail() == email && invitations.get(key).getAnswer() != Answer.DECLINED) {
+			if (invitations.get(key).getEmployeeEmail().equals(email) && invitations.get(key).getAnswer()!= Answer.DECLINED) {
 				int appointmentKey = (invitations.get(key).getAppointmentID());
 				array.add(appointment.get(appointmentKey));
 			}

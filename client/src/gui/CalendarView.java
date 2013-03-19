@@ -42,7 +42,7 @@ public class CalendarView extends JPanel{
 	private JTextArea textAreaInfo;
 	private JLabel lblWeek, lblMonday, lblTuesday, lblWednesday, lblThursday, lblFriday, lblSaturday, lblSunday, lbl_00, lbl_06, lbl_12, lbl_18, lbl_24;
 	private JPopupMenu menuNotifications, menuCalendars;
-	private ArrayList<JButton> buttonList = new ArrayList<JButton>();
+	private ArrayList<JButton> buttonList;
 	private int indexOfSelectedButton;
 	private EditView _editView;
 	private int selectedWeek = Calendar.getInstance().WEEK_OF_YEAR;
@@ -67,45 +67,47 @@ public class CalendarView extends JPanel{
 	public CalendarView(JPanel parentContentPane) {
 		initialize(parentContentPane);
 		updateInfo();
-			}
+	}
+	
 	public void updateInfo() {
 		btnNotifications.setText("Notifications (" + Integer.toString(menuNotifications.getComponentCount()) + ")");
 		
 		//Finds the appointments for the logged in user
-		for (int key : CalendarProgram.getModel().getAppointment.keySet()) {
-			if (CalendarProgram.getModel().getAppointment.get(key).getMeetingLeader() == CalendarProgram.getModel().username) {
-				CustomCalendarButton button = new CustomCalendarButton();
-				buttonList.add(button);
-				button.keyOfRelatedAppointment = key;
-				buttonList.get(buttonList.size()-1).setLayout(new BorderLayout());
-				JLabel label1 = new JLabel(CalendarProgram.getModel().getAppointment.get(key).getDescription());
-				JLabel label2 = new JLabel(CalendarProgram.getModel().getAppointment.get(key).getFormattedStartTime().toString());
-				buttonList.get(buttonList.size()-1).add(BorderLayout.NORTH,label1);
-				buttonList.get(buttonList.size()-1).add(BorderLayout.SOUTH,label2);
-				buttonList.get(buttonList.size()-1).addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						//indexOfSelectedButton = 0;
-						CustomCalendarButton tempButton = (CustomCalendarButton) e.getSource();
-						int key2 = tempButton.keyOfRelatedAppointment;
-						Appointment tempAppointment = CalendarProgram.getModel().getAppointment.get(key2);
-						textAreaInfo.setText("Owner:\n" + tempAppointment.getMeetingLeader() + "\n\nDescription:\n" +
-								tempAppointment.getDescription() + "\n\nStart:\n" + tempAppointment.getFormattedStartTime()
-								+ "\n\nEnd:\n" + tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation());
-						btnMore.setEnabled(true);
-						if (CalendarProgram.getModel().username == tempAppointment.getMeetingLeader()) {
-							btnEdit.setEnabled(true);
-						}
+		buttonList = new ArrayList<JButton>();
+		ArrayList<Appointment> appointmentsForUser = new ArrayList<Appointment>();
+		appointmentsForUser = CalendarProgram.getModel().getAppointmentsForUser(CalendarProgram.loggedInUser);
+		System.out.println(appointmentsForUser);
+		for (Appointment app : appointmentsForUser) {
+			CustomCalendarButton button = new CustomCalendarButton();
+			button.keyOfRelatedAppointment = app.getAppointmentID();
+			buttonList.add(button);
+			buttonList.get(buttonList.size()-1).setLayout(new BorderLayout());
+			JLabel label1 = new JLabel(app.getDescription());
+			JLabel label2 = new JLabel(app.getFormattedStartTime().toString());
+			buttonList.get(buttonList.size()-1).add(BorderLayout.NORTH,label1);
+			buttonList.get(buttonList.size()-1).add(BorderLayout.SOUTH,label2);
+			buttonList.get(buttonList.size()-1).addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					indexOfSelectedButton = buttonList.indexOf(e.getSource());
+					CustomCalendarButton tempButton = (CustomCalendarButton) e.getSource();
+					Appointment tempAppointment = CalendarProgram.getModel().getAppointment(tempButton.keyOfRelatedAppointment);
+					textAreaInfo.setText("Owner:\n" + tempAppointment.getMeetingLeader() + "\n\nDescription:\n" +
+							tempAppointment.getDescription() + "\n\nStart:\n" + tempAppointment.getFormattedStartTime()
+							+ "\n\nEnd:\n" + tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation());
+					btnMore.setEnabled(true);
+					if (CalendarProgram.getModel().username == tempAppointment.getMeetingLeader()) {
+						btnEdit.setEnabled(true);
 					}
-				});
-				GridBagConstraints gbc_btnAppointment = new GridBagConstraints();
-				gbc_btnAppointment.fill = GridBagConstraints.VERTICAL;
-				gbc_btnAppointment.gridx = 0;
-				gbc_btnAppointment.gridy = 2;
-				gbc_btnAppointment.gridheight = 3;
-//						((int) (Calendar.getModel().appointment.get(key).getEndTime().getTimeInMillis() -
-//						Calendar.getModel().appointment.get(key).getStartTime().getTimeInMillis())) / 1000*60*60;
-				calendarPanel.add(button, gbc_btnAppointment);
-			}
+				}
+			});
+			GridBagConstraints gbc_btnAppointment = new GridBagConstraints();
+			gbc_btnAppointment.fill = GridBagConstraints.VERTICAL;
+			gbc_btnAppointment.gridx = 0;
+			gbc_btnAppointment.gridy = 2;
+			gbc_btnAppointment.gridheight = 3;
+//					((int) (Calendar.getModel().appointment.get(key).getEndTime().getTimeInMillis() -
+//					Calendar.getModel().appointment.get(key).getStartTime().getTimeInMillis())) / 1000*60*60;
+			calendarPanel.add(button, gbc_btnAppointment);
 		}
 	}
 
