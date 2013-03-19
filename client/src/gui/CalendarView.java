@@ -119,6 +119,8 @@ public class CalendarView extends JPanel{
 			}
 		}
 		lblWeek.setText("Week: " + selectedWeek);
+		
+		//menuCalendars.add("Menuitem 1");
 	}
 	
 	private void paintGUI() {
@@ -191,8 +193,8 @@ public class CalendarView extends JPanel{
 		
 		btnCalendars = new JButton("Calendars");
 		menuCalendars = new JPopupMenu();
-		menuCalendars.add("Menuitem 1");
-		menuCalendars.add("Menuitem 2");
+		//menuCalendars.add("Menuitem 1");
+		//menuCalendars.add("Menuitem 2");
 		//menuCalendars.add(new JMenuItem(Calendar.getModel().getEmployee("email").getEmail()));
 
 		btnCalendars.addActionListener(new ActionListener() {
@@ -234,9 +236,6 @@ public class CalendarView extends JPanel{
 					System.out.println(selectedWeek);
 					paintGUI();
 					updateInfo();
-					
-					//String[] temp = dateString.split("-");
-					//setDate(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]), Integer.parseInt(temp[2]));
 				}
 			}
 		});
