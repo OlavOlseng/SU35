@@ -70,11 +70,13 @@ public class ApplicationModel {
 	}
 	
 	// key = email and appointmentID
-	public void addInvitation(String key, Invitation value){
+	public void addInvitation(String email, int appointmentID, Invitation value){
+		String key = email + "¤" + appointmentID;
 		invitations.put(key, value);
 	}
 	
-	public Invitation getInvitation(String id){
+	public Invitation getInvitation(String email, int appointmentID){
+		String id = email + "¤" + appointmentID;
 		Invitation i = invitations.get(id);
 		if(i == null){
 			// TODO add method to clientmessagehandler
@@ -82,13 +84,15 @@ public class ApplicationModel {
 		return i;
 	}
 	
-	public void updateInvitation(String id, Invitation i){
+	public void updateInvitation(String email, int appointmentID, Invitation i){
+		String id = email + "¤" + appointmentID;
 		if(invitations.containsKey(id)){
 			invitations.put(id, i);
 		}
 	}
 	
-	public void deleteInvitation(String id){
+	public void deleteInvitation(String email, int appointmentID){
+		String id = email + "¤" + appointmentID;
 		if(invitations.containsKey(id)){
 			invitations.remove(id);
 		}
@@ -120,11 +124,13 @@ public class ApplicationModel {
 	}
 	
 	// key = alarmID
-	public void addAlarm(String key, Alarm value){
+	public void addAlarm(String email, int appointmentID, Alarm value){
+		String key = email + "¤" + appointmentID;
 		alarms.put(key, value);
 	}
 	
-	public Alarm getAlarm(int id){
+	public Alarm getAlarm(String email, int appointmentID){
+		String id = email + "¤" + appointmentID;
 		Alarm a = alarms.get(id);
 		if(a == null){
 			// TODO add method to clientmessagehandler
@@ -132,13 +138,15 @@ public class ApplicationModel {
 		return a;
 	}
 	
-	public void updateAlarm(String id, Alarm r){
+	public void updateAlarm(String email, int appointmentID, Alarm r){
+		String id = email + "¤" + appointmentID;
 		if(alarms.containsKey(id)){
 			alarms.put(id, r);
 		}
 	}
 	
-	public void deleteAlarm(String id){
+	public void deleteAlarm(String email, int appointmentID){
+		String id = email + "¤" + appointmentID;
 		if(alarms.containsKey(id)){
 			alarms.remove(id);
 		}

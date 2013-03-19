@@ -25,7 +25,7 @@ public class ClientMessageHandler extends MessageHandler{
 		if(Integer.parseInt(data[1]) == 0){
 			Document d = null;
 			try {
-				d = XMLAssembler.getDocument(data[4]);
+				d = assembler.getDocument(data[4]);
 			} catch (ValidityException e1) {
 				e1.printStackTrace();
 			} catch (ParsingException e1) {
@@ -60,7 +60,7 @@ public class ClientMessageHandler extends MessageHandler{
 		if(Integer.parseInt(data[1]) == 0){
 			Document d = null;
 			try {
-				d = XMLAssembler.getDocument(data[4]);
+				d = assembler.getDocument(data[4]);
 			} catch (ValidityException e1) {
 				e1.printStackTrace();
 			} catch (ParsingException e1) {
@@ -104,7 +104,7 @@ public class ClientMessageHandler extends MessageHandler{
 		if(Integer.parseInt(data[1]) == 0){
 			Document d = null;
 			try {
-				d = XMLAssembler.getDocument(data[4]);
+				d = assembler.getDocument(data[4]);
 			} catch (ValidityException e1) {
 				e1.printStackTrace();
 			} catch (ParsingException e1) {
@@ -168,23 +168,23 @@ public class ClientMessageHandler extends MessageHandler{
 	}
 	
 	public void updateInvitation(Element element){
-		Element iID = element.getFirstChildElement("invitationID");
-		Invitation savedInvation = ApplicationModel.getInstance().getInvitation(iID.getValue());
+		Element email = element.getFirstChildElement("employeeEmail");
+		Element aID = element.getFirstChildElement("appointmentID");
+		Invitation savedInvation = ApplicationModel.getInstance().getInvitation(email.getValue(), Integer.parseInt(aID.getValue()));
 		if(savedInvation == null){
 			return;
 		}
-		String key = savedInvation.getEmployeeEmail() + "," + savedInvation.getAppointmentID();
-		ApplicationModel.getInstance().updateInvitation(key, assembler.assembleInvitation(element));
+		ApplicationModel.getInstance().updateInvitation(savedInvation.getEmployeeEmail(), savedInvation.getAppointmentID(), assembler.assembleInvitation(element));
 	}
 	
 	public void updateAlarm(Element element){
-		Element alarmID = element.getFirstChildElement("alarmID");
-		Alarm savedAlarm = ApplicationModel.getInstance().getAlarm(Integer.parseInt(alarmID.getValue()));
+		Element email = element.getFirstChildElement("employeeEmail");
+		Element aID = element.getFirstChildElement("appointmentID");
+		Alarm savedAlarm = ApplicationModel.getInstance().getAlarm(email.getValue(), Integer.parseInt(aID.getValue()));
 		if(savedAlarm == null){
 			return;
 		}
-		String id = savedAlarm.getEmployeeEmail() + "¤" + savedAlarm.getAppointmentID();
-		ApplicationModel.getInstance().updateAlarm(id, assembler.assembleAlarm(element));
+		ApplicationModel.getInstance().updateAlarm(savedAlarm.getEmployeeEmail(), savedAlarm.getAppointmentID(), assembler.assembleAlarm(element));
 	}
 
 	public void addEmployee(Element element){
@@ -204,14 +204,12 @@ public class ClientMessageHandler extends MessageHandler{
 	
 	public void addInvitation(Element element){
 		Invitation i = assembler.assembleInvitation(element);
-		String key = i.getEmployeeEmail() + "¤" + i.getAppointmentID();
-		ApplicationModel.getInstance().addInvitation(key, i);
+		ApplicationModel.getInstance().addInvitation(i.getEmployeeEmail(), i.getAppointmentID(), i);
 	}
 	
 	public void addAlarm(Element element){
 		Alarm a = assembler.assembleAlarm(element);
-		String id = a.getEmployeeEmail() + "¤" + a.getAppointmentID();
-		ApplicationModel.getInstance().addAlarm(id, a);
+		ApplicationModel.getInstance().addAlarm(a.getEmployeeEmail(), a.getAppointmentID(),a);
 	}
 	
 	public void deleteEmployee(Element element){
@@ -242,22 +240,22 @@ public class ClientMessageHandler extends MessageHandler{
 	}
 	
 	public void deleteInvitation(Element element){
-		Element iID = element.getFirstChildElement("invitationID");
-		Invitation savedInvation = ApplicationModel.getInstance().getInvitation(iID.getValue());
+		Element email = element.getFirstChildElement("employeeEmail");
+		Element aID = element.getFirstChildElement("appointmentID");
+		Invitation savedInvation = ApplicationModel.getInstance().getInvitation(email.getValue(), Integer.parseInt(aID.getValue()));
 		if(savedInvation == null){
 			return;
 		}
-		String key = savedInvation.getEmployeeEmail() + "¤" + savedInvation.getAppointmentID();
-		ApplicationModel.getInstance().deleteInvitation(key);
+		ApplicationModel.getInstance().deleteInvitation(savedInvation.getEmployeeEmail(), savedInvation.getAppointmentID());
 	}
 	
 	public void deleteAlarm(Element element){
-		Element alarmID = element.getFirstChildElement("alarmID");
-		Alarm savedAlarm = ApplicationModel.getInstance().getAlarm(Integer.parseInt(alarmID.getValue()));
+		Element email = element.getFirstChildElement("employeeEmail");
+		Element aID = element.getFirstChildElement("appointmentID");
+		Alarm savedAlarm = ApplicationModel.getInstance().getAlarm(email.getValue(), Integer.parseInt(aID.getValue()));
 		if(savedAlarm == null){
 			return;
 		}
-		String id = savedAlarm.getEmployeeEmail() + "¤" + savedAlarm.getAppointmentID();
-		ApplicationModel.getInstance().deleteAlarm(id);
+		ApplicationModel.getInstance().deleteAlarm(savedAlarm.getEmployeeEmail(), savedAlarm.getAppointmentID());
 	}
 }
