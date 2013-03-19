@@ -25,6 +25,7 @@ public abstract class MessageHandler {
 				break;
 			case("l"):
 				checkLogin(msga);
+				break;
 			default:
 				errorResponse(msga);
 		}

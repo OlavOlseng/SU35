@@ -796,7 +796,7 @@ public class ServerMessageHandler extends MessageHandler{
 			e.printStackTrace();
 		}
 		finally{
-			response = msgFactory.createMessage(MessageType.LOGIN, error, errorMsg, data[3], null);
+			response = msgFactory.createMessage(MessageType.LOGIN, error, errorMsg, data[3], msg[0]);
 		}
 		try {
 			bridge.send(response);
