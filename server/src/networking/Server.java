@@ -23,7 +23,6 @@ public class Server implements Runnable{
 			welcomeSocket = new ServerSocket(Server.SERVERPORT);
 			System.out.println("Server initialised...");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -53,10 +52,8 @@ public class Server implements Runnable{
 				running = false;
 				break;
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -64,7 +61,6 @@ public class Server implements Runnable{
 			welcomeSocket.close();
 			ConnectionPool.getInstance().flush();
 		} catch (IOException | SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

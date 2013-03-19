@@ -45,9 +45,11 @@ public class DBConnection {
 		return st.executeQuery(sql);
 	}
 
-	public void makeSingleUpdate(String sql) throws SQLException {
+	public int makeSingleUpdate(String sql) throws SQLException {
 		Statement st = connection.createStatement();
 		st.executeUpdate(sql);
+		int i = st.getUpdateCount();
+		return i;
 	}
 
 	public PreparedStatement preparedStatement(String sql) throws SQLException {
