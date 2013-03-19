@@ -83,7 +83,7 @@ public class BookRoomDialog extends JDialog
 			{ autoBookButton.setEnabled(false); }
 		
 		
-		JLabel text1Label = new JLabel("Select a room from the dropdown menu,");
+		JLabel text1Label = new JLabel("Select a room from the dropdown menu, or press AutoBook");
 		GridBagConstraints gbc_text1Label = new GridBagConstraints();
 		gbc_text1Label.insets = new Insets(0, 0, 5, 5);
 		gbc_text1Label.gridx = 2;
@@ -93,7 +93,7 @@ public class BookRoomDialog extends JDialog
 		contentPane.add(text1Label, gbc_text1Label);
 		
 		
-		JLabel text2Label = new JLabel("or press AutoBook to have the system select");
+		JLabel text2Label = new JLabel("to have the system select a room of proper size automatically.");
 		GridBagConstraints gbc_text2Label = new GridBagConstraints();
 		gbc_text2Label.insets = new Insets(0, 0, 5, 5);
 		gbc_text2Label.gridx = 2;
@@ -102,7 +102,7 @@ public class BookRoomDialog extends JDialog
 		contentPane.add(text2Label, gbc_text2Label);
 		
 		
-		JLabel text3Label = new JLabel("a room of proper size automatically.");
+		JLabel text3Label = new JLabel("To use AutoBook employees must have been added.");
 		GridBagConstraints gbc_text3Label = new GridBagConstraints();
 		gbc_text3Label.insets = new Insets(0, 0, 5, 5);
 		gbc_text3Label.gridx = 2;

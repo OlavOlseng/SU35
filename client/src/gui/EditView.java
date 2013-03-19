@@ -303,6 +303,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		
 		
 		descriptionArea = new JTextArea();
+		descriptionArea.setLineWrap(true);
 		
 		JScrollPane descriptionScrollPane = new JScrollPane(descriptionArea);
 		GridBagConstraints gbc_descriptionScrollPane = new GridBagConstraints();
@@ -358,24 +359,27 @@ public class EditView extends JPanel/*JFrame*/ {
 		this.add(unbookRoomButton, gbc_unbookRoomButton);
 		}
 	//--------------------------------------------------------------------------
-	//TODO: receive parameter of type Appointment instead of appointmentID
-	public void initialize(int appointmentID)//Appointment appointment)
+	public void initialize(int appointmentId)//Appointment appointment)
 		{
 		//If appointmentID is -1 this means that this is a new appointment and we
 		// need to make sure that the fields are empty 
-		if(appointmentID <= 0/*appointment == null*/)
+		if(appointmentId < 0)
 			{ resetPanel(); }
 		//This is an appointment that we might want to edit.  Get data from
 		// the specified appointment 
 		else
 			{
-//			titleField.setText(appointment.getTitle());
-//			dateField.setText(appointment.getDate());
-//			startField.setText(appointment.getStartTime());
-//			endField.setText(appointment.getEndTime());
-//			descriptionArea.setText(appointment.getDescription());
-//			locationField.setText(appointment.getLocation());
-//			
+			Appointment appointment = 
+					ApplicationModel.getInstance().getAppointment(appointmentId);
+			
+		
+			titleField.setText(appointment.getTitle());
+			dateField.setText(appointment.getFormattedDate());
+			startField.setText(appointment.getFormattedStartTime());
+			endField.setText(appointment.getFormattedEndTime());
+			descriptionArea.setText(appointment.getDescription());
+			locationField.setText(appointment.getLocation());
+			
 			//We also need to fill the peopleList with employees
 //			Employee[] employees = appointment.getPeople();
 //			CalendarProgram.getModel().???;
@@ -402,7 +406,9 @@ public class EditView extends JPanel/*JFrame*/ {
 		locationField.setText("");
 		
 		//Make sure peopleList is empty
-		peopleList.removeAll();
+		peopleListModel.clear();
+		peopleList.clearSelection();
+		
 		
 		unbookRoomButton.setEnabled(false);
 		deleteButton.setEnabled(false);
@@ -562,8 +568,8 @@ public class EditView extends JPanel/*JFrame*/ {
 			//If all the relevant data are filled in, then we can proceed and open
 			// a window where we can select rooms
 			if(!dateField.getText().equals("") && 
-					startField.getText().equals("") &&
-					endField.getText().equals(""))
+					!startField.getText().equals("") &&
+					!endField.getText().equals(""))
 				{
 				BookRoomDialog bookRoomDialog = new BookRoomDialog(
 						(JFrame) bookRoomButton.getTopLevelAncestor(), true,
