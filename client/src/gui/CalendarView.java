@@ -85,10 +85,12 @@ public class CalendarView extends JPanel{
 			button.keyOfRelatedAppointment = app.getAppointmentID();
 			buttonList.add(button);
 			buttonList.get(buttonList.size()-1).setLayout(new BorderLayout());
-			JLabel label1 = new JLabel(app.getDescription());
+			JLabel label1 = new JLabel(app.getTitle());
 			JLabel label2 = new JLabel(app.getFormattedStartTime().toString());
+			JLabel label3 = new JLabel(app.getFormattedEndTime().toString());
 			buttonList.get(buttonList.size()-1).add(BorderLayout.NORTH,label1);
-			buttonList.get(buttonList.size()-1).add(BorderLayout.SOUTH,label2);
+			buttonList.get(buttonList.size()-1).add(BorderLayout.CENTER,label2);
+			buttonList.get(buttonList.size()-1).add(BorderLayout.SOUTH,label3);
 			buttonList.get(buttonList.size()-1).addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					indexOfSelectedButton = buttonList.indexOf(e.getSource());
@@ -106,11 +108,12 @@ public class CalendarView extends JPanel{
 			});
 			GridBagConstraints gbc_btnAppointment = new GridBagConstraints();
 			gbc_btnAppointment.fill = GridBagConstraints.VERTICAL;
-			gbc_btnAppointment.gridx = 0;
-			gbc_btnAppointment.gridy = 2;
-			gbc_btnAppointment.gridheight = 3;
-//					((int) (Calendar.getModel().appointment.get(key).getEndTime().getTimeInMillis() -
-//					Calendar.getModel().appointment.get(key).getStartTime().getTimeInMillis())) / 1000*60*60;
+			//System.out.println(app.getDate().getTime().getDay());
+			gbc_btnAppointment.gridx = app.getDate().getTime().getDay() - 1;
+			//System.out.println(app.getStartTime().getTime().getHours());
+			gbc_btnAppointment.gridy = app.getStartTime().getTime().getHours();
+			//System.out.println(app.getEndTime().getTime().getHours() - app.getStartTime().getTime().getHours());
+			gbc_btnAppointment.gridheight = app.getEndTime().getTime().getHours() - app.getStartTime().getTime().getHours();
 			calendarPanel.add(button, gbc_btnAppointment);
 		}
 	}
@@ -455,7 +458,7 @@ public class CalendarView extends JPanel{
 		
 		GridBagLayout gbl_calendarPanel = new GridBagLayout();
 		gbl_calendarPanel.columnWidths = new int[]{80, 80, 80, 80, 80, 80, 80};
-		gbl_calendarPanel.rowHeights = new int[]{17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17};
+		gbl_calendarPanel.rowHeights = new int[]{16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16};
 		//gbl_calendarPanel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
 		//gbl_calendarPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		calendarPanel.setLayout(gbl_calendarPanel);
