@@ -120,7 +120,7 @@ public class XMLAssembler {
 	}
 	
 	public Alarm assembleAlarm(Element alarmElement){
-		Element element = alarmElement.getFirstChildElement("alarmID");
+		Element element = alarmElement.getFirstChildElement("appointmentID");
 		String id = null;
 		if(element != null){
 			id = element.getValue();
