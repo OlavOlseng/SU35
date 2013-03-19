@@ -32,6 +32,7 @@ import models.Appointment;
 public class InfoView extends JPanel/*JFrame*/ 
 	{
 	private int 			_appointmentId;
+	private JButton 		editButton;
 	private JPanel 		_parentContentPane;
 	private JTextField 	ownerField;
 	private JTextField 	titleField;
@@ -102,7 +103,7 @@ public class InfoView extends JPanel/*JFrame*/
 		gbc_backButton.gridy = 1;
 		this.add(calendarButton, gbc_backButton);
 		
-		JButton editButton = new JButton("Edit");
+		editButton = new JButton("Edit");
 		editButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				_editView.initialize(_appointmentId);
@@ -374,6 +375,12 @@ public class InfoView extends JPanel/*JFrame*/
 //		alarmField.setText(ApplicationModel.getInstance().getAlarm(
 //				CalendarProgram.loggedInUser, appointmentId).getTime());
 		
+		
+		//If this user is not the same user who created this appointment, then
+		// he will not be able to edit this appointment. We therefore deactivate
+		// the editButton button
+		if(!CalendarProgram.loggedInUser.equals(appointment.getMeetingLeader()))
+			{ editButton.setEnabled(false); }
 		//TODO: Receive usernames/emails from attending, declined and not
 		// answered employees
 		}

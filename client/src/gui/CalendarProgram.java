@@ -26,24 +26,34 @@ public class CalendarProgram {
 		//Testdata for employees
 		loggedInUser = "kenneth@ntnu.no";
 		
-		ApplicationModel.getInstance().addEmployee("fredrik@ntnu.no", new Employee("fredrik@ntnu.no",
+		ApplicationModel.getInstance().addEmployee("fredrik@ntnu.no", 
+				new Employee("fredrik@ntnu.no",
 				"Fredrik", "Haave", "54576859", "54367867"));
-		ApplicationModel.getInstance().addEmployee("sindre@ntnu.no", new Employee("sindre@ntnu.no",
+		ApplicationModel.getInstance().addEmployee("sindre@ntnu.no",
+				new Employee("sindre@ntnu.no",
 				"Sindre", "Magnussen", "54476834", "14389867"));
-		ApplicationModel.getInstance().addEmployee("august@ntnu.no", new Employee("august@ntnu.no",
+		ApplicationModel.getInstance().addEmployee("august@ntnu.no", 
+				new Employee("august@ntnu.no",
 				"August", "Kvernmo", "54576834", "54389867"));
-		ApplicationModel.getInstance().addEmployee("olav@ntnu.no", new Employee("olav@ntnu.no",
+		ApplicationModel.getInstance().addEmployee("olav@ntnu.no", 
+				new Employee("olav@ntnu.no",
 				"Olav", "Olseng", "54506834", "14389869"));
-		ApplicationModel.getInstance().addEmployee("yngve@ntnu.no", new Employee("yngve@ntnu.no",
+		ApplicationModel.getInstance().addEmployee("yngve@ntnu.no", 
+				new Employee("yngve@ntnu.no",
 				"Yngve", "Bloch Hoel", "54576834", "54389867"));
-		ApplicationModel.getInstance().addEmployee("kenneth@ntnu.no", new Employee("kenneth@ntnu.no",
+		ApplicationModel.getInstance().addEmployee("kenneth@ntnu.no", 
+				new Employee("kenneth@ntnu.no",
 				"Kenneth", "Lund", "54576834", "54389867"));
 		
 		//Testdata for rooms
-		ApplicationModel.getInstance().addRoom("Room A1", new Room("Room A1", 225));
-		ApplicationModel.getInstance().addRoom("Room C4", new Room("Room C4", 75));
-		ApplicationModel.getInstance().addRoom("Room K1", new Room("Room K1", 15));
-		ApplicationModel.getInstance().addRoom("Room K2", new Room("Room K1", 28));
+		ApplicationModel.getInstance().addRoom("Room A1",
+				new Room("Room A1", 225));
+		ApplicationModel.getInstance().addRoom("Room C4",
+				new Room("Room C4", 75));
+		ApplicationModel.getInstance().addRoom("Room K1",
+				new Room("Room K1", 15));
+		ApplicationModel.getInstance().addRoom("Room K2",
+				new Room("Room K1", 28));
 		
 		//Testdata for appointment 1
 		Appointment appointment1 = new Appointment(0);
@@ -58,7 +68,8 @@ public class CalendarProgram {
 		appointment1.setMeetingRoom("Room K1");
 		appointment1.setMeetingLeader("kenneth@ntnu.no");
 		
-		ApplicationModel.getInstance().addAppointment(appointment1.getAppointmentID(), appointment1);
+		ApplicationModel.getInstance().addAppointment(
+				appointment1.getAppointmentID(), appointment1);
 		
 		//Testdata for appointment2
 		Appointment appointment2 = new Appointment(1);
@@ -73,30 +84,38 @@ public class CalendarProgram {
 		appointment2.setMeetingRoom("Room K2");
 		appointment2.setMeetingLeader("sindre@ntnu.no");
 		
-		ApplicationModel.getInstance().addAppointment(appointment2.getAppointmentID(), appointment2);
+		ApplicationModel.getInstance().addAppointment(
+				appointment2.getAppointmentID(), appointment2);
 		
 		//Participants in appointment1
-		ApplicationModel.getInstance().addInvitation("kenneth@ntnu.no", appointment1.getAppointmentID(),
+		ApplicationModel.getInstance().addInvitation("kenneth@ntnu.no", 
+				appointment1.getAppointmentID(),
 				new Invitation("kenneth@ntnu.no", 
 						appointment1.getAppointmentID()));		
-		ApplicationModel.getInstance().addInvitation("olav@ntnu.no", appointment1.getAppointmentID(),
+		ApplicationModel.getInstance().addInvitation("olav@ntnu.no",
+				appointment1.getAppointmentID(),
 				new Invitation("olav@ntnu.no",
 						appointment1.getAppointmentID()));		
-		ApplicationModel.getInstance().addInvitation("yngve@ntnu.no", appointment1.getAppointmentID(),
+		ApplicationModel.getInstance().addInvitation("yngve@ntnu.no",
+				appointment1.getAppointmentID(),
 				new Invitation("yngve@ntnu.no",
 						appointment1.getAppointmentID()));		
 		
 		//Participants for appointment2
-		ApplicationModel.getInstance().addInvitation("sindre@ntnu.no", appointment2.getAppointmentID(),
+		ApplicationModel.getInstance().addInvitation("sindre@ntnu.no",
+				appointment2.getAppointmentID(),
 				new Invitation("sindre@ntnu.no",
 						appointment2.getAppointmentID()));		
-		ApplicationModel.getInstance().addInvitation("august@ntnu.no", appointment2.getAppointmentID(),
+		ApplicationModel.getInstance().addInvitation("august@ntnu.no",
+				appointment2.getAppointmentID(),
 				new Invitation("august@ntnu.no",
 						appointment2.getAppointmentID()));		
-		ApplicationModel.getInstance().addInvitation("fredrik@ntnu.no", appointment2.getAppointmentID(),
+		ApplicationModel.getInstance().addInvitation("fredrik@ntnu.no",
+				appointment2.getAppointmentID(),
 				new Invitation("fredrik@ntnu.no",
 						appointment2.getAppointmentID()));		
-		ApplicationModel.getInstance().addInvitation("yngve@ntnu.no", appointment2.getAppointmentID(),
+		ApplicationModel.getInstance().addInvitation("yngve@ntnu.no",
+				appointment2.getAppointmentID(),
 				new Invitation("yngve@ntnu.no", 
 						appointment2.getAppointmentID()));
 		
