@@ -10,7 +10,6 @@ public class ModelTest {
 		client.connect();
 		Scanner scanner = new Scanner(System.in);
 		String command = null;
-		ApplicationModel app = ApplicationModel.getInstance();
 		boolean exit = false;
 		do {
 			command = scanner.nextLine();
@@ -82,6 +81,30 @@ public class ModelTest {
 					System.out.print("Appointment ID: ");
 					String ID = scanner.nextLine();
 					client.sendAlarmDeletion(email, ID);
+				} break;
+				case "CREATE_INVITATION": {
+					System.out.print("Employee email: ");
+					String email = scanner.nextLine();
+					System.out.print("Appointment ID: ");
+					int ID = Integer.parseInt(scanner.nextLine());
+					System.out.print("Invitation answer: ");
+					String answer = scanner.nextLine();
+					System.out.print("Invitation message: ");
+					String message = scanner.nextLine();
+					Invitation invitation = new Invitation(email, ID);
+					switch(answer) {
+						case "ACCEPTED": {
+							invitation.setAnswer(Invitation.Answer.ACCEPTED);
+						} break;
+						case "DECLINED": {
+							invitation.setAnswer(Invitation.Answer.DECLINED);
+						} break;
+						default: {
+							invitation.setAnswer(Invitation.Answer.PENDING);
+						} break;
+					}
+					invitation.setMessage(message);
+					client.sendInvitationCreation(invitation);
 				} break;
 				case "CREATE_ALARM": {
 					System.out.print("Employee email: ");
@@ -192,9 +215,9 @@ public class ModelTest {
 					String email = scanner.nextLine();
 					System.out.print("Appointment ID: ");
 					int ID = Integer.parseInt(scanner.nextLine());
-					Alarm alarm = app.getAlarm(email, ID);
+					Alarm alarm = ApplicationModel.getInstance().getAlarm(email, ID);
 					System.out.println(alarm.toString());
-				}
+				} break;
 				default: {
 					System.err.println("UNKNOWN COMMAND");
 				} break;
