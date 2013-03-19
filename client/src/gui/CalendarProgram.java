@@ -18,12 +18,12 @@ public class CalendarProgram {
 	private static final String INFO_VIEW = "Info View";
 	
 	private static ApplicationModel model;
-	public String loggedInUser;
+	public static String loggedInUser;
 	
 	private static void createAndShowGui()
 		{
 		model = ApplicationModel.getInstance();
-		model.username = "email";
+		loggedInUser = "email";
 		JFrame frame = new JFrame("Superblaster");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBounds(50, 50, 800, 600);
