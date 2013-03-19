@@ -21,7 +21,7 @@ import models.Room;
 public class XMLAssembler {
 	
 	public Document getDocument(String XML) throws ValidityException, ParsingException, IOException{
-		Document d = new Builder().build(XML);
+		Document d = new Builder().build(XML, null);
 		return d;
 	}
 	
@@ -120,17 +120,36 @@ public class XMLAssembler {
 	}
 	
 	public Alarm assembleAlarm(Element alarmElement){
-		Element element = alarmElement.getFirstChildElement("appointmentID");
+		Element element = alarmElement.getFirstChildElement("alarmID");
+		
 		String id = null;
-		if(element != null){
-			id = element.getValue();
-		}
-		element = alarmElement.getFirstChildElement("employeeEmail");
 		String email = null;
 		if(element != null){
-			email = element.getValue();
+			String temp = element.getValue();
+			String[] vals = temp.split("¤");
+			id = vals[1];
+			email = vals[0];
+			
 		}
-		return new Alarm(Integer.parseInt(id), email);
+		
+		//Date is actually the time member of the alarm class
+		element = alarmElement.getFirstChildElement("date");
+		String time = null;
+		if(element != null){
+			time = element.getValue();
+		}
+		
+		element = alarmElement.getFirstChildElement("description");
+		String desc = null;
+		if(element != null){
+			desc = element.getValue();
+		}
+		
+		Alarm al = new Alarm(Integer.parseInt(id), email); 
+		al.setTime(time);
+		al.setDescription(desc);
+		
+		return al;
 	}
 	
 
