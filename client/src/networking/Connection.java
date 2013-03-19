@@ -36,8 +36,10 @@ public class Connection {
 	}
 	
 	public void send(String msg) throws IOException {
-		if(socket.isBound())
-			out.println(msg +'£');
+		if(socket.isBound()) {
+			out.print(msg +'£');
+			out.flush();
+		}
 	}
 
 	public void close() throws IOException {
