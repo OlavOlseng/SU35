@@ -119,7 +119,7 @@ public class CalendarProgram {
 						appointment2.getAppointmentID()));		
 		model.addInvitation("yngve@ntnu.no", appointment2.getAppointmentID(),
 				new Invitation("yngve@ntnu.no", 
-						appointment2.getAppointmentID()));		
+						appointment2.getAppointmentID()));	
 		}
 	
 	
