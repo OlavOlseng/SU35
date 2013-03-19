@@ -274,6 +274,9 @@ public class ModelTest {
 					Alarm alarm = ApplicationModel.getInstance().getAlarm(email, ID);
 					System.out.println(alarm.toString());
 				} break;
+				case "SHOW_KEYS": {
+					System.out.println(ApplicationModel.getInstance().listKeys());
+				} break;
 				default: {
 					System.err.println("UNKNOWN COMMAND");
 				} break;

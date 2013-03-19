@@ -25,12 +25,13 @@ public class ApplicationModel {
 	// key = email
 	public void addEmployee(String key, Employee value){
 		employees.put(key, value);
+		System.out.println("Key: " + key);
 	}
 	
 	public Employee getEmployee(String email){
 		Employee e = employees.get(email);
 		if(e == null){
-			//TODO add method to clientmessagehandler
+			System.err.println("No entry found in Hashmap");
 		}
 		return e;
 	}
@@ -50,12 +51,13 @@ public class ApplicationModel {
 	// key = appointmentID
 	public void addAppointment(int key, Appointment value){
 		appointment.put(key, value);
+		System.out.println("Key: " + key);
 	}
 	
 	public Appointment getAppointment(int aID){
 		Appointment a = appointment.get(aID);
 		if(a == null){
-			// TODO add method to clientmessagehandler
+			System.err.println("No entry found in Hashmap");
 		}
 		return a;
 	}
@@ -76,21 +78,20 @@ public class ApplicationModel {
 	public void addInvitation(String email, int appointmentID, Invitation value){
 		String key = email + "¤" + appointmentID;
 		invitations.put(key, value);
+		System.out.println("Key: " + key);
 	}
 	
 	public Invitation getInvitation(String email, int appointmentID){
 		String id = email + "¤" + appointmentID;
 		Invitation i = invitations.get(id);
 		if(i == null){
-			// TODO add method to clientmessagehandler
+			System.err.println("No entry found in Hashmap");
 		}
 		return i;
 	}
 	
 	public ArrayList<Appointment> getAppointmentsForUser(String email) {
 		ArrayList<Appointment> array = new ArrayList<Appointment>();
-		System.out.println(appointment);
-		System.out.println(invitations.keySet());
 		for (String key : invitations.keySet()) {
 			if (invitations.get(key).getEmployeeEmail().equals(email) && invitations.get(key).getAnswer()!= Answer.DECLINED) {
 				int appointmentKey = (invitations.get(key).getAppointmentID());
@@ -117,12 +118,13 @@ public class ApplicationModel {
 	// key = name
 	public void addRoom(String key, Room value){
 		rooms.put(key, value);
+		System.out.println("Key: " + key);
 	}
 	
 	public Room getRoom(String id){
 		Room r = rooms.get(id);
 		if(r == null){
-			//TODO add method to clientmessagehandler
+			System.err.println("No entry found in Hashmap");
 		}
 		return r;
 	}
@@ -142,7 +144,7 @@ public class ApplicationModel {
 	// key = alarmID
 	public void addAlarm(String email, int appointmentID, Alarm value){
 		String key = email + "¤" + appointmentID;
-		System.out.println(key);
+		System.out.println("Key: " + key);
 		alarms.put(key, value);
 	}
 	
@@ -150,7 +152,7 @@ public class ApplicationModel {
 		String id = email + "¤" + appointmentID;
 		Alarm a = alarms.get(id);
 		if(a == null){
-			// TODO add method to clientmessagehandler
+			System.err.println("No entry found in Hashmap");
 		}
 		return a;
 	}
@@ -174,6 +176,20 @@ public class ApplicationModel {
 			model = new ApplicationModel();
 		}
 		return model;
+	}
+	
+	public String listKeys() {
+		String keys = "Employee keys:\n";
+		keys += employees.keySet();
+		keys += "\nAppointment keys:\n";
+		keys += appointment.keySet();
+		keys += "\nRoom keys:\n";
+		keys += rooms.keySet();
+		keys += "\nInvitation keys:\n";
+		keys += invitations.keySet();
+		keys += "\nAlarm keys:\n";
+		keys += alarms.keySet()+"\n";
+		return keys;
 	}
 	
 }
