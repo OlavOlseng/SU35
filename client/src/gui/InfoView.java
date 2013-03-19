@@ -25,6 +25,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JTextArea;
 import javax.swing.JRadioButton;
 
+import models.ApplicationModel;
 import models.Appointment;
 
 public class InfoView extends JPanel/*JFrame*/ 
@@ -352,13 +353,13 @@ public class InfoView extends JPanel/*JFrame*/
 	public void intitialize(int appointmentId)
 		{ 
 		Appointment appointment = 
-				CalendarProgram.getModel().getAppointment(appointmentId);
+				ApplicationModel.getInstance().getAppointment(appointmentId);
 		
 		ownerField.setText(appointment.getMeetingLeader());
 		titleField.setText(appointment.getTitle());
 		dateField.setText(appointment.getFormattedDate());
 		locationField.setText(appointment.getLocation());
-		alarmField.setText(CalendarProgram.getModel().getAlarm(
+		alarmField.setText(ApplicationModel.getInstance().getAlarm(
 				CalendarProgram.loggedInUser, appointmentId).getTime());
 		
 		//TODO: Receive usernames/emails from attending, declined and not
