@@ -17,17 +17,17 @@ TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 2. implement update features:
     [ ] Appointment
     [ ] Invitation
-    [ ] Alarm
+    [x] Alarm
     [ ] Finalized
     
 3.  Implement create features:
     [ ] Appointment
     [ ] Invitation
-    [ ] Alarm
+    [x] Alarm
     [ ] Finalized
     
 4. Implement deletion features:
     [ ] Appointment
     [ ] Invitation
-    [ ] Alarm
+    [x] Alarm
     [ ] Finalized

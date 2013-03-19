@@ -44,14 +44,16 @@ public class DBFactory {
 		while(rs.next())
 		{
 			int appointmentID = rs.getInt(1);
-			String date = rs.getString(2);
-			String startTime = rs.getString(3);
-			String endTime = rs.getString(4);
-			String description = rs.getString(5);
-			String location = rs.getString(6);
-			String meetingRoom = rs.getString(7);
-			String meetingLeaderEmail = rs.getString(8);
+			String title = rs.getString(2);
+			String date = rs.getString(3);
+			String startTime = rs.getString(4);
+			String endTime = rs.getString(5);
+			String description = rs.getString(6);
+			String location = rs.getString(7);
+			String meetingRoom = rs.getString(8);
+			String meetingLeaderEmail = rs.getString(9);
 			Appointment appointment = new Appointment(appointmentID);
+			appointment.setTitle(title);
 			appointment.setDate(date);
 			appointment.setStartTime(startTime);
 			appointment.setEndTime(endTime);

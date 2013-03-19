@@ -13,6 +13,10 @@ public class Invitation {
 		Answer(int b) {
 			this.b = b;
 		}
+		
+		public int getValue() {
+			return b;
+		}
 	}
 
 	private Answer answer;
