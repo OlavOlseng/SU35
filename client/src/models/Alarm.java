@@ -36,4 +36,13 @@ public class Alarm {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	public String toString() {
+		String ret = "";
+		ret += "Employee email:\t\t\t" + employeeEmail;
+		ret += "\nAppointment ID:\t\t\t" + appointmentID;
+		ret += "\nAlarm Time:\t\t\t" + time;
+		ret += "\nAlarm Description:\t\t" + description;
+		return ret;
+	}
 }

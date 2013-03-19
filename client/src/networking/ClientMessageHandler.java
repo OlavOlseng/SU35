@@ -96,7 +96,8 @@ public class ClientMessageHandler extends MessageHandler{
 
 	@Override
 	public void createEntry(String[] data) {
-		// TODO Auto-generated method stub
+		// TODO Create a better implementation
+		getEntry(data);
 	}
 
 	@Override
