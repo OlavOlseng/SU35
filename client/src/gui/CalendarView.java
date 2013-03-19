@@ -1,5 +1,6 @@
 package gui;
 import models.Appointment;
+import models.ApplicationModel;
 
 import java.awt.EventQueue;
 
@@ -75,7 +76,7 @@ public class CalendarView extends JPanel{
 		//Finds the appointments for the logged in user
 		buttonList = new ArrayList<JButton>();
 		ArrayList<Appointment> appointmentsForUser = new ArrayList<Appointment>();
-		appointmentsForUser = CalendarProgram.getModel().getAppointmentsForUser(CalendarProgram.loggedInUser);
+		appointmentsForUser = ApplicationModel.getInstance().getAppointmentsForUser(CalendarProgram.loggedInUser);
 		System.out.println(appointmentsForUser);
 		for (Appointment app : appointmentsForUser) {
 			CustomCalendarButton button = new CustomCalendarButton();
@@ -90,12 +91,12 @@ public class CalendarView extends JPanel{
 				public void actionPerformed(ActionEvent e) {
 					indexOfSelectedButton = buttonList.indexOf(e.getSource());
 					CustomCalendarButton tempButton = (CustomCalendarButton) e.getSource();
-					Appointment tempAppointment = CalendarProgram.getModel().getAppointment(tempButton.keyOfRelatedAppointment);
+					Appointment tempAppointment = ApplicationModel.getInstance().getAppointment(tempButton.keyOfRelatedAppointment);
 					textAreaInfo.setText("Owner:\n" + tempAppointment.getMeetingLeader() + "\n\nDescription:\n" +
 							tempAppointment.getDescription() + "\n\nStart:\n" + tempAppointment.getFormattedStartTime()
 							+ "\n\nEnd:\n" + tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation());
 					btnMore.setEnabled(true);
-					if (CalendarProgram.getModel().username == tempAppointment.getMeetingLeader()) {
+					if (ApplicationModel.getInstance().username == tempAppointment.getMeetingLeader()) {
 						btnEdit.setEnabled(true);
 					}
 				}
