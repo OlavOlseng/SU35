@@ -142,6 +142,7 @@ public class ApplicationModel {
 	// key = alarmID
 	public void addAlarm(String email, int appointmentID, Alarm value){
 		String key = email + "¤" + appointmentID;
+		System.out.println(key);
 		alarms.put(key, value);
 	}
 	
