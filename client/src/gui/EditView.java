@@ -42,10 +42,12 @@ public class EditView extends JPanel/*JFrame*/ {
 	private ActionListener peopleListener;
 
 	private JButton 				addButton;
+	private JButton 				deleteButton;
 	private JButton 				removeButton;
 	private JButton 				calendarButton;
 	private JButton 				chooseDate;
 	private JButton 				bookRoomButton;
+	private JButton 				unbookRoomButton;
 	private JList					peopleList;
 	private JPanel 				_parentContentPane;
 	private JPopupMenu 			addPeopleMenu;
@@ -134,7 +136,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		this.add(saveButton, gbc_saveButton);
 		
 		
-		JButton deleteButton = new JButton("Delete");
+		deleteButton = new JButton("Delete");
 		deleteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
@@ -230,7 +232,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		
 				
 		JLabel startLabel = new JLabel("Start:");
-		startLabel.setToolTipText("Enter time in the format: HH:MM:SS");
+		startLabel.setToolTipText("Enter time in the format: HH:MM");
 		GridBagConstraints gbc_startLabel = new GridBagConstraints();
 		gbc_startLabel.anchor = GridBagConstraints.EAST;
 		gbc_startLabel.insets = new Insets(0, 0, 5, 5);
@@ -250,7 +252,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		
 		
 		JLabel endLabel = new JLabel("End:");
-		endLabel.setToolTipText("Enter time in the format: HH:MM:SS");
+		endLabel.setToolTipText("Enter time in the format: HH:MM");
 		GridBagConstraints gbc_endLabel = new GridBagConstraints();
 		gbc_endLabel.anchor = GridBagConstraints.EAST;
 		gbc_endLabel.insets = new Insets(0, 0, 5, 5);
@@ -343,17 +345,17 @@ public class EditView extends JPanel/*JFrame*/ {
 		this.add(bookRoomButton, gbc_btnBookRoom);
 		
 		
-		JButton btnUnbook = new JButton("Unbook");
-		btnUnbook.addActionListener(new ActionListener() {
+		unbookRoomButton = new JButton("Unbook");
+		unbookRoomButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
-		GridBagConstraints gbc_btnUnbook = new GridBagConstraints();
-		gbc_btnUnbook.fill = GridBagConstraints.BOTH;
-		gbc_btnUnbook.insets = new Insets(0, 0, 5, 5);
-		gbc_btnUnbook.gridx = 5;
-		gbc_btnUnbook.gridy = 10;
-		this.add(btnUnbook, gbc_btnUnbook);
+		GridBagConstraints gbc_unbookRoomButton = new GridBagConstraints();
+		gbc_unbookRoomButton.fill = GridBagConstraints.BOTH;
+		gbc_unbookRoomButton.insets = new Insets(0, 0, 5, 5);
+		gbc_unbookRoomButton.gridx = 5;
+		gbc_unbookRoomButton.gridy = 10;
+		this.add(unbookRoomButton, gbc_unbookRoomButton);
 		}
 	//--------------------------------------------------------------------------
 	//TODO: receive parameter of type Appointment instead of appointmentID
@@ -401,6 +403,9 @@ public class EditView extends JPanel/*JFrame*/ {
 		
 		//Make sure peopleList is empty
 		peopleList.removeAll();
+		
+		unbookRoomButton.setEnabled(false);
+		deleteButton.setEnabled(false);
 		}
 	//--------------------------------------------------------------------------
 	//This function checks the different components
@@ -554,11 +559,27 @@ public class EditView extends JPanel/*JFrame*/ {
 		{
 		public void actionPerformed(ActionEvent event)
 			{
-			BookRoomDialog bookRoomDialog = new BookRoomDialog(
-					(JFrame) bookRoomButton.getTopLevelAncestor(), true,
-					peopleList.getModel().getSize(), EditView.this);
-			bookRoomDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			bookRoomDialog.setVisible(true);
+			//If all the relevant data are filled in, then we can proceed and open
+			// a window where we can select rooms
+			if(!dateField.getText().equals("") && 
+					startField.getText().equals("") &&
+					endField.getText().equals(""))
+				{
+				BookRoomDialog bookRoomDialog = new BookRoomDialog(
+						(JFrame) bookRoomButton.getTopLevelAncestor(), true,
+						peopleList.getModel().getSize(), EditView.this);
+				bookRoomDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				bookRoomDialog.setVisible(true);
+				}
+			//All relevant fields are not filled with data. Output error message
+			else
+				{
+				JOptionPane.showMessageDialog(
+						(JFrame)SwingUtilities.getRoot(_parentContentPane),
+						"All the fields for 'Date', 'Start' and 'End' have to be " +
+						"filled!", "Error message", 
+						JOptionPane.ERROR_MESSAGE);
+				}
 			
 //			if (bookRoomDialog.getAnswer() == 1) {
 //				//System.out.println(gotoDialog.getWeek());
@@ -632,8 +653,8 @@ public class EditView extends JPanel/*JFrame*/ {
 				
 				if(selectedEmail.equals(element))
 					{
-					JOptionPane.showMessageDialog(((JFrame)SwingUtilities.getRoot(
-							_parentContentPane)),
+					JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
+							_parentContentPane),
 							"Email address or group is already in list!",
 							"Error message", JOptionPane.ERROR_MESSAGE);
 					isEmailSelected = true;
@@ -665,9 +686,22 @@ public class EditView extends JPanel/*JFrame*/ {
 				//TODO: Save appointment for this user in database and send message
 				// to relevant employees (employees added to the people-list)
 				//CalendarProgram.getModel().addAppointment(key, value);
-				ApplicationModel.getInstance().addEmployee("kenneth@ntnu.no",
-						new Employee("neo@matrix.com", "Thomas A.", "Anderson",
-						"543678904", "456234765"));
+//				ApplicationModel.getInstance().addEmployee("kenneth@ntnu.no",
+//						new Employee("neo@matrix.com", "Thomas A.", "Anderson",
+//						"543678904", "456234765"));
+				Appointment appointment = new Appointment(3);
+				appointment.setTitle(titleField.getText());
+				appointment.setDate(dateField.getText());
+				appointment.setStartTime(startField.getText());
+				appointment.setEndTime(startField.getText());
+				appointment.setDescription(descriptionArea.getText());
+				appointment.setLocation(locationField.getText());
+				appointment.setMeetingRoom(locationField.getText());
+				appointment.setMeetingLeader(CalendarProgram.loggedInUser);
+								
+				ApplicationModel.getInstance().addAppointment(
+						appointment.getAppointmentID(), appointment);
+				
 				
 				JOptionPane.showMessageDialog(
 						(JFrame)SwingUtilities.getRoot(_parentContentPane),

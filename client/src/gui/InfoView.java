@@ -24,21 +24,23 @@ import javax.swing.JScrollPane;
 import javax.swing.JCheckBox;
 import javax.swing.JTextArea;
 import javax.swing.JRadioButton;
+import javax.swing.ScrollPaneConstants;
 
 import models.ApplicationModel;
 import models.Appointment;
 
 public class InfoView extends JPanel/*JFrame*/ 
 	{
-	private JPanel _parentContentPane;
-	private JTextField ownerField;
-	private JTextField titleField;
+	private JPanel 		_parentContentPane;
+	private JTextField 	ownerField;
+	private JTextField 	titleField;
 	private final JLabel startLabel = new JLabel("Start:");
-	private JTextField startField;
-	private JTextField endField;
-	private JTextField locationField;
-	private JTextField alarmField;
-	private JTextField dateField;
+	private JTextField 	startField;
+	private JTextField 	endField;
+	private JTextField 	locationField;
+	private JTextField 	alarmField;
+	private JTextField 	dateField;
+	private JTextArea 	descriptionTextArea;
 
 	/**
 	 * Launch the application.
@@ -280,10 +282,12 @@ public class InfoView extends JPanel/*JFrame*/
 		gbc_notAnsweredScrollPane.gridheight = 3;
 		this.add(notAnsweredScrollPane, gbc_notAnsweredScrollPane);
 		
-		JTextArea textArea = new JTextArea();
-		textArea.setEditable(false);
+		descriptionTextArea = new JTextArea();
+		descriptionTextArea.setEditable(false);
 		
-		JScrollPane descriptionScrollPane = new JScrollPane(textArea);
+		JScrollPane descriptionScrollPane = new JScrollPane(descriptionTextArea,
+				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		GridBagConstraints gbc_descriptionScrollPane = new GridBagConstraints();
 		gbc_descriptionScrollPane.insets = new Insets(0, 0, 5, 5);
 		gbc_descriptionScrollPane.fill = GridBagConstraints.BOTH;
@@ -358,6 +362,9 @@ public class InfoView extends JPanel/*JFrame*/
 		ownerField.setText(appointment.getMeetingLeader());
 		titleField.setText(appointment.getTitle());
 		dateField.setText(appointment.getFormattedDate());
+		startField.setText(appointment.getFormattedStartTime());
+		endField.setText(appointment.getFormattedEndTime());
+		descriptionTextArea.setText(appointment.getDescription());
 		locationField.setText(appointment.getLocation());
 //		alarmField.setText(ApplicationModel.getInstance().getAlarm(
 //				CalendarProgram.loggedInUser, appointmentId).getTime());

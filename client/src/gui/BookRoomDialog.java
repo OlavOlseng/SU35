@@ -110,6 +110,7 @@ public class BookRoomDialog extends JDialog
 		gbc_text3Label.gridwidth = 5;
 		contentPane.add(text3Label, gbc_text3Label);
 		
+		//Her henter vi alle rom som er 
 		String[] rooms = { "Room 1", "Room 2", "Room 3", "Room 4" };
 		 _roomList = rooms;
 		//_roomList	= new ArrayList<String>(Arrays.asList(rooms));
