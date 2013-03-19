@@ -46,7 +46,9 @@ public class CalendarView extends JPanel{
 	private ArrayList<JButton> buttonList;
 	private int indexOfSelectedButton;
 	private EditView _editView;
+	private InfoView _infoView;
 	private int selectedWeek = Calendar.getInstance().WEEK_OF_YEAR;
+	private int appointmentID;
 	
 	/**
 	 * Launch the application.
@@ -92,6 +94,7 @@ public class CalendarView extends JPanel{
 					indexOfSelectedButton = buttonList.indexOf(e.getSource());
 					CustomCalendarButton tempButton = (CustomCalendarButton) e.getSource();
 					Appointment tempAppointment = ApplicationModel.getInstance().getAppointment(tempButton.keyOfRelatedAppointment);
+					appointmentID = tempButton.keyOfRelatedAppointment;
 					textAreaInfo.setText("Owner:\n" + tempAppointment.getMeetingLeader() + "\n\nDescription:\n" +
 							tempAppointment.getDescription() + "\n\nStart:\n" + tempAppointment.getFormattedStartTime()
 							+ "\n\nEnd:\n" + tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation());
@@ -299,6 +302,8 @@ public class CalendarView extends JPanel{
 		btnMore.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//Open InfoView
+				System.out.println(appointmentID);
+				_infoView.initialize(appointmentID);
 				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
 				c1.show(_parentContentPane, "Info View");
 			}
@@ -487,4 +492,7 @@ public class CalendarView extends JPanel{
 	//--------------------------------------------------------------------------
 	public void setEditView(EditView editView)
 		{ _editView = editView; }
+	
+	public void setInfoView(InfoView infoView)
+	{ _infoView = infoView; }
 }

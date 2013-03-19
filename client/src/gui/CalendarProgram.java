@@ -23,34 +23,9 @@ public class CalendarProgram {
 	private static void createAndShowGui()
 		{
 		//model = ApplicationModel.getInstance();
-		loggedInUser = "kenneth@ntnu.no";
-		JFrame frame = new JFrame("Superblaster");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setBounds(50, 50, 800, 600);
-		
-		final JPanel contentPane = new JPanel();
-		contentPane.setLayout(new CardLayout());
-						
-		Login login = new Login(contentPane);
-		contentPane.add(login, LOG_IN);
-		
-		EditView editView = new EditView(contentPane);
-		contentPane.add(editView, EDIT_VIEW);
-		
-		CalendarView calendarView = new CalendarView(contentPane);
-		contentPane.add(calendarView, CALENDAR_VIEW);
-		
-		InfoView infoView = new InfoView(contentPane);
-		contentPane.add(infoView, INFO_VIEW);
-		
-		calendarView.setEditView(editView);
-		
-		frame.add(contentPane);
-		frame.pack();
-		frame.setVisible(true);
-		
-		
 		//Testdata for employees
+		loggedInUser = "kenneth@ntnu.no";
+		
 		ApplicationModel.getInstance().addEmployee("fredrik@ntnu.no", new Employee("fredrik@ntnu.no",
 				"Fredrik", "Haave", "54576859", "54367867"));
 		ApplicationModel.getInstance().addEmployee("sindre@ntnu.no", new Employee("sindre@ntnu.no",
@@ -119,7 +94,33 @@ public class CalendarProgram {
 						appointment2.getAppointmentID()));		
 		ApplicationModel.getInstance().addInvitation("yngve@ntnu.no", appointment2.getAppointmentID(),
 				new Invitation("yngve@ntnu.no", 
-						appointment2.getAppointmentID()));	
+						appointment2.getAppointmentID()));
+		
+		JFrame frame = new JFrame("Superblaster");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setBounds(50, 50, 800, 600);
+		
+		final JPanel contentPane = new JPanel();
+		contentPane.setLayout(new CardLayout());
+						
+		Login login = new Login(contentPane);
+		contentPane.add(login, LOG_IN);
+		
+		EditView editView = new EditView(contentPane);
+		contentPane.add(editView, EDIT_VIEW);
+		
+		CalendarView calendarView = new CalendarView(contentPane);
+		contentPane.add(calendarView, CALENDAR_VIEW);
+		
+		InfoView infoView = new InfoView(contentPane);
+		contentPane.add(infoView, INFO_VIEW);
+		
+		calendarView.setEditView(editView);
+		calendarView.setInfoView(infoView);
+		
+		frame.add(contentPane);
+		frame.pack();
+		frame.setVisible(true);
 		}
 	
 	
