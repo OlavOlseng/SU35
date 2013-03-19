@@ -36,15 +36,15 @@ public class ClientMessageHandler extends MessageHandler{
 			Element e = d.getRootElement();
 			switch(e.getLocalName()){
 			case "employee":
-				addEmployee(e);
+				addEmployee(e); break;
 			case "appointment":
-				addAppointment(e);
+				addAppointment(e); break;
 			case "room":
-				addRoom(e);
+				addRoom(e); break;
 			case "invitation":
-				addInvitation(e);
+				addInvitation(e); break;
 			case "alarm":
-				addAlarm(e);
+				addAlarm(e); break;
 			default:
 				System.err.println("Unknown localname.");
 				return;
@@ -71,15 +71,15 @@ public class ClientMessageHandler extends MessageHandler{
 			Element e = d.getRootElement();
 			switch(e.getLocalName()){
 			case "employee":
-				updateEmployee(e);
+				updateEmployee(e); break;
 			case "appointment":
-				updateAppointment(e);
+				updateAppointment(e); break;
 			case "room":
-				updateRoom(e);
+				updateRoom(e); break;
 			case "invitation":
-				updateInvitation(e);
+				updateInvitation(e); break;
 			case "alarm":
-				updateAlarm(e);
+				updateAlarm(e); break;
 			default:
 				System.err.println("Unknown localname.");
 				return;
@@ -96,7 +96,8 @@ public class ClientMessageHandler extends MessageHandler{
 
 	@Override
 	public void createEntry(String[] data) {
-		// TODO Auto-generated method stub
+		// TODO Create a better implementation
+		getEntry(data);
 	}
 
 	@Override
@@ -115,15 +116,15 @@ public class ClientMessageHandler extends MessageHandler{
 			Element e = d.getRootElement();
 			switch(e.getLocalName()){
 			case "employee":
-				deleteEmployee(e);
+				deleteEmployee(e); break;
 			case "appointment":
-				deleteAppointment(e);
+				deleteAppointment(e); break;
 			case "room":
-				deleteRoom(e);
+				deleteRoom(e); break;
 			case "invitation":
-				deleteInvitation(e);
+				deleteInvitation(e); break;
 			case "alarm":
-				deleteAlarm(e);
+				deleteAlarm(e); break;
 			default:
 				System.err.println("Unknown localname.");
 				return;

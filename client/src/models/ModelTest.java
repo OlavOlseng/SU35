@@ -10,7 +10,6 @@ public class ModelTest {
 		client.connect();
 		Scanner scanner = new Scanner(System.in);
 		String command = null;
-		ApplicationModel app = ApplicationModel.getInstance();
 		boolean exit = false;
 		do {
 			command = scanner.nextLine();
@@ -192,8 +191,9 @@ public class ModelTest {
 					String email = scanner.nextLine();
 					System.out.print("Appointment ID: ");
 					int ID = Integer.parseInt(scanner.nextLine());
-					Alarm alarm = app.getAlarm(email, ID);
+					Alarm alarm = ApplicationModel.getInstance().getAlarm(email, ID);
 					System.out.println(alarm.toString());
+					break;
 				}
 				default: {
 					System.err.println("UNKNOWN COMMAND");

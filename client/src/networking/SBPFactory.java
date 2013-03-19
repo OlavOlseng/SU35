@@ -41,19 +41,15 @@ public class SBPFactory {
 		return createMessage(MessageType.GET, false, null, option, payload);
 	}
 	
-	public String makeDeleteMessage(String option, String condition) {
-		String payload = String.format("%s", condition);
+	public String makeDeleteMessage(String option, String payload) {
 		return createMessage(MessageType.DELETE, false, null, option, payload);
 	}
 	
-	//Not finalized
-	public String makeCreateMessage(String option, String what, String values){
-		String payload = String.format("%s¤%s", what, values);
+	public String makeCreateMessage(String option, String payload){
 		return createMessage(MessageType.CREATE, false, null, option, payload);
 	}
 	
-	public String makeUpdateMessage(String option, String what, String condition) {
-		String payload = String.format("%s¤%s", what, condition);
+	public String makeUpdateMessage(String option, String payload) {
 		return createMessage(MessageType.UPDATE, false, null, option, payload);
 	}
 	
