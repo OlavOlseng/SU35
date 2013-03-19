@@ -33,13 +33,13 @@ public class CalendarProgram {
 		EditView editView = new EditView(contentPane);
 		contentPane.add(editView, EDIT_VIEW);
 		
-		CalendarView calendarView = new CalendarView(contentPane, editView);
+		CalendarView calendarView = new CalendarView(contentPane);
 		contentPane.add(calendarView, CALENDAR_VIEW);
-		
-		
 		
 		InfoView infoView = new InfoView(contentPane);
 		contentPane.add(infoView, INFO_VIEW);
+		
+		calendarView.setEditView(editView);
 		
 		frame.add(contentPane);
 		frame.pack();

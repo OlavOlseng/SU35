@@ -62,9 +62,9 @@ public class CalendarView extends JPanel{
 	/**
 	 * Create the application.
 	 */
-	public CalendarView(JPanel parentContentPane, EditView editView) {
+	public CalendarView(JPanel parentContentPane) {
 		//updateInfo();
-		initialize(parentContentPane, editView);
+		initialize(parentContentPane);
 		
 		btnNotifications.setText("Notifications (" + Integer.toString(menuNotifications.getComponentCount()) + ")");
 		
@@ -109,9 +109,8 @@ public class CalendarView extends JPanel{
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize(JPanel parentContentPane, EditView editView) {
+	private void initialize(JPanel parentContentPane) {
 		_parentContentPane 	= parentContentPane;
-		_editView 				= editView;
 	
 		this.setBorder(new EmptyBorder(5,5,5,5));
 		this.setBackground(new Color(153, 190, 255));
@@ -479,4 +478,7 @@ public class CalendarView extends JPanel{
 		bottomRightPanel.add(lbl_24, gbc_label_5);
 		
 	}
+	//--------------------------------------------------------------------------
+	public void setEditView(EditView editView)
+		{ _editView = editView; }
 }
