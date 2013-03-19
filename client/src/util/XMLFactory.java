@@ -51,7 +51,7 @@ public class XMLFactory {
 	public String makeAlarmXML(Alarm a){
 		String aID = a.getEmployeeEmail() + "¤" + a.getAppointmentID();
 		ArrayList<String> alarmInfo = makeStringArray(aID, a.getTime(), a.getDescription());
-		createNewObject("invitation");
+		createNewObject("alarm");
 		addChild(alarmInfo, "alarmID", "date", "description");
 		return getXML();
 	}
