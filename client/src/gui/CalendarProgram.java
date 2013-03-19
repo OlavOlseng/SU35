@@ -49,9 +49,9 @@ public class CalendarProgram {
 		Appointment appointment1 = new Appointment(0);
 
 		appointment1.setTitle("Moete");
-		appointment1.setDate("22-03-13");
-		appointment1.setStartTime("14:00:00");
-		appointment1.setEndTime("15:00:00");
+		appointment1.setDate("2013-03-22");
+		appointment1.setStartTime("14:00");
+		appointment1.setEndTime("15:00");
 		appointment1.setDescription("Et moete der vi tar opp aktuelle " +
 				"spoersmaal angaaende fellesprosjektet.");
 		appointment1.setLocation("Room K1");
@@ -64,9 +64,9 @@ public class CalendarProgram {
 		Appointment appointment2 = new Appointment(1);
 
 		appointment2.setTitle("Moete");
-		appointment2.setDate("12-04-13");
-		appointment2.setStartTime("16:00:00");
-		appointment2.setEndTime("18:00:00");
+		appointment2.setDate("2013-04-12");
+		appointment2.setStartTime("16:00");
+		appointment2.setEndTime("18:00");
 		appointment2.setDescription("Et moete der vi tar opp aktuelle " +
 				"spoersmaal angaaende ulike problemstillinger.");
 		appointment2.setLocation("Room K2");

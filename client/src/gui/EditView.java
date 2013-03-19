@@ -177,7 +177,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		
 		
 		JLabel dateLabel = new JLabel("Date:");
-		dateLabel.setToolTipText("Enter date in the format: DD-MM-YYYY");
+		dateLabel.setToolTipText("Enter date in the format: YYYY-MM-DD");
 		GridBagConstraints gbc_dateLabel = new GridBagConstraints();
 		gbc_dateLabel.anchor = GridBagConstraints.EAST;
 		gbc_dateLabel.insets = new Insets(0, 0, 5, 5);
