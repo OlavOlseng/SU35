@@ -43,16 +43,14 @@ public class CalendarView extends JPanel{
 	private JTextArea textAreaInfo;
 	private JLabel lblWeek, lblMonday, lblTuesday, lblWednesday, lblThursday, lblFriday, lblSaturday, lblSunday, lbl_00, lbl_06, lbl_12, lbl_18, lbl_24;
 	private JPopupMenu menuNotifications, menuCalendars;
-	private ArrayList<JButton> buttonList;
-	private int indexOfSelectedButton;
+	//private ArrayList<JButton> buttonList;
+	//private int indexOfSelectedButton;
 	private EditView _editView;
 	private InfoView _infoView;
-	private int selectedWeek = Calendar.getInstance().WEEK_OF_YEAR;
+	private static int selectedWeek = Calendar.getInstance().WEEK_OF_YEAR;
 	private int appointmentID;
+	private ArrayList<String> selectedUsers = new ArrayList<String>();
 	
-	/**
-	 * Launch the application.
-	 */
 /*	public static void main(String[] args) {
 		
 		
@@ -64,66 +62,66 @@ public class CalendarView extends JPanel{
 		frame.setVisible(true);
 	}
 */
-	/**
-	 * Create the application.
-	 */
 	public CalendarView(JPanel parentContentPane) {
 		initialize(parentContentPane);
 		updateInfo();
+	}
+	
+	private void initialize(JPanel parentContentPane) {
+		_parentContentPane 	= parentContentPane;
+		paintGUI();
 	}
 	
 	public void updateInfo() {
 		btnNotifications.setText("Notifications (" + Integer.toString(menuNotifications.getComponentCount()) + ")");
 		
 		//Finds the appointments for the logged in user
-		buttonList = new ArrayList<JButton>();
+		//buttonList = new ArrayList<JButton>();
 		ArrayList<Appointment> appointmentsForUser = new ArrayList<Appointment>();
 		appointmentsForUser = ApplicationModel.getInstance().getAppointmentsForUser(CalendarProgram.loggedInUser);
-		System.out.println(appointmentsForUser);
 		for (Appointment app : appointmentsForUser) {
-			CustomCalendarButton button = new CustomCalendarButton();
-			button.keyOfRelatedAppointment = app.getAppointmentID();
-			buttonList.add(button);
-			buttonList.get(buttonList.size()-1).setLayout(new BorderLayout());
-			JLabel label1 = new JLabel(app.getTitle());
-			JLabel label2 = new JLabel(app.getFormattedStartTime().toString());
-			JLabel label3 = new JLabel(app.getFormattedEndTime().toString());
-			buttonList.get(buttonList.size()-1).add(BorderLayout.NORTH,label1);
-			buttonList.get(buttonList.size()-1).add(BorderLayout.CENTER,label2);
-			buttonList.get(buttonList.size()-1).add(BorderLayout.SOUTH,label3);
-			buttonList.get(buttonList.size()-1).addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					indexOfSelectedButton = buttonList.indexOf(e.getSource());
-					CustomCalendarButton tempButton = (CustomCalendarButton) e.getSource();
-					Appointment tempAppointment = ApplicationModel.getInstance().getAppointment(tempButton.keyOfRelatedAppointment);
-					appointmentID = tempButton.keyOfRelatedAppointment;
-					textAreaInfo.setText("Owner:\n" + tempAppointment.getMeetingLeader() + "\n\nDescription:\n" +
-							tempAppointment.getDescription() + "\n\nStart:\n" + tempAppointment.getFormattedStartTime()
-							+ "\n\nEnd:\n" + tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation());
-					btnMore.setEnabled(true);
-					if (ApplicationModel.getInstance().username == tempAppointment.getMeetingLeader()) {
-						btnEdit.setEnabled(true);
+			if (app.getDate().WEEK_OF_YEAR == selectedWeek) {
+				CustomCalendarButton button = new CustomCalendarButton();
+				button.keyOfRelatedAppointment = app.getAppointmentID();
+				//buttonList.add(button);
+				button.setLayout(new BorderLayout());
+				JLabel label1 = new JLabel(app.getTitle());
+				JLabel label2 = new JLabel(app.getFormattedStartTime().toString());
+				JLabel label3 = new JLabel(app.getFormattedEndTime().toString());
+				button.add(BorderLayout.NORTH,label1);
+				button.add(BorderLayout.CENTER,label2);
+				button.add(BorderLayout.SOUTH,label3);
+				button.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						//indexOfSelectedButton = buttonList.indexOf(e.getSource());
+						CustomCalendarButton tempButton = (CustomCalendarButton) e.getSource();
+						Appointment tempAppointment = ApplicationModel.getInstance().getAppointment(tempButton.keyOfRelatedAppointment);
+						appointmentID = tempButton.keyOfRelatedAppointment;
+						textAreaInfo.setText("Owner:\n" + tempAppointment.getMeetingLeader() + "\n\nDescription:\n" +
+								tempAppointment.getDescription() + "\n\nStart:\n" + tempAppointment.getFormattedStartTime()
+								+ "\n\nEnd:\n" + tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation());
+						btnMore.setEnabled(true);
+						if (CalendarProgram.loggedInUser.equals(tempAppointment.getMeetingLeader())) {
+							btnEdit.setEnabled(true);
+						}
 					}
-				}
-			});
-			GridBagConstraints gbc_btnAppointment = new GridBagConstraints();
-			gbc_btnAppointment.fill = GridBagConstraints.VERTICAL;
-			//System.out.println(app.getDate().getTime().getDay());
-			gbc_btnAppointment.gridx = app.getDate().getTime().getDay() - 1;
-			//System.out.println(app.getStartTime().getTime().getHours());
-			gbc_btnAppointment.gridy = app.getStartTime().getTime().getHours();
-			//System.out.println(app.getEndTime().getTime().getHours() - app.getStartTime().getTime().getHours());
-			gbc_btnAppointment.gridheight = app.getEndTime().getTime().getHours() - app.getStartTime().getTime().getHours();
-			calendarPanel.add(button, gbc_btnAppointment);
+				});
+				GridBagConstraints gbc_btnAppointment = new GridBagConstraints();
+				gbc_btnAppointment.fill = GridBagConstraints.VERTICAL;
+				//System.out.println(app.getDate().getTime().getDay());
+				gbc_btnAppointment.gridx = app.getDate().getTime().getDay() - 1;
+				//System.out.println(app.getStartTime().getTime().getHours());
+				gbc_btnAppointment.gridy = app.getStartTime().getTime().getHours();
+				//System.out.println(app.getEndTime().getTime().getHours() - app.getStartTime().getTime().getHours());
+				gbc_btnAppointment.gridheight = app.getEndTime().getTime().getHours() - app.getStartTime().getTime().getHours();
+				calendarPanel.add(button, gbc_btnAppointment);
+			}
 		}
+		lblWeek.setText("Week: " + selectedWeek);
 	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize(JPanel parentContentPane) {
-		_parentContentPane 	= parentContentPane;
 	
+	private void paintGUI() {
+		this.removeAll();
 		this.setBorder(new EmptyBorder(5,5,5,5));
 		this.setBackground(new Color(153, 190, 255));
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -220,6 +218,9 @@ public class CalendarView extends JPanel{
 				if (gotoDialog.getAnswer() == 1) {
 					//System.out.println(gotoDialog.getWeek());
 					//Update CalendarView with week from gotoDialog.getWeek()
+					selectedWeek = Integer.parseInt(gotoDialog.getWeek());
+					paintGUI();
+					updateInfo();
 				}
 				else if (gotoDialog.getAnswer() == 2) {
 					//System.out.println(gotoDialog.getDate());
@@ -289,6 +290,7 @@ public class CalendarView extends JPanel{
 		bottomLeftPanel.setLayout(gbl_bottomLeftPanel);
 		
 		textAreaInfo = new JTextArea();
+		textAreaInfo.setLineWrap(true);
 		textAreaInfo.setEditable(false);
 		textAreaInfo.setRows(19);
 		//textAreaInfo.setText("Info:");
@@ -326,7 +328,7 @@ public class CalendarView extends JPanel{
 				//Open EditView
 				//We will call intialize with the appointmentID as a parameter.
 				//The number 1 is for testing purposes
-				_editView.initialize(1);
+				_editView.initialize(appointmentID);
 				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
 				c1.show(_parentContentPane, "Edit View");
 			}
@@ -357,6 +359,9 @@ public class CalendarView extends JPanel{
 		btnPreviousWeek.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//Load previous week in calendar
+				selectedWeek--;
+				paintGUI();
+				updateInfo();
 			}
 		});
 		GridBagConstraints gbc_btnPreviousWeek = new GridBagConstraints();
@@ -379,6 +384,9 @@ public class CalendarView extends JPanel{
 		btnNextWeek.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//Load next week in calendar
+				selectedWeek++;
+				paintGUI();
+				updateInfo();
 			}
 		});
 		GridBagConstraints gbc_btnNextWeek = new GridBagConstraints();
@@ -490,8 +498,8 @@ public class CalendarView extends JPanel{
 		gbc_label_5.gridx = 0;
 		gbc_label_5.gridy = 6;
 		bottomRightPanel.add(lbl_24, gbc_label_5);
-		
 	}
+	
 	//--------------------------------------------------------------------------
 	public void setEditView(EditView editView)
 		{ _editView = editView; }

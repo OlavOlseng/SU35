@@ -56,7 +56,7 @@ public class CalendarProgram {
 				"spoersmaal angaaende fellesprosjektet.");
 		appointment1.setLocation("Room K1");
 		appointment1.setMeetingRoom("Room K1");
-		appointment1.setMeetingLeader("Kenneth Lund");
+		appointment1.setMeetingLeader("kenneth@ntnu.no");
 		
 		ApplicationModel.getInstance().addAppointment(appointment1.getAppointmentID(), appointment1);
 		
@@ -71,7 +71,7 @@ public class CalendarProgram {
 				"spoersmaal angaaende ulike problemstillinger.");
 		appointment2.setLocation("Room K2");
 		appointment2.setMeetingRoom("Room K2");
-		appointment2.setMeetingLeader("Sindre Magnussen");
+		appointment2.setMeetingLeader("sindre@ntnu.no");
 		
 		ApplicationModel.getInstance().addAppointment(appointment2.getAppointmentID(), appointment2);
 		
