@@ -25,8 +25,10 @@ import javax.swing.JCheckBox;
 import javax.swing.JTextArea;
 import javax.swing.JRadioButton;
 
-public class InfoView extends JPanel/*JFrame*/ {
+import models.Appointment;
 
+public class InfoView extends JPanel/*JFrame*/ 
+	{
 	private JPanel _parentContentPane;
 	private JTextField ownerField;
 	private JTextField titleField;
@@ -345,5 +347,21 @@ public class InfoView extends JPanel/*JFrame*/ {
 		buttonGroup.add(attendRadioButton);
 		buttonGroup.add(declineRadioButon);
 	}
-
+	//--------------------------------------------------------------------------
+	//Here we initialize the different fields, lists and so on.
+	public void intitialize(int appointmentId)
+		{ 
+		Appointment appointment = 
+				CalendarProgram.getModel().getAppointment(appointmentId);
+		
+		ownerField.setText(appointment.getMeetingLeader());
+		titleField.setText(appointment.getTitle());
+		dateField.setText(appointment.getFormattedDate());
+		locationField.setText(appointment.getLocation());
+		alarmField.setText(CalendarProgram.getModel().getAlarm(
+				CalendarProgram.loggedInUser, appointmentId).getTime());
+		
+		//TODO: Receive usernames/emails from attending, declined and not
+		// answered employees
+		}
 }
