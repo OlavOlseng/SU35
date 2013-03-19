@@ -10,7 +10,6 @@ public class ModelTest {
 		client.connect();
 		Scanner scanner = new Scanner(System.in);
 		String command = null;
-		ApplicationModel app = ApplicationModel.getInstance();
 		boolean exit = false;
 		do {
 			command = scanner.nextLine();
@@ -82,6 +81,60 @@ public class ModelTest {
 					System.out.print("Appointment ID: ");
 					String ID = scanner.nextLine();
 					client.sendAlarmDeletion(email, ID);
+				} break;
+				case "CREATE_APPOINTMENT": {
+					System.out.print("Appointment ID: ");
+					int ID = Integer.parseInt(scanner.nextLine());
+					System.out.print("Appointment title: ");
+					String title = scanner.nextLine();
+					System.out.print("Appointment date: ");
+					String date = scanner.nextLine();
+					System.out.print("Appointment start time: ");
+					String startTime = scanner.nextLine();
+					System.out.print("Appointment end time: ");
+					String endTime = scanner.nextLine();
+					System.out.print("Appointment description: ");
+					String description = scanner.nextLine();
+					System.out.print("Appointment location: ");
+					String location = scanner.nextLine();
+					System.out.print("Appointment meeting leader: ");
+					String leader = scanner.nextLine();
+					System.out.print("Appointment meeting room: ");
+					String room = scanner.nextLine();
+					Appointment appointment = new Appointment(ID);
+					appointment.setTitle(title);
+					appointment.setDate(date);
+					appointment.setStartTime(startTime);
+					appointment.setEndTime(endTime);
+					appointment.setDescription(description);
+					appointment.setLocation(location);
+					appointment.setMeetingLeader(leader);
+					appointment.setMeetingRoom(room);
+					client.sendAppointmentCreation(appointment);
+				} break;
+				case "CREATE_INVITATION": {
+					System.out.print("Employee email: ");
+					String email = scanner.nextLine();
+					System.out.print("Appointment ID: ");
+					int ID = Integer.parseInt(scanner.nextLine());
+					System.out.print("Invitation answer: ");
+					String answer = scanner.nextLine();
+					System.out.print("Invitation message: ");
+					String message = scanner.nextLine();
+					Invitation invitation = new Invitation(email, ID);
+					switch(answer) {
+						case "ACCEPTED": {
+							invitation.setAnswer(Invitation.Answer.ACCEPTED);
+						} break;
+						case "DECLINED": {
+							invitation.setAnswer(Invitation.Answer.DECLINED);
+						} break;
+						default: {
+							invitation.setAnswer(Invitation.Answer.PENDING);
+						} break;
+					}
+					invitation.setMessage(message);
+					client.sendInvitationCreation(invitation);
 				} break;
 				case "CREATE_ALARM": {
 					System.out.print("Employee email: ");
@@ -187,14 +240,40 @@ public class ModelTest {
 					alarm.setDescription(description);
 					client.sendAlarmUpdate(alarm);
 				} break;
+				case "SHOW_EMPLOYEE": {
+					System.out.print("Employee email: ");
+					String email = scanner.nextLine();
+					Employee employee = ApplicationModel.getInstance().getEmployee(email);
+					System.out.println(employee.toString());
+				} break;
+				case "SHOW_APPOINTMENT": {
+					System.out.print("Appointment ID: ");
+					int ID = Integer.parseInt(scanner.nextLine());
+					Appointment appointment = ApplicationModel.getInstance().getAppointment(ID);
+					System.out.println(appointment.toString());
+				} break;
+				case "SHOW_INVITATION": {
+					System.out.print("Employee email: ");
+					String email = scanner.nextLine();
+					System.out.print("Appointment ID: ");
+					int ID = Integer.parseInt(scanner.nextLine());
+					Invitation invitation = ApplicationModel.getInstance().getInvitation(email,ID);
+					System.out.println(invitation.toString());
+				} break;
+				case "SHOW_ROOM": {
+					System.out.print("Room name: ");
+					String name = scanner.nextLine();
+					Room room = ApplicationModel.getInstance().getRoom(name);
+					System.out.println(room.toString());
+				} break;
 				case "SHOW_ALARM": {
 					System.out.print("Employee email: ");
 					String email = scanner.nextLine();
 					System.out.print("Appointment ID: ");
 					int ID = Integer.parseInt(scanner.nextLine());
-					Alarm alarm = app.getAlarm(email, ID);
+					Alarm alarm = ApplicationModel.getInstance().getAlarm(email, ID);
 					System.out.println(alarm.toString());
-				}
+				} break;
 				default: {
 					System.err.println("UNKNOWN COMMAND");
 				} break;
