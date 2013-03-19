@@ -17,6 +17,13 @@ public class ModelTest {
 				case "EXIT": {
 					exit = true;
 				} break;
+				case "LOGIN": {
+					System.out.print("Username: ");
+					String username = scanner.nextLine();
+					System.out.print("Password: ");
+					String password = scanner.nextLine();
+					client.sendLoginQuery(username, password);
+				} break;
 				case "GET_EMPLOYEE": {
 					System.out.print("Employee email: ");
 					String email = scanner.nextLine();
@@ -273,6 +280,9 @@ public class ModelTest {
 					int ID = Integer.parseInt(scanner.nextLine());
 					Alarm alarm = ApplicationModel.getInstance().getAlarm(email, ID);
 					System.out.println(alarm.toString());
+				} break;
+				case "SHOW_KEYS": {
+					System.out.println(ApplicationModel.getInstance().listKeys());
 				} break;
 				default: {
 					System.err.println("UNKNOWN COMMAND");

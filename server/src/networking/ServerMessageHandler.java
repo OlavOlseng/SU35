@@ -418,9 +418,12 @@ public class ServerMessageHandler extends MessageHandler{
 			String message = inv.getMessage();
 		
 			String sql = String.format("UPDATE invitation SET accepted='%d', message='%s' WHERE employee_email='%s' AND appointment_ID='%d'", accepted, message, emp_email, appID);
-			conn.makeSingleUpdate(sql);
-			error = false;
-			errorMsg = null;
+			int i = conn.makeSingleUpdate(sql);
+			if (i != -1) {
+				
+				error = false;
+				errorMsg = null;
+			}
 
 		} catch (SQLException | ParsingException | IOException e) {
 			e.printStackTrace();
@@ -452,11 +455,14 @@ public class ServerMessageHandler extends MessageHandler{
 			String meetingLeader = app.getMeetingLeader();
 
 			String sql = String.format
-					("UPDATE appointment SET title='%s', date='%s', starttime='%s', endttime='%s', description='%s', place='%s', meetingleader='%s', room_name ='%s%  WHERE ID='%d'", 
+					("UPDATE appointment SET title='%s', date='%s', starttime='%s', endtime='%s', description='%s', place='%s', meetingleader='%s', room_name ='%s' WHERE ID=%d", 
 							title, date, startTime, endTime, desc, location, meetingLeader, meetingRoom, appID);
-			conn.makeSingleUpdate(sql);
-			error = false;
-			errorMsg = null;
+			int i = conn.makeSingleUpdate(sql);
+			if (i < 1) {
+				
+				error = false;
+				errorMsg = null;
+			}
 
 		} catch (SQLException | ParsingException | IOException e) {
 			e.printStackTrace();
@@ -483,9 +489,12 @@ public class ServerMessageHandler extends MessageHandler{
 			String desc = al.getDescription();
 
 			String sql = String.format("UPDATE alarm SET time='%s', description='%s' WHERE employee_email='%s' AND appointment_ID='%d'", time, desc, empEmail, appID);
-			conn.makeSingleUpdate(sql);
-			error = false;
-			errorMsg = null;
+			int i = conn.makeSingleUpdate(sql);
+			if (i < 1) {
+				
+				error = false;
+				errorMsg = "No matching entry found...";
+			}
 
 		} catch (SQLException | ParsingException | IOException e) {
 			e.printStackTrace();
@@ -500,10 +509,13 @@ public class ServerMessageHandler extends MessageHandler{
 
 	@Override
 	public void makeBatchUpdate(String[] data) {
-		// TODO Auto-generated method stub
 
 	}
 
+	//UPDATE CODE END
+	
+	//CREATE CODE BEGIN
+	
 	@Override
 	public void createEntry(String[] data) {
 		if (data.length < 4) {
@@ -516,14 +528,14 @@ public class ServerMessageHandler extends MessageHandler{
 
 		switch(what) {
 		case(SBPFactory.OPTION_APPOINTMENT):
-			response = updateAppointment(data);
+			response = createAppointment(data);
 			break;
 		case(SBPFactory.OPTION_INVITATION):
-			response = updateInvitation(data);
+			response = createInvitation(data);
 			break;
 		case(SBPFactory.OPTION_ALARM):
 			response = createAlarm(data);
-		broadcast = false;
+			broadcast = false;
 		break;
 		default:
 			response.add(msgFactory.createMessage(MessageType.ERROR, true, "No matching command found", data[3], null));
@@ -540,7 +552,80 @@ public class ServerMessageHandler extends MessageHandler{
 			e1.printStackTrace();
 		}
 	}
+	
+	public ArrayList<String> createAppointment(String[] data) {
+		ArrayList<String> response = new ArrayList<String>();
+		boolean error = true;
+		String errorMsg = "Unknown error...";
 
+		try {
+
+			Document d = xmlAssembler.getDocument(data[4]);
+			Appointment app = xmlAssembler.assembleAppointment(d.getRootElement());
+			
+			String date = app.getFormattedDate();
+			String startTime = app.getFormattedStartTime();
+			String endTime = app.getFormattedEndTime();
+			String title = app.getTitle();
+			String desc = app.getDescription();
+			String location = app.getLocation();
+			String meetingRoom = app.getMeetingRoom();
+			String meetingLeader = app.getMeetingLeader();
+			
+			int id = (int)(System.currentTimeMillis());
+			
+			String sql = String.format("INSERT INTO appointment VALUES (%d,'%s','%s','%s','%s','%s','%s','%s','%s')", 
+					id, title, date, startTime, endTime, desc, location, meetingLeader, meetingRoom);
+			conn.makeSingleUpdate(sql);
+			app.setAppointmentID(id);
+			data[4] = xmlFactory.makeAppointmentXML(app);
+			
+			error = false;
+			errorMsg = null;
+			
+		} catch (SQLException | ParsingException | IOException e) {
+			e.printStackTrace();
+			error = true;
+			errorMsg = e.getMessage();
+		} finally {
+			response.add(msgFactory.createMessage(MessageType.CREATE, error, errorMsg, data[3], data[4]));
+		}
+		return response;
+	}
+	
+
+	
+	public ArrayList<String> createInvitation(String[] data) {
+		ArrayList<String> response = new ArrayList<String>();
+		boolean error = true;
+		String errorMsg = "Unknown error...";
+
+		try {
+
+			Document d = xmlAssembler.getDocument(data[4]);
+			Invitation inv = xmlAssembler.assembleInvitation(d.getRootElement());
+			
+			int accepted = -1;
+			int appID = inv.getAppointmentID();
+			String emp_email = inv.getEmployeeEmail();
+			String message = inv.getMessage();
+			
+			String sql = String.format("INSERT INTO invitation VALUES ('%s',%d, %d,'%s')", emp_email, appID, accepted, message);
+			conn.makeSingleUpdate(sql);
+			error = false;
+			errorMsg = null;
+			
+		} catch (SQLException | ParsingException | IOException e) {
+			e.printStackTrace();
+			error = true;
+			errorMsg = e.getMessage();
+		} finally {
+			response.add(msgFactory.createMessage(MessageType.CREATE, error, errorMsg, data[3], data[4]));
+		}
+
+		return response;
+	}
+	
 	public ArrayList<String> createAlarm(String[] data) {
 		ArrayList<String> response = new ArrayList<String>();
 		boolean error = true;
@@ -560,6 +645,7 @@ public class ServerMessageHandler extends MessageHandler{
 			conn.makeSingleUpdate(sql);
 			error = false;
 			errorMsg = null;
+			
 		} catch (SQLException | ParsingException | IOException e) {
 			e.printStackTrace();
 			error = true;
@@ -573,7 +659,6 @@ public class ServerMessageHandler extends MessageHandler{
 
 	@Override
 	public void deleteEntry(String[] data) {
-		// TODO Auto-generated method stub
 		if (data.length < 4) {
 			data[3] = "error";
 		}
@@ -584,12 +669,10 @@ public class ServerMessageHandler extends MessageHandler{
 
 		switch(what) {
 		case(SBPFactory.OPTION_APPOINTMENT):
-			//TODO implement
-			//			response = deleteAppointment(data);
+				response = deleteAppointment(data);
 			break;
 		case(SBPFactory.OPTION_INVITATION):
-			//TODO implement
-			//			response = deleteInvitation(data);
+				response = deleteInvitation(data);
 			break;
 		case(SBPFactory.OPTION_ALARM):
 			response = deleteAlarm(data);
@@ -611,6 +694,60 @@ public class ServerMessageHandler extends MessageHandler{
 		}
 	}
 
+	
+	public ArrayList<String> deleteAppointment(String[] data) {
+		ArrayList<String> response = new ArrayList<String>();
+		boolean error = true;
+		String errorMsg = "Unknown error...";
+
+		try {
+			Document d = xmlAssembler.getDocument(data[4]);
+			Appointment app = xmlAssembler.assembleAppointment(d.getRootElement());
+
+			int appID = app.getAppointmentID();
+
+			String sql = String.format("DELETE FROM appointment WHERE ID='%d'", appID);
+			conn.makeSingleUpdate(sql);
+			error = false;
+			errorMsg = null;
+
+		} catch (SQLException | ParsingException | IOException e) {
+			e.printStackTrace();
+			error = true;
+			errorMsg = e.getMessage();
+		} finally {
+			response.add(msgFactory.createMessage(MessageType.DELETE, error, errorMsg, data[3], data[4]));
+		}
+		return response;
+	}
+	
+	public ArrayList<String> deleteInvitation(String[] data) {
+		ArrayList<String> response = new ArrayList<String>();
+		boolean error = true;
+		String errorMsg = "Unknown error...";
+
+		try {
+			Document d = xmlAssembler.getDocument(data[4]);
+			Invitation inv = xmlAssembler.assembleInvitation(d.getRootElement());
+
+			int appID = inv.getAppointmentID();
+			String empEmail = inv.getEmployeeEmail();
+
+			String sql = String.format("DELETE FROM invitation WHERE employee_email='%s' AND appointment_ID='%d'", empEmail, appID);
+			conn.makeSingleUpdate(sql);
+			error = false;
+			errorMsg = null;
+
+		} catch (SQLException | ParsingException | IOException e) {
+			e.printStackTrace();
+			error = true;
+			errorMsg = e.getMessage();
+		} finally {
+			response.add(msgFactory.createMessage(MessageType.DELETE, error, errorMsg, data[3], data[4]));
+		}
+		return response;
+	}
+	
 	public ArrayList<String> deleteAlarm(String[] data) {
 		ArrayList<String> response = new ArrayList<String>();
 		boolean error = true;
@@ -659,7 +796,7 @@ public class ServerMessageHandler extends MessageHandler{
 			e.printStackTrace();
 		}
 		finally{
-			response = msgFactory.createMessage(MessageType.LOGIN, error, errorMsg, data[3], null);
+			response = msgFactory.createMessage(MessageType.LOGIN, error, errorMsg, data[3], msg[0]);
 		}
 		try {
 			bridge.send(response);

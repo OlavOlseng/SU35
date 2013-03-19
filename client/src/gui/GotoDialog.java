@@ -99,7 +99,7 @@ public class GotoDialog extends JDialog implements ActionListener{
 			contentPanel.add(btnGo1, gbc_btnGo1);
 		}
 		{
-			JLabel lblDate = new JLabel("Date:");
+			JLabel lblDate = new JLabel("Date: YYYY-MM-DD");
 			GridBagConstraints gbc_lblDate = new GridBagConstraints();
 			gbc_lblDate.insets = new Insets(0, 0, 0, 5);
 			gbc_lblDate.anchor = GridBagConstraints.EAST;

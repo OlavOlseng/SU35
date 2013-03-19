@@ -47,7 +47,8 @@ public class CalendarView extends JPanel{
 	//private int indexOfSelectedButton;
 	private EditView _editView;
 	private InfoView _infoView;
-	private static int selectedWeek = Calendar.getInstance().WEEK_OF_YEAR;
+	private int selectedWeek = Calendar.getInstance().WEEK_OF_YEAR;
+	private Calendar selectedDate = Calendar.getInstance();
 	private int appointmentID;
 	private ArrayList<String> selectedUsers = new ArrayList<String>();
 	
@@ -224,7 +225,18 @@ public class CalendarView extends JPanel{
 				}
 				else if (gotoDialog.getAnswer() == 2) {
 					//System.out.println(gotoDialog.getDate());
-					//Update CalendarView with week from gotoDialog.getWeek()
+					//Update CalendarView with week from gotoDialog.getDate()
+					String date = gotoDialog.getDate();
+					String[] temp = date.split("-");
+					System.out.println(temp[0]+temp[1]+temp[2]);
+					selectedDate.set(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]), Integer.parseInt(temp[2]));
+					selectedWeek = selectedDate.WEEK_OF_YEAR;
+					System.out.println(selectedWeek);
+					paintGUI();
+					updateInfo();
+					
+					//String[] temp = dateString.split("-");
+					//setDate(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]), Integer.parseInt(temp[2]));
 				}
 			}
 		});
