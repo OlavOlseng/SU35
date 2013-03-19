@@ -1,11 +1,15 @@
 package networking;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.nio.CharBuffer;
 
 public class Connection {
 
@@ -19,6 +23,11 @@ public class Connection {
 			this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			this.out = new PrintWriter(socket.getOutputStream(),true);
 		}
+		
+		BufferedOutputStream bos = new BufferedOutputStream(socket.getOutputStream());
+		BufferedInputStream bis = new BufferedInputStream(socket.getInputStream());
+		BufferedWriter bw = new BufferedWriter(out);
+		InputStreamReader r = new InputStreamReader(socket.getInputStream());
 	}
 	
 	public InetAddress getRemoteAddress() {
@@ -33,7 +42,7 @@ public class Connection {
 	
 	public void send(String msg) throws IOException {
 		if(socket.isBound())
-			out.println(msg);
+			out.println(msg +'£');
 	}
 
 	public void close() throws IOException {
@@ -42,7 +51,14 @@ public class Connection {
 	}
 
 	public String receive() throws IOException {
-		String	msg = in.readLine();
+		char c = 0;
+		String msg = "";
+		while(true) {
+			c = (char) in.read();
+			if (c == '£')
+				break;
+			msg += c;
+		}
 		return msg;
 	}
 	
