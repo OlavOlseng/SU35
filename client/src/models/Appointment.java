@@ -68,14 +68,17 @@ public class Appointment {
 	
 	private void setDate(int year, int month, int day) {
 		Calendar temp = this.date;
-		date.set(year, month-1, day, 0, 0, 0);
+		date.set(Calendar.YEAR, year);
+		date.set(Calendar.MONTH, month);
+		date.set(Calendar.DAY_OF_MONTH, day);
+		
 		pcs.firePropertyChange(APPOINTMENT_DATE_PROPERTY, temp, this.date);
-		temp = this.startTime;
-		startTime.set(year, month-1, day);
-		pcs.firePropertyChange(APPOINTMENT_STARTTIME_PROPERTY, temp, this.startTime);
-		temp = this.endTime;
-		endTime.set(year, month-1, day);
-		pcs.firePropertyChange(APPOINTMENT_ENDTIME_PROPERTY, temp, this.endTime);
+//		temp = this.startTime;
+//		startTime.set(year, month-1, day);
+//		pcs.firePropertyChange(APPOINTMENT_STARTTIME_PROPERTY, temp, this.startTime);
+//		temp = this.endTime;
+//		endTime.set(year, month-1, day);
+//		pcs.firePropertyChange(APPOINTMENT_ENDTIME_PROPERTY, temp, this.endTime);
 	}
 
 	public void setDate(String dateString) {
