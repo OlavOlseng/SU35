@@ -386,7 +386,7 @@ public class InfoView extends JPanel implements ModelListener
 		//If this user is not the same user who created this appointment, then
 		// he will not be able to edit this appointment. We therefore deactivate
 		// the editButton button
-		if(!CalendarProgram.username.equals(appointment.getMeetingLeader()))
+		if(!ApplicationModel.getInstance().username.equals(appointment.getMeetingLeader()))
 			{ editButton.setEnabled(false); }
 		//TODO: Receive usernames/emails from attending, declined and not
 		// answered employees

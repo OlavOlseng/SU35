@@ -56,7 +56,7 @@ public class CalendarView extends JPanel implements ModelListener{
 	//private int indexOfSelectedButton;
 	private EditView _editView;
 	private InfoView _infoView;
-	private int selectedWeek = Calendar.getInstance().WEEK_OF_YEAR;
+	private int selectedWeek = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR);
 	private Calendar selectedDate = Calendar.getInstance();
 	private int appointmentID;
 	private ArrayList<String> selectedUsers = new ArrayList<String>();
@@ -101,7 +101,7 @@ public class CalendarView extends JPanel implements ModelListener{
 		ArrayList<Appointment> appointmentsForUser = new ArrayList<Appointment>();
 		appointmentsForUser = ApplicationModel.getInstance().getAppointmentsForUser(ApplicationModel.getInstance().username);
 		for (Appointment app : appointmentsForUser) {
-			if (app.getDate().WEEK_OF_YEAR == selectedWeek) {
+			if (app.getDate().get(Calendar.WEEK_OF_YEAR) == selectedWeek) {
 				CustomCalendarButton button = new CustomCalendarButton();
 				button.keyOfRelatedAppointment = app.getAppointmentID();
 				//buttonList.add(button);
@@ -169,7 +169,7 @@ public class CalendarView extends JPanel implements ModelListener{
 			ArrayList<Appointment> appointmentsForOtherUsers = new ArrayList<Appointment>();
 			appointmentsForOtherUsers = ApplicationModel.getInstance().getAppointmentsForUser(email);
 			for (Appointment app : appointmentsForOtherUsers) {
-				if (app.getDate().WEEK_OF_YEAR == selectedWeek) {
+				if (app.getDate().get(Calendar.WEEK_OF_YEAR) == selectedWeek) {
 					CustomCalendarButton buttonOther = new CustomCalendarButton();
 					buttonOther.keyOfRelatedAppointment = app.getAppointmentID();
 					//buttonList.add(button);
@@ -328,8 +328,9 @@ public class CalendarView extends JPanel implements ModelListener{
 					String date = gotoDialog.getDate();
 					String[] temp = date.split("-");
 					//System.out.println(temp[0]+temp[1]+temp[2]);
-					selectedDate.set(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]), Integer.parseInt(temp[2]));
-					selectedWeek = selectedDate.WEEK_OF_YEAR;
+					selectedDate.set(Integer.parseInt(temp[0]), Integer.parseInt(temp[1])-1, Integer.parseInt(temp[2]));
+					System.out.println(selectedDate.toString());
+					selectedWeek = selectedDate.get(Calendar.WEEK_OF_YEAR);
 					//System.out.println(selectedWeek);
 					paintGUI();
 					updateInfo();
