@@ -399,7 +399,10 @@ public class EditView extends JPanel/*JFrame*/ {
 			
 			//We also need to fill the peopleList with employees
 			ArrayList<String> employeeList = 
-					ApplicationModel.getInstance().getEmployees();
+					ApplicationModel.getInstance().getEmployeesForApplication(
+							_appointmentId);
+			
+			System.out.println(employeeList);
 			
 //			for(String employee : employeeList)
 //				{
@@ -574,27 +577,10 @@ public class EditView extends JPanel/*JFrame*/ {
 			addPeopleMenu = new JPopupMenu();
 			JLabel addPeopleMenuLabel = new JLabel("Select people to add to appointment:");
 			addPeopleMenu.add(addPeopleMenuLabel);
-			addPeopleMenu.addSeparator();
+			addPeopleMenu.addSeparator();			
 			
-			
-			
-			
-			//Idea: We receive email addresses from database when we open
-			// application or when we open EditView and save these data in an
-			// array which we use when we add JMenuItems in the JPopupMenu.
-			// This should be put in a method
-			//For testing purposes:
-			String[] test = { "trtre", "tgsfs" };
-			
-			//Here
+			//Here we receive all the email addresses for the employees
 			ArrayList<String> emailAddresses = ApplicationModel.getInstance().getEmployees();
-//			String[] emailAddresses = ApplicationModel.getInstance().getEmployees();
-											/*{"fredrik@ntnu.no",
-												"olav@ntnu.no",
-												"yngve@ntnu.no",
-												"sindre@ntnu.no",
-												"august@ntnu.no",
-												"kenneth@ntnu.no"};*/
 			JMenuItem menuItem;
 			
 			
@@ -634,16 +620,7 @@ public class EditView extends JPanel/*JFrame*/ {
 						"All the fields for 'Date', 'Start' and 'End' have to be " +
 						"filled!", "Error message", 
 						JOptionPane.ERROR_MESSAGE);
-				}
-			
-//			if (bookRoomDialog.getAnswer() == 1) {
-//				//System.out.println(gotoDialog.getWeek());
-//				//Update CalendarView with week from gotoDialog.getWeek()
-//			}
-//			else if (bookRoomDialog.getAnswer() == 2) {
-//				//System.out.println(gotoDialog.getDate());
-//				//Update CalendarView with week from gotoDialog.getWeek()
-//			}
+				}			
 			}
 		}
 	//**************************************************************************
@@ -658,6 +635,7 @@ public class EditView extends JPanel/*JFrame*/ {
 				{ 
 				ApplicationModel.getInstance().deleteRoom(locationField.getText());
 				locationField.setText("");
+				locationField.setEnabled(true);
 				bookRoomButton.setEnabled(true);
 				unbookRoomButton.setEnabled(false);
 				
