@@ -27,6 +27,12 @@ public class ApplicationModel {
 		connection.connect();
 	}
 	
+	public void fetchData() {
+		connection.getAllAppointments();
+		connection.getAllEmployees();
+		connection.getAllRooms();
+	}
+	
 	// key = email
 	public void addEmployee(String key, Employee value){
 		if(employees.containsKey(key)) {

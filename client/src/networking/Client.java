@@ -88,6 +88,11 @@ public class Client implements MessageListener {
 		String msg = factory.makeGetMessage(SBPFactory.OPTION_EMPLOYEE, "all");
 		send(msg);
 	}
+	
+	public void getAllRooms() {
+		String msg = factory.makeGetMessage(SBPFactory.OPTION_ROOM, "all");
+		send(msg);
+	}
 	/*
 	 * QUERY THE SERVER FOR DATA
 	 */
