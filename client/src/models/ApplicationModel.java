@@ -149,7 +149,7 @@ public class ApplicationModel {
 	}
 	
 	public void createInvitation(Invitation value) {
-		if(appointment.containsKey(value.getEmployeeEmail()+"¤"+value.getAppointmentID())) {
+		if(invitations.containsKey(value.getEmployeeEmail()+"¤"+value.getAppointmentID())) {
 			connection.sendInvitationUpdate(value);
 		}
 		else {
