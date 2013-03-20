@@ -110,7 +110,8 @@ public class CalendarView extends JPanel{
 						appointmentID = tempButton.keyOfRelatedAppointment;
 						textAreaInfo.setText("Owner:\n" + tempAppointment.getMeetingLeader() + "\n\nDescription:\n" +
 								tempAppointment.getDescription() + "\n\nStart:\n" + tempAppointment.getFormattedStartTime()
-								+ "\n\nEnd:\n" + tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation());
+								+ "\n\nEnd:\n" + tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation()
+								+ "\n" + tempAppointment.getMeetingRoom());
 						btnMore.setEnabled(true);
 						if (CalendarProgram.loggedInUser.equals(tempAppointment.getMeetingLeader())) {
 							btnEdit.setEnabled(true);
@@ -152,7 +153,8 @@ public class CalendarView extends JPanel{
 							appointmentID = tempButton.keyOfRelatedAppointment;
 							textAreaInfo.setText("Owner:\n" + tempAppointment.getMeetingLeader() + "\n\nDescription:\n" +
 									tempAppointment.getDescription() + "\n\nStart:\n" + tempAppointment.getFormattedStartTime()
-									+ "\n\nEnd:\n" + tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation());
+									+ "\n\nEnd:\n" + tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation()
+									+ "\n" + tempAppointment.getMeetingRoom());
 							btnMore.setEnabled(true);
 							if (CalendarProgram.loggedInUser.equals(tempAppointment.getMeetingLeader())) {
 								btnEdit.setEnabled(true);
@@ -266,10 +268,10 @@ public class CalendarView extends JPanel{
 					//Update CalendarView with week from gotoDialog.getDate()
 					String date = gotoDialog.getDate();
 					String[] temp = date.split("-");
-					System.out.println(temp[0]+temp[1]+temp[2]);
+					//System.out.println(temp[0]+temp[1]+temp[2]);
 					selectedDate.set(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]), Integer.parseInt(temp[2]));
 					selectedWeek = selectedDate.WEEK_OF_YEAR;
-					System.out.println(selectedWeek);
+					//System.out.println(selectedWeek);
 					paintGUI();
 					updateInfo();
 				}
@@ -353,7 +355,7 @@ public class CalendarView extends JPanel{
 		btnMore.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//Open InfoView
-				System.out.println(appointmentID);
+				//System.out.println(appointmentID);
 				_infoView.initialize(appointmentID);
 				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
 				c1.show(_parentContentPane, "Info View");
@@ -609,11 +611,11 @@ public class CalendarView extends JPanel{
 			
 			//notifications = ApplicationModel.getInstance().getPendingAppointmentsForUser(CalendarProgram.loggedInUser);
 			
-			JMenuItem menuItem;
+			CustomJMenuItem menuItem;
 			
 			for(int i = 0; i < notifications.size(); i++) {
-				menuItem = new JMenuItem(Integer.toString(ApplicationModel.getInstance().getAppointment(i).getAppointmentID()));
-				menuItem.add(new JLabel("Invited to: " + ApplicationModel.getInstance().getAppointment(i).getTitle()));
+				menuItem = new CustomJMenuItem("Invited to: " + ApplicationModel.getInstance().getAppointment(i).getTitle());
+				menuItem.setAppID(ApplicationModel.getInstance().getAppointment(i).getAppointmentID());
 				menuNotifications.add(menuItem);
 				menuItem.addActionListener(new InvitationListener());
 			}
@@ -625,8 +627,8 @@ public class CalendarView extends JPanel{
 	
 	class InvitationListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
-			JMenuItem invitationItem = (JMenuItem)event.getSource();
-			int selectedInvitation = Integer.parseInt(invitationItem.getText());
+			CustomJMenuItem invitationItem = (CustomJMenuItem)event.getSource();
+			int selectedInvitation = invitationItem.getAppID();
 			
 			_infoView.initialize(selectedInvitation);
 			CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
