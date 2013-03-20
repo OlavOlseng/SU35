@@ -288,5 +288,18 @@ public class ApplicationModel {
 		keys += "\nCurrent user: " + username;
 		return keys;
 	}
+	
+	public ArrayList<Invitation> getInvitationsByAppointment(int appointmentID) {
+		ArrayList<Invitation> invites = new ArrayList<Invitation>();
+		ArrayList<String> keys = new ArrayList<String>(invitations.keySet());
+		
+		for(String s : keys) {
+			if(s.split("¤")[1] == Integer.toString(appointmentID)){
+				invites.add(invitations.get(s));
+			}
+		}
+		return invites;
+	}
+	
 }
 

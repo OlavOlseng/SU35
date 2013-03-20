@@ -38,7 +38,6 @@ public class ServerMessageHandler extends MessageHandler{
 		this.msgFactory = new SBPFactory();
 		this.xmlFactory = new XMLFactory();
 		this.xmlAssembler = new XMLAssembler();
-
 	}
 
 	@Override
@@ -96,11 +95,11 @@ public class ServerMessageHandler extends MessageHandler{
 
 		try {
 			String query = String.format("SELECT * FROM employee WHERE email='%s'", id);
-			
+
 			if(data[4].equals("all")) {
 				query = "SELECT * FROM employee";
 			} 
-			
+
 			ResultSet set = conn.makeSingleQuery(query);
 			employees = dbFactory.getEmployees(set);
 
@@ -133,7 +132,7 @@ public class ServerMessageHandler extends MessageHandler{
 		String payload = null;
 		ArrayList<String> response = new ArrayList<String>();
 		ArrayList<Appointment> apps = new ArrayList<Appointment>();
-		
+
 		String query = String.format("SELECT * FROM appointment WHERE ID='%s'", id);
 		if (id.equals("all")) {
 			query = "SELECT * FROM appointment";
@@ -166,12 +165,17 @@ public class ServerMessageHandler extends MessageHandler{
 	public ArrayList<String> getInvitation(String[] data) {
 		boolean error = true;
 		String errorMsg = "Unknown error...";
-		String ids[] = data[4].split("¤");
-		String payload = null;
 		ArrayList<String> response = new ArrayList<String>();
 		ArrayList<Invitation> invites = new ArrayList<Invitation>();
+		String query = "SELECT * FROM invitation";
+		
+		if(!data[4].equals("all")) {
+			String ids[] = data[4].split("¤");
+			query = String.format("SELECT * FROM invitation WHERE employee_email='%s' AND appointment_ID='%s'", ids[0], ids[1]);
+		}
+		
+		String payload = null;
 
-		String query = String.format("SELECT * FROM invitation WHERE employee_email='%s' AND appointment_ID='%s'", ids[0], ids[1]);
 		ResultSet set;
 
 		try {
@@ -419,16 +423,16 @@ public class ServerMessageHandler extends MessageHandler{
 		try {
 			Document d = xmlAssembler.getDocument(data[4]);
 			Invitation inv = xmlAssembler.assembleInvitation(d.getRootElement());
-			
+
 			int accepted = inv.getAnswer().getValue();
 			int appID = inv.getAppointmentID();
 			String emp_email = inv.getEmployeeEmail();
 			String message = inv.getMessage();
-		
+
 			String sql = String.format("UPDATE invitation SET accepted='%d', message='%s' WHERE employee_email='%s' AND appointment_ID='%d'", accepted, message, emp_email, appID);
 			int i = conn.makeSingleUpdate(sql);
 			if (i != -1) {
-				
+
 				error = false;
 				errorMsg = null;
 			}
@@ -442,7 +446,7 @@ public class ServerMessageHandler extends MessageHandler{
 		}
 		return response;	
 	}
-	
+
 	public ArrayList<String> updateAppointment(String[] data) {
 		ArrayList<String> response = new ArrayList<String>();
 		boolean error = true;
@@ -451,7 +455,7 @@ public class ServerMessageHandler extends MessageHandler{
 		try {
 			Document d = xmlAssembler.getDocument(data[4]);
 			Appointment app = xmlAssembler.assembleAppointment(d.getRootElement());
-			
+
 			int appID = app.getAppointmentID();
 			String date = app.getFormattedDate();
 			String startTime = app.getFormattedStartTime();
@@ -467,7 +471,7 @@ public class ServerMessageHandler extends MessageHandler{
 							title, date, startTime, endTime, desc, location, meetingLeader, meetingRoom, appID);
 			int i = conn.makeSingleUpdate(sql);
 			if (i < 1) {
-				
+
 				error = false;
 				errorMsg = null;
 			}
@@ -481,7 +485,7 @@ public class ServerMessageHandler extends MessageHandler{
 		}
 		return response;
 	}
-	
+
 	public ArrayList<String> updateAlarm(String[] data) {
 		ArrayList<String> response = new ArrayList<String>();
 		boolean error = true;
@@ -499,7 +503,7 @@ public class ServerMessageHandler extends MessageHandler{
 			String sql = String.format("UPDATE alarm SET time='%s', description='%s' WHERE employee_email='%s' AND appointment_ID='%d'", time, desc, empEmail, appID);
 			int i = conn.makeSingleUpdate(sql);
 			if (i < 1) {
-				
+
 				error = false;
 				errorMsg = "No matching entry found...";
 			}
@@ -521,9 +525,9 @@ public class ServerMessageHandler extends MessageHandler{
 	}
 
 	//UPDATE CODE END
-	
+
 	//CREATE CODE BEGIN
-	
+
 	@Override
 	public void createEntry(String[] data) {
 		if (data.length < 4) {
@@ -537,13 +541,13 @@ public class ServerMessageHandler extends MessageHandler{
 		switch(what) {
 		case(SBPFactory.OPTION_APPOINTMENT):
 			response = createAppointment(data);
-			break;
+		break;
 		case(SBPFactory.OPTION_INVITATION):
 			response = createInvitation(data);
-			break;
+		break;
 		case(SBPFactory.OPTION_ALARM):
 			response = createAlarm(data);
-			broadcast = false;
+		broadcast = false;
 		break;
 		default:
 			response.add(msgFactory.createMessage(MessageType.ERROR, true, "No matching command found", data[3], null));
@@ -560,7 +564,7 @@ public class ServerMessageHandler extends MessageHandler{
 			e1.printStackTrace();
 		}
 	}
-	
+
 	public ArrayList<String> createAppointment(String[] data) {
 		ArrayList<String> response = new ArrayList<String>();
 		boolean error = true;
@@ -570,7 +574,7 @@ public class ServerMessageHandler extends MessageHandler{
 
 			Document d = xmlAssembler.getDocument(data[4]);
 			Appointment app = xmlAssembler.assembleAppointment(d.getRootElement());
-			
+
 			String date = app.getFormattedDate();
 			String startTime = app.getFormattedStartTime();
 			String endTime = app.getFormattedEndTime();
@@ -579,18 +583,18 @@ public class ServerMessageHandler extends MessageHandler{
 			String location = app.getLocation();
 			String meetingRoom = app.getMeetingRoom();
 			String meetingLeader = app.getMeetingLeader();
-			
+
 			int id = app.getAppointmentID();
-			
+
 			String sql = String.format("INSERT INTO appointment VALUES (%d,'%s','%s','%s','%s','%s','%s','%s','%s')", 
 					id, title, date, startTime, endTime, desc, location, meetingLeader, meetingRoom);
 			conn.makeSingleUpdate(sql);
 			app.setAppointmentID(id);
 			data[4] = xmlFactory.makeAppointmentXML(app);
-			
+
 			error = false;
 			errorMsg = null;
-			
+
 		} catch (SQLException | ParsingException | IOException e) {
 			e.printStackTrace();
 			error = true;
@@ -600,9 +604,9 @@ public class ServerMessageHandler extends MessageHandler{
 		}
 		return response;
 	}
-	
 
-	
+
+
 	public ArrayList<String> createInvitation(String[] data) {
 		ArrayList<String> response = new ArrayList<String>();
 		boolean error = true;
@@ -612,17 +616,17 @@ public class ServerMessageHandler extends MessageHandler{
 
 			Document d = xmlAssembler.getDocument(data[4]);
 			Invitation inv = xmlAssembler.assembleInvitation(d.getRootElement());
-			
+
 			int accepted = -1;
 			int appID = inv.getAppointmentID();
 			String emp_email = inv.getEmployeeEmail();
 			String message = inv.getMessage();
-			
+
 			String sql = String.format("INSERT INTO invitation VALUES ('%s',%d, %d,'%s')", emp_email, appID, accepted, message);
 			conn.makeSingleUpdate(sql);
 			error = false;
 			errorMsg = null;
-			
+
 		} catch (SQLException | ParsingException | IOException e) {
 			e.printStackTrace();
 			error = true;
@@ -633,7 +637,7 @@ public class ServerMessageHandler extends MessageHandler{
 
 		return response;
 	}
-	
+
 	public ArrayList<String> createAlarm(String[] data) {
 		ArrayList<String> response = new ArrayList<String>();
 		boolean error = true;
@@ -653,7 +657,7 @@ public class ServerMessageHandler extends MessageHandler{
 			conn.makeSingleUpdate(sql);
 			error = false;
 			errorMsg = null;
-			
+
 		} catch (SQLException | ParsingException | IOException e) {
 			e.printStackTrace();
 			error = true;
@@ -677,11 +681,11 @@ public class ServerMessageHandler extends MessageHandler{
 
 		switch(what) {
 		case(SBPFactory.OPTION_APPOINTMENT):
-				response = deleteAppointment(data);
-			break;
+			response = deleteAppointment(data);
+		break;
 		case(SBPFactory.OPTION_INVITATION):
-				response = deleteInvitation(data);
-			break;
+			response = deleteInvitation(data);
+		break;
 		case(SBPFactory.OPTION_ALARM):
 			response = deleteAlarm(data);
 		broadcast = false;
@@ -702,7 +706,7 @@ public class ServerMessageHandler extends MessageHandler{
 		}
 	}
 
-	
+
 	public ArrayList<String> deleteAppointment(String[] data) {
 		ArrayList<String> response = new ArrayList<String>();
 		boolean error = true;
@@ -728,7 +732,7 @@ public class ServerMessageHandler extends MessageHandler{
 		}
 		return response;
 	}
-	
+
 	public ArrayList<String> deleteInvitation(String[] data) {
 		ArrayList<String> response = new ArrayList<String>();
 		boolean error = true;
@@ -755,7 +759,7 @@ public class ServerMessageHandler extends MessageHandler{
 		}
 		return response;
 	}
-	
+
 	public ArrayList<String> deleteAlarm(String[] data) {
 		ArrayList<String> response = new ArrayList<String>();
 		boolean error = true;
