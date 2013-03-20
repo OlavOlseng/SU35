@@ -11,7 +11,7 @@ public class RoomManager {
 		}
 	}
 	
-	private static HashSet<String> removeRooms(HashSet<String> roomIDs, int minSize) {
+	private static ArrayList<String> removeRooms(ArrayList<String> roomIDs, int minSize) {
 		for(String roomID : roomIDs) {
 			if(ApplicationModel.getInstance().getRoom(roomID).getRoomSize() < minSize) {
 				roomIDs.remove(roomID);
@@ -20,7 +20,7 @@ public class RoomManager {
 		return roomIDs;
 	}
 	
-	private static ArrayList<Appointment> removeAppointments(HashSet<Integer> appointmentIDs, Calendar date) {
+	private static ArrayList<Appointment> removeAppointments(ArrayList<Integer> appointmentIDs, Calendar date) {
 		ArrayList<Appointment> appointments = new ArrayList<Appointment>();
 		for(Integer ID : appointmentIDs) {
 			Appointment appointment = ApplicationModel.getInstance().getAppointment(ID);
@@ -33,15 +33,18 @@ public class RoomManager {
 		return appointments;
 	}
 	
-	public static HashSet<String> findSuitableRooms(int minSize, Calendar date, Calendar startTime, Calendar endTime) throws NoAvailableRooms {
-		HashSet<String> suitableRooms = ApplicationModel.getInstance().getRooms();
+	public static ArrayList<String> findSuitableRooms(int minSize, Appointment appointment) throws NoAvailableRooms {
+		Calendar date = appointment.getDate();
+		Calendar startTime = appointment.getStartTime();
+		Calendar endTime = appointment.getEndTime();
+		ArrayList<String> suitableRooms = ApplicationModel.getInstance().getRooms();
 		suitableRooms = removeRooms(suitableRooms, minSize);
-		HashSet<Integer> appointmentIDs = ApplicationModel.getInstance().getAppointments();
+		ArrayList<Integer> appointmentIDs = ApplicationModel.getInstance().getAppointments();
 		ArrayList<Appointment> appointments = removeAppointments(appointmentIDs, date);
-		for(Appointment appointment : appointments) {
-			if((startTime.after(appointment.getStartTime()) && startTime.before(appointment.getEndTime())) ||
-				(endTime.after(appointment.getStartTime()) && endTime.before(appointment.getEndTime()))) {
-				suitableRooms.remove(appointment.getMeetingRoom());
+		for(Appointment app : appointments) {
+			if((startTime.after(app.getStartTime()) && startTime.before(app.getEndTime())) ||
+				(endTime.after(app.getStartTime()) && endTime.before(app.getEndTime()))) {
+				suitableRooms.remove(app.getMeetingRoom());
 			}
 		}
 		if(suitableRooms.isEmpty()) {
@@ -50,8 +53,8 @@ public class RoomManager {
 		return suitableRooms;
 	}
 	
-	public static String pickSuitableRoom(int minSize, Calendar date, Calendar startTime, Calendar endTime) throws NoAvailableRooms {
-		String roomID = findSuitableRooms(minSize, date, startTime, endTime).iterator().next();
+	public static String pickSuitableRoom(int minSize, Appointment appointment) throws NoAvailableRooms {
+		String roomID = findSuitableRooms(minSize, appointment).iterator().next();
 		if(roomID==null) {
 			throw new NoAvailableRooms();
 		}

@@ -214,16 +214,16 @@ public class ApplicationModel {
 		return model;
 	}
 	
-	public HashSet<String> getRooms() {
-		return new HashSet<String>(rooms.keySet());
+	public ArrayList<String> getRooms() {
+		return new ArrayList<String>(rooms.keySet());
 	}
 	
-	public HashSet<Integer> getAppointments() {
-		return new HashSet<Integer>(appointment.keySet());
+	public ArrayList<Integer> getAppointments() {
+		return new ArrayList<Integer>(appointment.keySet());
 	}
 	
-	public String[] getEmployees() {
-		return (String[])employees.keySet().toArray();
+	public ArrayList<String> getEmployees() {
+		return new ArrayList<String>(employees.keySet());
 	}
 	
 	public String listKeys() {
