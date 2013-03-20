@@ -130,6 +130,7 @@ public class CalendarProgram {
 						
 		Login login = new Login(contentPane);
 		contentPane.add(login, LOG_IN);
+		ApplicationModel.getInstance().connection.addLoginListener(login);
 		
 		EditView editView = new EditView(contentPane);
 		contentPane.add(editView, EDIT_VIEW);

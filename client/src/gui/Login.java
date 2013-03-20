@@ -21,9 +21,9 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import models.*;
 
-
-public class Login extends JPanel/*JFrame*/ {
+public class Login extends JPanel/*JFrame*/ implements LoginListener {
 	
 	private JPanel _parentContentPane;
 	private JTextField emailAddress;
@@ -143,5 +143,16 @@ public class Login extends JPanel/*JFrame*/ {
 		gbc_logInButton.gridx = 1;
 		gbc_logInButton.gridy = 6;
 		this.add(logInButton, gbc_logInButton);
+	}
+
+	@Override
+	public void onLogin(LoginEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getLoginSuccess()) {
+			// logged in
+		}
+		else {
+			// not logged in
+		}
 	}
 }

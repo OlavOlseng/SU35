@@ -25,8 +25,13 @@ public class ApplicationModel {
 		rooms = new HashMap<String, Room>();
 		invitations = new HashMap<String, Invitation>();
 		alarms = new HashMap<String, Alarm>();
+		username = null;
 		connection = new Client();
 		connection.connect();
+	}
+	
+	public void login(String username, String password) {
+		connection.sendLoginQuery(username, password);
 	}
 	
 	public void fetchData() {

@@ -15,7 +15,6 @@ public class Client implements MessageListener {
 	public final static String HOST = "78.91.15.198";
 	
 	public Client() {
-		
 		try {
 			connection = new Connection(new Socket());
 			receiveWorker = new ReceiveWorker(connection, this);
@@ -26,6 +25,10 @@ public class Client implements MessageListener {
 		factory = new SBPFactory();
 		messageHandler = new ClientMessageHandler();
 		xmlFactory = new XMLFactory();
+	}
+	
+	public void addLoginListener(LoginListener ll) {
+		messageHandler.addLoginListener(ll);
 	}
 	
 	public void connect() {

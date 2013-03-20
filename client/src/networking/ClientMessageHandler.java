@@ -1,6 +1,8 @@
 package networking;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import util.XMLAssembler;
 import models.Alarm;
 import models.ApplicationModel;
@@ -12,12 +14,25 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.ParsingException;
 import nu.xom.ValidityException;
+import models.*;
 
 public class ClientMessageHandler extends MessageHandler{
 	private XMLAssembler assembler;
+	private ArrayList<LoginListener> loginListeners;
 	
 	public ClientMessageHandler(){
 		assembler = new XMLAssembler();
+		loginListeners = new ArrayList<LoginListener>();
+	}
+	
+	public void addLoginListener(LoginListener loginListener) {
+		loginListeners.add(loginListener);
+	}
+	
+	public void fireLoginEvent(LoginEvent e) {
+		for(LoginListener ll : loginListeners) {
+			ll.onLogin(e);
+		}
 	}
 	
 	@Override
@@ -139,9 +154,11 @@ public class ClientMessageHandler extends MessageHandler{
 		if(data[1].equals("0")) {
 			ApplicationModel.getInstance().username = data[4];
 			ApplicationModel.getInstance().fetchData();
+			fireLoginEvent(new LoginEvent(true));
 			System.out.println("Login successful");
 		}
 		else {
+			fireLoginEvent(new LoginEvent(false));
 			System.err.println("Login failed");
 		}
 	}
