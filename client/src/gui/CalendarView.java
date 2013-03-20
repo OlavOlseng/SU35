@@ -145,8 +145,7 @@ public class CalendarView extends JPanel implements ModelListener{
 						textAreaInfo.setText("Owner:\n" + tempAppointment.getMeetingLeader() + "\n\nDescription:\n" +
 								tempAppointment.getDescription() + "\n\nDate:\n" + tempAppointment.getFormattedDate() + 
 								"\n\nStart:\n" + tempAppointment.getFormattedStartTime() + "\n\nEnd:\n" + 
-								tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation()
-								+ "\n" + tempAppointment.getMeetingRoom());
+								tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation());
 						btnMore.setEnabled(true);
 						if (ApplicationModel.getInstance().username.equals(tempAppointment.getMeetingLeader())) {
 							btnEdit.setEnabled(true);
@@ -212,8 +211,7 @@ public class CalendarView extends JPanel implements ModelListener{
 							textAreaInfo.setText("Owner:\n" + tempAppointment.getMeetingLeader() + "\n\nDescription:\n" +
 									tempAppointment.getDescription() + "\n\nDate:\n" + tempAppointment.getFormattedDate() + 
 									"\n\nStart:\n" + tempAppointment.getFormattedStartTime() + "\n\nEnd:\n" + 
-									tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation()
-									+ "\n" + tempAppointment.getMeetingRoom());
+									tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation());
 							btnMore.setEnabled(true);
 							if (ApplicationModel.getInstance().username.equals(tempAppointment.getMeetingLeader())) {
 								btnEdit.setEnabled(true);
@@ -350,10 +348,9 @@ public class CalendarView extends JPanel implements ModelListener{
 				//Open EditView
 				//We call initialize with the parameter -1 to indicate that we
 				// want to create a new appointment
-				_editView.initialize(-1);
+				_editView.initialize(0);
 				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
 				c1.show(_parentContentPane, "Edit View");
-				
 			}
 		});
 		GridBagConstraints gbc_btnCreate = new GridBagConstraints();
