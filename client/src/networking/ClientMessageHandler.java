@@ -138,6 +138,7 @@ public class ClientMessageHandler extends MessageHandler{
 	public void checkLogin(String[] data) {
 		if(data[1].equals("0")) {
 			ApplicationModel.getInstance().username = data[4];
+			ApplicationModel.getInstance().fetchData();
 			System.out.println("Login successful");
 		}
 		else {

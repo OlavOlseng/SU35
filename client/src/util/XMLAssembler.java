@@ -54,10 +54,17 @@ public class XMLAssembler {
 	
 	public Appointment assembleAppointment(Element appointmentElement)  {
 		Appointment a = new Appointment(0);
+		
 		Element element = appointmentElement.getFirstChildElement("appointmentID");
 		if (element != null) {
 			a.setAppointmentID(Integer.parseInt(element.getValue()));
 		}
+		
+		element = appointmentElement.getFirstChildElement("title");
+		if(element != null){
+			a.setTitle(element.getValue());
+		}
+		
 		element = appointmentElement.getFirstChildElement("starttime");
 		if(element != null){
 			a.setStartTime(element.getValue());
@@ -67,10 +74,6 @@ public class XMLAssembler {
 			a.setEndTime(element.getValue());
 		}
 		
-		element = appointmentElement.getFirstChildElement("title");
-		if(element != null){
-			a.setTitle(element.getValue());
-		}
 		
 		element = appointmentElement.getFirstChildElement("description");
 		if(element != null){

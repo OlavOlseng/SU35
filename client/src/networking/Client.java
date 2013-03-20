@@ -88,6 +88,11 @@ public class Client implements MessageListener {
 		String msg = factory.makeGetMessage(SBPFactory.OPTION_EMPLOYEE, "all");
 		send(msg);
 	}
+	
+	public void getAllRooms() {
+		String msg = factory.makeGetMessage(SBPFactory.OPTION_ROOM, "all");
+		send(msg);
+	}
 	/*
 	 * QUERY THE SERVER FOR DATA
 	 */
@@ -221,6 +226,7 @@ public class Client implements MessageListener {
 	/*
 	 * QUERY THE SERVER FOR UPDATE
 	 */
+	
 	public void sendEmployeeUpdate(Employee employee) {
 		String payload = xmlFactory.makeEmployeeXML(employee);
 		String msg = factory.makeUpdateMessage(SBPFactory.OPTION_EMPLOYEE, payload);

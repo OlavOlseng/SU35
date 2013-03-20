@@ -50,8 +50,8 @@ public class DBFactory {
 			String endTime = rs.getString(5);
 			String description = rs.getString(6);
 			String location = rs.getString(7);
-			String meetingRoom = rs.getString(8);
-			String meetingLeaderEmail = rs.getString(9);
+			String meetingLeaderEmail = rs.getString(8);
+			String meetingRoom = rs.getString(9);
 			Appointment appointment = new Appointment(appointmentID);
 			appointment.setTitle(title);
 			appointment.setDate(date);
