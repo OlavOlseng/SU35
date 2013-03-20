@@ -79,7 +79,6 @@ public class XMLAssembler {
 			a.setEndTime(element.getValue());
 		}
 		
-		
 		element = appointmentElement.getFirstChildElement("description");
 		if(element != null){
 			a.setDescription(element.getValue());

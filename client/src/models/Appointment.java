@@ -69,7 +69,7 @@ public class Appointment {
 	private void setDate(int year, int month, int day) {
 		Calendar temp = this.date;
 		date.set(Calendar.YEAR, year);
-		date.set(Calendar.MONTH, month);
+		date.set(Calendar.MONTH, month-1);
 		date.set(Calendar.DAY_OF_MONTH, day);
 		
 		pcs.firePropertyChange(APPOINTMENT_DATE_PROPERTY, temp, this.date);
