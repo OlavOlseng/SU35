@@ -25,11 +25,11 @@ public class XMLFactory {
 	
 	public String makeAppointmentXML(Appointment a){
 		ArrayList<String> appointmentInfo = makeStringArray(Integer.toString(
-				a.getAppointmentID()), a.getTitle(), a.getFormattedStartTime(),  
+				a.getAppointmentID()), a.getTitle(), a.getFormattedDate(), a.getFormattedStartTime(),  
 				a.getFormattedEndTime(), a.getDescription(), 
 				a.getLocation(), a.getMeetingLeader(), a.getMeetingRoom());
 		createNewObject("appointment");
-		addChild(appointmentInfo, "appointmentID", "title", "starttime", "endtime", 
+		addChild(appointmentInfo, "appointmentID", "title", "date", "starttime", "endtime", 
 				"description", "location", "meetingleader", "room");
 		return getXML();
 	}

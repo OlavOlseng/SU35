@@ -65,6 +65,11 @@ public class XMLAssembler {
 			a.setTitle(element.getValue());
 		}
 		
+		element = appointmentElement.getFirstChildElement("date");
+		if(element != null){
+			a.setDate(element.getValue());
+		}
+		
 		element = appointmentElement.getFirstChildElement("starttime");
 		if(element != null){
 			a.setStartTime(element.getValue());
