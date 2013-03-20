@@ -69,4 +69,9 @@ public class Invitation {
 		String s = String.format("Employee: %s \n Appointment: %d\n, Answer: %s \n Message: %s", employeeEmail, appointmentID, answer, message);
 		return s;
 	}
+
+	public void update(Invitation i) {
+		setAnswer(i.getAnswer());
+		setMessage(i.getMessage());
+	}
 }

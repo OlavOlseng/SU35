@@ -2,7 +2,7 @@ package models;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import networking.Client;
 import models.Invitation.Answer;
 
 public class ApplicationModel {
@@ -13,6 +13,7 @@ public class ApplicationModel {
 	private HashMap<String, Invitation> invitations;
 	private HashMap<String, Alarm> alarms;
 	public String username; 
+	public Client connection;
 	
 	private ApplicationModel(){
 		employees = new HashMap<String, Employee>();
@@ -20,10 +21,16 @@ public class ApplicationModel {
 		rooms = new HashMap<String, Room>();
 		invitations = new HashMap<String, Invitation>();
 		alarms = new HashMap<String, Alarm>();
+		connection = new Client();
+		connection.connect();
 	}
 	
 	// key = email
 	public void addEmployee(String key, Employee value){
+		if(employees.containsKey(key)) {
+			updateEmployee(key, value);
+			return;
+		}
 		employees.put(key, value);
 		System.out.println("Key: " + key);
 	}
@@ -32,13 +39,17 @@ public class ApplicationModel {
 		Employee e = employees.get(email);
 		if(e == null){
 			System.err.println("No entry found in Hashmap");
+			e = new Employee(email, "", "", "", "");
+			employees.put(email, e);
+			connection.sendEmployeeQuery(email);
 		}
 		return e;
 	}
 	
 	public void updateEmployee(String email, Employee e){
 		if(employees.containsKey(email)){
-			employees.put(email, e);
+			Employee local = employees.get(email);
+			local.update(e);
 		}
 	}
 	
@@ -50,6 +61,10 @@ public class ApplicationModel {
 	
 	// key = appointmentID
 	public void addAppointment(int key, Appointment value){
+		if(appointment.containsKey(key)) {
+			updateAppointment(key, value);
+			return;
+		}
 		appointment.put(key, value);
 		System.out.println("Key: " + key);
 	}
@@ -58,13 +73,16 @@ public class ApplicationModel {
 		Appointment a = appointment.get(aID);
 		if(a == null){
 			System.err.println("No entry found in Hashmap");
+			a = new Appointment(aID);
+			connection.sendAppointmentQuery(Integer.toString(aID));
 		}
 		return a;
 	}
 	
 	public void updateAppointment(int aID, Appointment a){
 		if(appointment.containsKey(aID)){
-			appointment.put(aID, a);
+			Appointment local = appointment.get(aID);
+			local.update(a);
 		}
 	}
 	
@@ -77,6 +95,10 @@ public class ApplicationModel {
 	// key = email and appointmentID
 	public void addInvitation(String email, int appointmentID, Invitation value){
 		String key = email + "¤" + appointmentID;
+		if(invitations.containsKey(key)) {
+			updateInvitation(email, appointmentID, value);
+			return;
+		}
 		invitations.put(key, value);
 		System.out.println("Key: " + key);
 	}
@@ -84,8 +106,11 @@ public class ApplicationModel {
 	public Invitation getInvitation(String email, int appointmentID){
 		String id = email + "¤" + appointmentID;
 		Invitation i = invitations.get(id);
+		
 		if(i == null){
 			System.err.println("No entry found in Hashmap");
+			i = new Invitation(email,appointmentID);
+			connection.sendInvitationQuery(email, Integer.toString(appointmentID));
 		}
 		return i;
 	}
@@ -104,7 +129,8 @@ public class ApplicationModel {
 	public void updateInvitation(String email, int appointmentID, Invitation i){
 		String id = email + "¤" + appointmentID;
 		if(invitations.containsKey(id)){
-			invitations.put(id, i);
+			Invitation local = invitations.get(id);
+			local.update(i);
 		}
 	}
 	
@@ -145,6 +171,10 @@ public class ApplicationModel {
 	public void addAlarm(String email, int appointmentID, Alarm value){
 		String key = email + "¤" + appointmentID;
 		System.out.println("Key: " + key);
+		if (alarms.containsKey(key)) {
+			updateAlarm(email, appointmentID, value);
+			return;
+		}
 		alarms.put(key, value);
 	}
 	
@@ -153,6 +183,8 @@ public class ApplicationModel {
 		Alarm a = alarms.get(id);
 		if(a == null){
 			System.err.println("No entry found in Hashmap");
+			a = new Alarm(appointmentID, email);
+			connection.sendAlarmQuery(email, Integer.toString(appointmentID));
 		}
 		return a;
 	}
@@ -160,7 +192,8 @@ public class ApplicationModel {
 	public void updateAlarm(String email, int appointmentID, Alarm r){
 		String id = email + "¤" + appointmentID;
 		if(alarms.containsKey(id)){
-			alarms.put(id, r);
+			Alarm a = alarms.get(id);
+			a.update(r);
 		}
 	}
 	

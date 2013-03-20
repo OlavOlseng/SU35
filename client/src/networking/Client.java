@@ -11,10 +11,11 @@ public class Client implements MessageListener {
 	private SBPFactory factory;
 	private ClientMessageHandler messageHandler;
 	private XMLFactory xmlFactory;
-	private final static int CONNECTPORT = 49153;
-	private final static String HOST = "78.91.15.205";
+	public final static int CONNECTPORT = 49153;
+	public final static String HOST = "78.91.15.205";
 	
 	public Client() {
+		
 		try {
 			connection = new Connection(new Socket());
 			receiveWorker = new ReceiveWorker(connection, this);

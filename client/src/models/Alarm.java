@@ -1,8 +1,8 @@
 package models;
 
 public class Alarm {
-	private final int appointmentID;
-	private final String employeeEmail;
+	private int appointmentID;
+	private String employeeEmail;
 	private String time;
 	private String description;
 	
@@ -36,6 +36,11 @@ public class Alarm {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	public void update(Alarm other) {
+		this.setDescription(other.getDescription());
+		this.setTime(other.getTime());
+	} 
 	
 	public String toString() {
 		String ret = "";

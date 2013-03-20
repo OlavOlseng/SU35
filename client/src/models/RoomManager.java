@@ -20,13 +20,13 @@ public class RoomManager {
 		appointments = new ArrayList<Appointment>();
 	}
 	
-	public void addRoom(String room, int roomSize) {
+	private void addRoom(String room, int roomSize) {
 		if(roomSize >= minRoomSize) {
 			rooms.add(room);
 		}
 	}
 	
-	public void addAppointment(Appointment appointment) {
+	private void addAppointment(Appointment appointment) {
 		if(appointment.getStartTime().getTime().getYear() == date.getTime().getYear() &&
 				appointment.getStartTime().getTime().getMonth() == date.getTime().getMonth() &&
 				appointment.getStartTime().getTime().getDate() == date.getTime().getDate()) {

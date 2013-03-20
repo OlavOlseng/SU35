@@ -172,4 +172,15 @@ public class Appointment {
 				s += "\nMeeting Leader:\t\t\t" + meetingLeader;
 		return s;
 	}
+
+	public void update(Appointment a) {
+		setDate(a.getFormattedDate());
+		setStartTime(a.getFormattedStartTime());
+		setEndTime(a.getFormattedEndTime());
+		setTitle(a.getTitle());
+		setDescription(a.getDescription());
+		setLocation(a.getLocation());
+		setMeetingLeader(a.getMeetingLeader());
+		setMeetingRoom(a.getMeetingRoom());
+	}
 }
