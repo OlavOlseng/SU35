@@ -37,6 +37,7 @@ import javax.swing.SwingConstants;
 import models.ApplicationModel;
 import models.Appointment;
 import models.Employee;
+import models.Invitation;
 
 
 public class EditView extends JPanel/*JFrame*/ {
@@ -362,6 +363,10 @@ public class EditView extends JPanel/*JFrame*/ {
 		{
 		_appointmentId = appointmentId;
 		
+		//Make sure peopleList is empty
+		peopleListModel.clear();
+		peopleList.clearSelection();
+		
 		//If appointmentID is -1 this means that this is a new appointment and we
 		// need to make sure that the fields are empty 
 		if(appointmentId < 0)
@@ -398,16 +403,15 @@ public class EditView extends JPanel/*JFrame*/ {
 			
 			
 			//We also need to fill the peopleList with employees
-			ArrayList<String> employeeList = 
-					ApplicationModel.getInstance().getEmployeesForApplication(
-							_appointmentId);
+			ArrayList<Invitation> invitationList = 
+					ApplicationModel.getInstance().getInvitationsByAppointment(
+							appointmentId);
 			
-			System.out.println(employeeList);
-			
-//			for(String employee : employeeList)
-//				{
-//				if()
-//				}
+			System.out.println("Antall i ansatte lista for avtale: " +invitationList.size());
+			for(Invitation invitation : invitationList)
+				{
+				peopleListModel.addElement(invitation.getEmployeeEmail());
+				}
 			
 //			public ArrayList<String> getEmployeesForApplication(applicationId)
 //				{
