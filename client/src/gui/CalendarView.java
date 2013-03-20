@@ -615,6 +615,28 @@ public class CalendarView extends JPanel implements ModelListener{
 		bottomRightPanel.add(lbl_24, gbc_label_5);
 	}
 	
+	public void gotoAppointment(Appointment app) {
+		String date = app.getFormattedDate();
+		String[] temp = date.split("-");
+		//System.out.println(temp[0]+temp[1]+temp[2]);
+		selectedDate.set(Integer.parseInt(temp[0]), Integer.parseInt(temp[1])-1, Integer.parseInt(temp[2]));
+		//System.out.println(selectedDate.toString());
+		selectedWeek = selectedDate.get(Calendar.WEEK_OF_YEAR);
+		//System.out.println(selectedWeek);
+		//appointmentID = tempButton.keyOfRelatedAppointment;
+		paintGUI();
+		updateInfo();
+		textAreaInfo.setText("Owner:\n" + app.getMeetingLeader() + "\n\nDescription:\n" +
+				app.getDescription() + "\n\nDate:\n" + app.getFormattedDate() + 
+				"\n\nStart:\n" + app.getFormattedStartTime() + "\n\nEnd:\n" + 
+				app.getFormattedEndTime() + "\n\nWhere:\n" + app.getLocation());
+		btnMore.setEnabled(true);
+		if (ApplicationModel.getInstance().username.equals(app.getMeetingLeader())) {
+			btnEdit.setEnabled(true);
+		}
+		
+	}
+	
 	//--------------------------------------------------------------------------
 	public void setEditView(EditView editView)
 		{ _editView = editView; }
@@ -672,8 +694,9 @@ public class CalendarView extends JPanel implements ModelListener{
 			CustomJMenuItem menuItem;
 			
 			for(int i = 0; i < notifications.size(); i++) {
-				menuItem = new CustomJMenuItem("Invited to: " + ApplicationModel.getInstance().getAppointment(i).getTitle());
-				menuItem.setAppID(ApplicationModel.getInstance().getAppointment(i).getAppointmentID());
+				Appointment tempApp = ApplicationModel.getInstance().getAppointment(notifications.get(i));
+				menuItem = new CustomJMenuItem("Invited to: " + tempApp.getTitle());
+				menuItem.setAppID(tempApp.getAppointmentID());
 				menuNotifications.add(menuItem);
 				menuItem.addActionListener(new InvitationListener());
 			}
@@ -687,10 +710,12 @@ public class CalendarView extends JPanel implements ModelListener{
 		public void actionPerformed(ActionEvent event) {
 			CustomJMenuItem invitationItem = (CustomJMenuItem)event.getSource();
 			int selectedInvitation = invitationItem.getAppID();
+			Appointment tempApp = ApplicationModel.getInstance().getAppointment(selectedInvitation);
+			gotoAppointment(tempApp);
 			
-			_infoView.initialize(selectedInvitation);
-			CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
-			c1.show(_parentContentPane, "Info View");
+//			_infoView.initialize(selectedInvitation);
+//			CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
+//			c1.show(_parentContentPane, "Info View");
 		}
 	}
 }
