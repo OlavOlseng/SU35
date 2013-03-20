@@ -22,6 +22,8 @@ import java.util.Arrays;
 import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
 
+import models.ApplicationModel;
+
 public class BookRoomDialog extends JDialog
 	{
 	private int 					_nPeople;
@@ -83,7 +85,8 @@ public class BookRoomDialog extends JDialog
 			{ autoBookButton.setEnabled(false); }
 		
 		
-		JLabel text1Label = new JLabel("Select a room from the dropdown menu, or press AutoBook");
+		JLabel text1Label = new JLabel(
+				"Select a room from the dropdown menu, or press AutoBook");
 		GridBagConstraints gbc_text1Label = new GridBagConstraints();
 		gbc_text1Label.insets = new Insets(0, 0, 5, 5);
 		gbc_text1Label.gridx = 2;
@@ -93,7 +96,8 @@ public class BookRoomDialog extends JDialog
 		contentPane.add(text1Label, gbc_text1Label);
 		
 		
-		JLabel text2Label = new JLabel("to have the system select a room of proper size automatically.");
+		JLabel text2Label = new JLabel(
+				"to have the system select a room of proper size automatically.");
 		GridBagConstraints gbc_text2Label = new GridBagConstraints();
 		gbc_text2Label.insets = new Insets(0, 0, 5, 5);
 		gbc_text2Label.gridx = 2;
@@ -102,7 +106,8 @@ public class BookRoomDialog extends JDialog
 		contentPane.add(text2Label, gbc_text2Label);
 		
 		
-		JLabel text3Label = new JLabel("To use AutoBook employees must have been added.");
+		JLabel text3Label = new JLabel(
+				"To use AutoBook employees must have been added.");
 		GridBagConstraints gbc_text3Label = new GridBagConstraints();
 		gbc_text3Label.insets = new Insets(0, 0, 5, 5);
 		gbc_text3Label.gridx = 2;
@@ -110,9 +115,12 @@ public class BookRoomDialog extends JDialog
 		gbc_text3Label.gridwidth = 5;
 		contentPane.add(text3Label, gbc_text3Label);
 		
-		//Her henter vi alle rom som er 
-		String[] rooms = { "Room 1", "Room 2", "Room 3", "Room 4" };
-		 _roomList = rooms;
+		
+		//Here we get all the rooms 
+		ArrayList<String> roomList = ApplicationModel.getInstance().getRooms();
+		_roomList = new String[roomList.size()];
+		_roomList = roomList.toArray(_roomList);
+		// _roomList = rooms;
 		//_roomList	= new ArrayList<String>(Arrays.asList(rooms));
 		
 		roomComboBox = new JComboBox(_roomList);

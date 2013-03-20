@@ -637,7 +637,7 @@ public class EditView extends JPanel/*JFrame*/ {
 			// reservation
 			if(locationField.isEnabled() == false)
 				{ 
-				ApplicationModel.getInstance().deleteRoom(locationField.getText());
+				//ApplicationModel.getInstance().deleteRoom(locationField.getText());
 				locationField.setText("");
 				locationField.setEnabled(true);
 				bookRoomButton.setEnabled(true);
@@ -742,8 +742,7 @@ public class EditView extends JPanel/*JFrame*/ {
 					appointment.setStartTime(startField.getText());
 					appointment.setEndTime(startField.getText());
 					appointment.setDescription(descriptionArea.getText());
-					//appointment.setLocation(locationField.getText());
-					
+										
 					
 					//If locationField is not enabled then this means that a room has
 					// been boooked
@@ -760,6 +759,7 @@ public class EditView extends JPanel/*JFrame*/ {
 						appointment.setLocation(locationField.getText());
 						}
 					
+					
 					//appointment.setMeetingRoom(locationField.getText());
 					appointment.setMeetingLeader(CalendarProgram.loggedInUser);
 									
@@ -767,18 +767,27 @@ public class EditView extends JPanel/*JFrame*/ {
 							appointment.getAppointmentID(), appointment);
 					
 					
+					//We also need to create invitations for all the employees in
+					// the peopleList
+					for(int i = 0; i < peopleListModel.getSize(); i++)
+						{
+						ApplicationModel.getInstance().addInvitation(
+								(String)peopleListModel.get(i), _appointmentId, 
+								new Invitation((String)peopleListModel.get(i),
+										_appointmentId));
+						}
+					
+					
 					JOptionPane.showMessageDialog(
 							(JFrame)SwingUtilities.getRoot(_parentContentPane),
 							"Appointment has been saved!",
 							"Information Message",
 							JOptionPane.INFORMATION_MESSAGE);
-					
-					
 					}
 				//This is an editable appointment and we need to updata data
 				else
 					{
-					//TODO: We need to call update functions
+					//TODO: Not complete. We need to call update functions
 					
 					
 					JOptionPane.showMessageDialog(
