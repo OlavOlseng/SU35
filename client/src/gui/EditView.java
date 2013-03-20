@@ -40,8 +40,8 @@ import models.Employee;
 
 
 public class EditView extends JPanel/*JFrame*/ {
-	private ActionListener peopleListener;
-
+	private int 					_appointmentId;
+	private ActionListener 		peopleListener;
 	private JButton 				addButton;
 	private JButton 				deleteButton;
 	private JButton 				saveButton;
@@ -360,6 +360,8 @@ public class EditView extends JPanel/*JFrame*/ {
 	//--------------------------------------------------------------------------
 	public void initialize(int appointmentId)//Appointment appointment)
 		{
+		_appointmentId = appointmentId;
+		
 		//If appointmentID is -1 this means that this is a new appointment and we
 		// need to make sure that the fields are empty 
 		if(appointmentId < 0)
@@ -377,17 +379,37 @@ public class EditView extends JPanel/*JFrame*/ {
 			startField.setText(appointment.getFormattedStartTime());
 			endField.setText(appointment.getFormattedEndTime());
 			descriptionArea.setText(appointment.getDescription());
-			locationField.setText(appointment.getLocation());
+			
+			
+			//If the location is not a meeting room
+			if(appointment.getMeetingRoom().equals(""))
+				{
+				locationField.setText(appointment.getLocation());
+				unbookRoomButton.setEnabled(false);
+				}
+			//Location is a meeting room a we handle this
+			else
+				{
+				locationField.setText(appointment.getMeetingRoom());
+				bookRoomButton.setEnabled(false);
+				unbookRoomButton.setEnabled(true);
+				locationField.setEnabled(false);
+				}
+			
 			
 			//We also need to fill the peopleList with employees
-//			Employee[] employees = appointment.getPeople();
-//			CalendarProgram.getModel().???;
-//			
-			//			Do we receive array with people from Calendarprogram.getModel().???
-//			for(int i = 0; i < array?; <i++>)
-//				{	peopleListModel.addElement(array[i]); }
-
-//			removeButton.setEnabled(true);
+			ArrayList<String> employeeList = 
+					ApplicationModel.getInstance().getEmployees();
+			
+//			for(String employee : employeeList)
+//				{
+//				if()
+//				}
+			
+//			public ArrayList<String> getEmployeesForApplication(applicationId)
+//				{
+//				ArrayList<String> = new ArrayList<String>
+//				}
 			}
 		}
 	//--------------------------------------------------------------------------
@@ -564,6 +586,7 @@ public class EditView extends JPanel/*JFrame*/ {
 			//For testing purposes:
 			String[] test = { "trtre", "tgsfs" };
 			
+			//Here
 			ArrayList<String> emailAddresses = ApplicationModel.getInstance().getEmployees();
 //			String[] emailAddresses = ApplicationModel.getInstance().getEmployees();
 											/*{"fredrik@ntnu.no",
@@ -726,45 +749,63 @@ public class EditView extends JPanel/*JFrame*/ {
 			// to the calendar-view
 			if(isDataValid() == true)
 				{
-				//TODO: Save appointment for this user in database and send message
-				// to relevant employees (employees added to the people-list)
-				Appointment appointment = new Appointment(3);
-				appointment.setTitle(titleField.getText());
-				appointment.setDate(dateField.getText());
-				appointment.setStartTime(startField.getText());
-				appointment.setEndTime(startField.getText());
-				appointment.setDescription(descriptionArea.getText());
-				//appointment.setLocation(locationField.getText());
-				
-				
-				//If locationField is not enabled then this means that a room has
-				// been boooked
-				if(locationField.isEnabled() == false)
+				//This is a new appointment
+				if(_appointmentId < 0)
 					{
-					appointment.setMeetingRoom(locationField.getText());
-					appointment.setLocation("");
+					//TODO: Save appointment for this user in database and send message
+					// to relevant employees (employees added to the people-list)
+					Appointment appointment = new Appointment(3);
+					appointment.setTitle(titleField.getText());
+					appointment.setDate(dateField.getText());
+					appointment.setStartTime(startField.getText());
+					appointment.setEndTime(startField.getText());
+					appointment.setDescription(descriptionArea.getText());
+					//appointment.setLocation(locationField.getText());
+					
+					
+					//If locationField is not enabled then this means that a room has
+					// been boooked
+					if(locationField.isEnabled() == false)
+						{
+						appointment.setMeetingRoom(locationField.getText());
+						appointment.setLocation("");
+						}
+					//Else a meetingroom has not been selected and the location is
+					// specified manually by the user
+					else
+						{
+						appointment.setMeetingRoom("");
+						appointment.setLocation(locationField.getText());
+						}
+					
+					//appointment.setMeetingRoom(locationField.getText());
+					appointment.setMeetingLeader(CalendarProgram.loggedInUser);
+									
+					ApplicationModel.getInstance().addAppointment(
+							appointment.getAppointmentID(), appointment);
+					
+					
+					JOptionPane.showMessageDialog(
+							(JFrame)SwingUtilities.getRoot(_parentContentPane),
+							"Appointment has been saved!",
+							"Information Message",
+							JOptionPane.INFORMATION_MESSAGE);
+					
+					
 					}
-				//Else a meetingroom has not been selected and the location is
-				// specified manually by the user
+				//This is an editable appointment and we need to updata data
 				else
 					{
-					appointment.setMeetingRoom("");
-					appointment.setLocation(locationField.getText());
+					//TODO: We need to call update functions
+					
+					
+					JOptionPane.showMessageDialog(
+							(JFrame)SwingUtilities.getRoot(_parentContentPane),
+							"Appointment has been updated!",
+							"Information Message",
+							JOptionPane.INFORMATION_MESSAGE);
+					
 					}
-				
-				//appointment.setMeetingRoom(locationField.getText());
-				appointment.setMeetingLeader(CalendarProgram.loggedInUser);
-								
-				ApplicationModel.getInstance().addAppointment(
-						appointment.getAppointmentID(), appointment);
-				
-				
-				JOptionPane.showMessageDialog(
-						(JFrame)SwingUtilities.getRoot(_parentContentPane),
-						"Appointment has been saved!",
-						"Information Message",
-						JOptionPane.INFORMATION_MESSAGE);
-				
 				//We go to the calendar view
 				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
 				c1.show(_parentContentPane, "Calendar View");

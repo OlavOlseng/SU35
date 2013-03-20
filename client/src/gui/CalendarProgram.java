@@ -64,7 +64,7 @@ public class CalendarProgram {
 		appointment1.setEndTime("15:00");
 		appointment1.setDescription("Et møte der vi tar opp aktuelle " +
 				"spørsmål angående fellesprosjektet.");
-		appointment1.setLocation("Room K1");
+		appointment1.setLocation("");
 		appointment1.setMeetingRoom("Room K1");
 		appointment1.setMeetingLeader("kenneth@ntnu.no");
 		
@@ -77,11 +77,11 @@ public class CalendarProgram {
 		appointment2.setTitle("Møte");
 		appointment2.setDate("2013-04-12");
 		appointment2.setStartTime("16:00");
-		appointment2.setEndTime("18:00");
+		appointment2.setEndTime("20:00");
 		appointment2.setDescription("Et møte der vi tar opp aktuelle " +
 				"spørsmål angående ulike problemstillinger.");
-		appointment2.setLocation("Room K2");
-		appointment2.setMeetingRoom("Room K2");
+		appointment2.setLocation("Hotel Clarion");
+		appointment2.setMeetingRoom("");
 		appointment2.setMeetingLeader("sindre@ntnu.no");
 		
 		ApplicationModel.getInstance().addAppointment(
