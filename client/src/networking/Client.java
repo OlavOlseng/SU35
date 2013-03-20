@@ -153,15 +153,15 @@ public class Client implements MessageListener {
 		send(msg);
 	}
 	
-	public void sendAppointmentDeletion(String ID) {
-		Appointment appointment = new Appointment(Integer.parseInt(ID));
+	public void sendAppointmentDeletion(int ID) {
+		Appointment appointment = new Appointment(ID);
 		String payload = xmlFactory.makeAppointmentXML(appointment);
 		String msg = factory.makeDeleteMessage(SBPFactory.OPTION_APPOINTMENT, payload);
 		send(msg);
 	}
 	
-	public void sendInvitationDeletion(String email, String ID) {
-		Invitation invitation = new Invitation(email, Integer.parseInt(ID));
+	public void sendInvitationDeletion(String email, int ID) {
+		Invitation invitation = new Invitation(email, ID);
 		String payload = xmlFactory.makeInvitationXML(invitation);
 		String msg = factory.makeDeleteMessage(SBPFactory.OPTION_INVITATION, payload);
 		send(msg);
@@ -183,8 +183,8 @@ public class Client implements MessageListener {
 	}
 	*/
 	
-	public void sendAlarmDeletion(String email, String ID) {
-		Alarm alarm = new Alarm(Integer.parseInt(ID), email);
+	public void sendAlarmDeletion(String email, int ID) {
+		Alarm alarm = new Alarm(ID, email);
 		String payload = xmlFactory.makeAlarmXML(alarm);
 		String msg = factory.makeDeleteMessage(SBPFactory.OPTION_ALARM, payload);
 		send(msg);

@@ -68,14 +68,14 @@ public class ModelTest {
 				} break;
 				case "DELETE_APPOINTMENT": {
 					System.out.print("Appointment ID: ");
-					String ID = scanner.nextLine();
+					int ID = Integer.parseInt(scanner.nextLine());
 					client.sendAppointmentDeletion(ID);
 				} break;
 				case "DELETE_INVITATION": {
 					System.out.print("Employee email: ");
 					String email = scanner.nextLine();
 					System.out.print("Appointment ID: ");
-					String ID = scanner.nextLine();
+					int ID = Integer.parseInt(scanner.nextLine());
 					client.sendInvitationDeletion(email, ID);
 				} break;
 				case "DELETE_ROOM": {
@@ -87,7 +87,7 @@ public class ModelTest {
 					System.out.print("Employee email: ");
 					String email = scanner.nextLine();
 					System.out.print("Appointment ID: ");
-					String ID = scanner.nextLine();
+					int ID = Integer.parseInt(scanner.nextLine());
 					client.sendAlarmDeletion(email, ID);
 				} break;
 				case "CREATE_APPOINTMENT": {

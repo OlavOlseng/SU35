@@ -44,10 +44,11 @@ public class ApplicationModel {
 	// key = email
 	public void addEmployee(String key, Employee value){
 		if(employees.containsKey(key)) {
-			updateEmployee(key, value);
+			connection.sendEmployeeUpdate(value);
 			return;
 		}
 		employees.put(key, value);
+		connection.sendEmployeeCreation(value);
 		System.out.println("Key: " + key);
 		fireUpdateEvent();
 	}
@@ -74,6 +75,7 @@ public class ApplicationModel {
 	public void deleteEmployee(String email){
 		if(employees.containsKey(email)){
 			employees.remove(email);
+			connection.sendEmployeeDeletion(email);
 			fireUpdateEvent();
 		}
 	}
@@ -81,10 +83,11 @@ public class ApplicationModel {
 	// key = appointmentID
 	public void addAppointment(int key, Appointment value){
 		if(appointment.containsKey(key)) {
-			updateAppointment(key, value);
+			connection.sendAppointmentUpdate(value);
 			return;
 		}
 		appointment.put(key, value);
+		connection.sendAppointmentCreation(value);
 		System.out.println("Key: " + key);
 		fireUpdateEvent();
 	}
@@ -111,6 +114,9 @@ public class ApplicationModel {
 	public void deleteAppointment(int aID){
 		if(appointment.containsKey(aID)){
 			appointment.remove(aID);
+			if(getAppointment(aID).getMeetingLeader().equals(username)) {
+				connection.sendAppointmentDeletion(aID);
+			}
 			fireUpdateEvent();
 		}
 	}
@@ -119,10 +125,11 @@ public class ApplicationModel {
 	public void addInvitation(String email, int appointmentID, Invitation value){
 		String key = email + "¤" + appointmentID;
 		if(invitations.containsKey(key)) {
-			updateInvitation(email, appointmentID, value);
+			connection.sendInvitationUpdate(value);
 			return;
 		}
 		invitations.put(key, value);
+		connection.sendInvitationCreation(value);
 		System.out.println("Key: " + key);
 		fireUpdateEvent();
 	}
@@ -175,6 +182,9 @@ public class ApplicationModel {
 		String id = email + "¤" + appointmentID;
 		if(invitations.containsKey(id)){
 			invitations.remove(id);
+			if(email.equals(username)) {
+				connection.sendInvitationDeletion(email, appointmentID);
+			}
 			fireUpdateEvent();
 		}
 	}
@@ -210,10 +220,11 @@ public class ApplicationModel {
 		String key = email + "¤" + appointmentID;
 		System.out.println("Key: " + key);
 		if (alarms.containsKey(key)) {
-			updateAlarm(email, appointmentID, value);
+			connection.sendAlarmUpdate(value);
 			return;
 		}
 		alarms.put(key, value);
+		connection.sendAlarmCreation(value);
 		fireUpdateEvent();
 	}
 	
@@ -242,6 +253,9 @@ public class ApplicationModel {
 		String id = email + "¤" + appointmentID;
 		if(alarms.containsKey(id)){
 			alarms.remove(id);
+			if(email.equals(username)) {
+				connection.sendAlarmDeletion(email, appointmentID);
+			}
 			fireUpdateEvent();
 		}
 	}
