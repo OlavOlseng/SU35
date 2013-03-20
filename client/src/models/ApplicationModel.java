@@ -292,9 +292,8 @@ public class ApplicationModel {
 	public ArrayList<Invitation> getInvitationsByAppointment(int appointmentID) {
 		ArrayList<Invitation> invites = new ArrayList<Invitation>();
 		ArrayList<String> keys = new ArrayList<String>(invitations.keySet());
-		
 		for(String s : keys) {
-			if(s.split("¤")[1] == Integer.toString(appointmentID)){
+			if(s.split("¤")[1].equals(Integer.toString(appointmentID))){
 				invites.add(invitations.get(s));
 			}
 		}
