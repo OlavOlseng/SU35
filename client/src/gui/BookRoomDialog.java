@@ -160,7 +160,10 @@ public class BookRoomDialog extends JDialog
 			{
 			//JComboBox selectedRoom = (JComboBox)event.getSource();
 			int index = roomComboBox.getSelectedIndex();
-			_editView.setLoacationField(_roomList[index]); 
+			_editView.setLocationField(_roomList[index]);
+			_editView.setLocationFieldEnabled(false);
+			_editView.setBookRoomButtonEnabled(false);
+			_editView.setUnbookRoomButtonEnabled(true);
 			
 			BookRoomDialog.this.dispose();
 			}

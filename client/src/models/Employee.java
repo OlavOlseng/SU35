@@ -76,5 +76,11 @@ public class Employee {
 		}
 		return s;
 	}
+
+
+
+	public void update(Employee other) {
+		//TODO maybe implement
+	}
 	
 }

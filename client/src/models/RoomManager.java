@@ -3,7 +3,6 @@ package models;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
-import java.util.Set;
 
 public class RoomManager {
 	public static class NoAvailableRooms extends Exception {
