@@ -110,11 +110,13 @@ public class Login extends JPanel/*JFrame*/ implements LoginListener {
 		logInButton = new JButton("Log in");
 		logInButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				ApplicationModel.getInstance().login(emailAddress.getText(), password.getText());
+				
 				//NB! Unfinished.
 				//We have to check if email and password is correct
 //				if (email and password exist in database) {
-					CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
-					c1.show(_parentContentPane, "Calendar View");
+//					CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
+//					c1.show(_parentContentPane, "Calendar View");
 //				}
 //				else {
 //					JOptionPane.showMessageDialog(JOptionPane.getFrameForComponent(getRootPane()),
@@ -150,9 +152,15 @@ public class Login extends JPanel/*JFrame*/ implements LoginListener {
 		// TODO Auto-generated method stub
 		if(e.getLoginSuccess()) {
 			// logged in
+			CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
+			c1.show(_parentContentPane, "Calendar View");
 		}
 		else {
 			// not logged in
+			JOptionPane.showMessageDialog(JOptionPane.getFrameForComponent(getRootPane()),
+				    "Login failed!" + "\n" +"Please re-enter your email and password, or contact system administrator.",
+				    "Login failed!",
+				    JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }

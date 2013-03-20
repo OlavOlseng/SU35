@@ -1,6 +1,9 @@
 package gui;
 import models.Appointment;
 import models.ApplicationModel;
+import models.Invitation;
+import models.Invitation.Answer;
+import models.ModelListener;
 
 import gui.EditView.AddListener;
 import gui.EditView.PeopleListener;
@@ -40,7 +43,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.SwingConstants;
 
 
-public class CalendarView extends JPanel{
+public class CalendarView extends JPanel implements ModelListener{
 
 //	static JFrame frame;
 	private JPanel topLeftPanel, topRightPanel, bottomLeftPanel, bottomRightPanel, calendarPanel, _parentContentPane;
@@ -73,6 +76,7 @@ public class CalendarView extends JPanel{
 	public CalendarView(JPanel parentContentPane) {
 		initialize(parentContentPane);
 		updateInfo();
+		ApplicationModel.getInstance().addModelListener(this);
 	}
 	
 	private void initialize(JPanel parentContentPane) {
@@ -86,7 +90,7 @@ public class CalendarView extends JPanel{
 	}
 	
 	public void updateInfo() {
-		notifications = ApplicationModel.getInstance().getPendingAppointmentsForUser(CalendarProgram.loggedInUser);
+		notifications = ApplicationModel.getInstance().getPendingAppointmentsForUser(ApplicationModel.getInstance().username);
 		if (notifications.size() > 0) {
 			btnNotifications.setText("Notifications (" + Integer.toString(notifications.size()) + ")");
 		}
@@ -94,12 +98,32 @@ public class CalendarView extends JPanel{
 		//Finds the appointments for the logged in user
 		//buttonList = new ArrayList<JButton>();
 		ArrayList<Appointment> appointmentsForUser = new ArrayList<Appointment>();
-		appointmentsForUser = ApplicationModel.getInstance().getAppointmentsForUser(CalendarProgram.loggedInUser);
+		appointmentsForUser = ApplicationModel.getInstance().getAppointmentsForUser(ApplicationModel.getInstance().username);
 		for (Appointment app : appointmentsForUser) {
 			if (app.getDate().WEEK_OF_YEAR == selectedWeek) {
 				CustomCalendarButton button = new CustomCalendarButton();
 				button.keyOfRelatedAppointment = app.getAppointmentID();
 				//buttonList.add(button);
+				boolean allAccepted = true;
+				boolean allDeclined = true;
+				for (Invitation inv : ApplicationModel.getInstance().getInvitationsByAppointment(app.getAppointmentID())) {
+					if (inv.getAnswer() == Answer.PENDING) {
+						button.setBackground(new Color(0,0,255));
+						break;
+					}
+					else if (inv.getAnswer() == Answer.DECLINED) {
+						allAccepted = false;
+					}
+					else if (inv.getAnswer() == Answer.ACCEPTED) {
+						allDeclined = false;
+					}
+				}
+				if (allAccepted == true && allDeclined == false) {
+					button.setBackground(new Color(0,255,0));
+				}
+				if (allAccepted == false && allDeclined == true) {
+					button.setBackground(new Color(255,0,0));
+				}
 				button.setLayout(new BorderLayout());
 				JLabel label1 = new JLabel(app.getTitle());
 				JLabel label2 = new JLabel(app.getFormattedStartTime().toString());
@@ -118,7 +142,7 @@ public class CalendarView extends JPanel{
 								+ "\n\nEnd:\n" + tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation()
 								+ "\n" + tempAppointment.getMeetingRoom());
 						btnMore.setEnabled(true);
-						if (CalendarProgram.loggedInUser.equals(tempAppointment.getMeetingLeader())) {
+						if (ApplicationModel.getInstance().username.equals(tempAppointment.getMeetingLeader())) {
 							btnEdit.setEnabled(true);
 						}
 					}
@@ -161,7 +185,7 @@ public class CalendarView extends JPanel{
 									+ "\n\nEnd:\n" + tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation()
 									+ "\n" + tempAppointment.getMeetingRoom());
 							btnMore.setEnabled(true);
-							if (CalendarProgram.loggedInUser.equals(tempAppointment.getMeetingLeader())) {
+							if (ApplicationModel.getInstance().username.equals(tempAppointment.getMeetingLeader())) {
 								btnEdit.setEnabled(true);
 							}
 						}
@@ -580,9 +604,10 @@ public class CalendarView extends JPanel{
 			
 			availableEmailAdresses.clear();
 			ArrayList<String> tempAvailableEmailAdresses = ApplicationModel.getInstance().getEmployees();
-			
 			for(String email : tempAvailableEmailAdresses) {
-				if (email != CalendarProgram.loggedInUser && selectedUsers.contains(email) == false) {
+				System.out.println(ApplicationModel.getInstance().username);
+				System.out.println(email);
+				if (!email.equals(ApplicationModel.getInstance().username) && selectedUsers.contains(email) == false) {
 					availableEmailAdresses.add(email);
 				}
 			}
