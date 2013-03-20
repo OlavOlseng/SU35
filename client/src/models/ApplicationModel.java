@@ -69,6 +69,9 @@ public class ApplicationModel {
 			local.update(e);
 			fireUpdateEvent();
 		}
+		else {
+			getEmployee(email);
+		}
 	}
 	
 	public void deleteEmployee(String email){
@@ -117,6 +120,9 @@ public class ApplicationModel {
 			Appointment local = appointment.get(aID);
 			local.update(a);
 			fireUpdateEvent();
+		}
+		else {
+			getAppointment(aID);
 		}
 	}
 	
@@ -192,6 +198,9 @@ public class ApplicationModel {
 			Invitation local = invitations.get(id);
 			local.update(i);
 			fireUpdateEvent();
+		}
+		else {
+			getInvitation(email, appointmentID);
 		}
 	}
 	
@@ -271,6 +280,9 @@ public class ApplicationModel {
 			Alarm a = alarms.get(id);
 			a.update(r);
 			fireUpdateEvent();
+		}
+		else {
+			getAlarm(email, appointmentID);
 		}
 	}
 	
