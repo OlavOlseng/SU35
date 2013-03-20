@@ -17,7 +17,10 @@ public class ApplicationModel {
 	public String username; 
 	public Client connection;
 	
+	private ArrayList<ModelListener> listeners;
+	
 	private ApplicationModel(){
+		listeners = new ArrayList<ModelListener>();
 		employees = new HashMap<String, Employee>();
 		appointment = new HashMap<Integer, Appointment>();
 		rooms = new HashMap<String, Room>();
@@ -35,6 +38,7 @@ public class ApplicationModel {
 		}
 		employees.put(key, value);
 		System.out.println("Key: " + key);
+		fireUpdateEvent();
 	}
 	
 	public Employee getEmployee(String email){
@@ -52,12 +56,14 @@ public class ApplicationModel {
 		if(employees.containsKey(email)){
 			Employee local = employees.get(email);
 			local.update(e);
+			fireUpdateEvent();
 		}
 	}
 	
 	public void deleteEmployee(String email){
 		if(employees.containsKey(email)){
 			employees.remove(email);
+			fireUpdateEvent();
 		}
 	}
 	
@@ -69,6 +75,7 @@ public class ApplicationModel {
 		}
 		appointment.put(key, value);
 		System.out.println("Key: " + key);
+		fireUpdateEvent();
 	}
 	
 	public Appointment getAppointment(int aID){
@@ -86,12 +93,14 @@ public class ApplicationModel {
 		if(appointment.containsKey(aID)){
 			Appointment local = appointment.get(aID);
 			local.update(a);
+			fireUpdateEvent();
 		}
 	}
 	
 	public void deleteAppointment(int aID){
 		if(appointment.containsKey(aID)){
 			appointment.remove(aID);
+			fireUpdateEvent();
 		}
 	}
 	
@@ -104,6 +113,7 @@ public class ApplicationModel {
 		}
 		invitations.put(key, value);
 		System.out.println("Key: " + key);
+		fireUpdateEvent();
 	}
 	
 	public Invitation getInvitation(String email, int appointmentID){
@@ -146,6 +156,7 @@ public class ApplicationModel {
 		if(invitations.containsKey(id)){
 			Invitation local = invitations.get(id);
 			local.update(i);
+			fireUpdateEvent();
 		}
 	}
 	
@@ -153,6 +164,7 @@ public class ApplicationModel {
 		String id = email + "¤" + appointmentID;
 		if(invitations.containsKey(id)){
 			invitations.remove(id);
+			fireUpdateEvent();
 		}
 	}
 	
@@ -191,6 +203,7 @@ public class ApplicationModel {
 			return;
 		}
 		alarms.put(key, value);
+		fireUpdateEvent();
 	}
 	
 	public Alarm getAlarm(String email, int appointmentID){
@@ -210,6 +223,7 @@ public class ApplicationModel {
 		if(alarms.containsKey(id)){
 			Alarm a = alarms.get(id);
 			a.update(r);
+			fireUpdateEvent();
 		}
 	}
 	
@@ -217,6 +231,7 @@ public class ApplicationModel {
 		String id = email + "¤" + appointmentID;
 		if(alarms.containsKey(id)){
 			alarms.remove(id);
+			fireUpdateEvent();
 		}
 	}
 	
@@ -237,6 +252,20 @@ public class ApplicationModel {
 	
 	public ArrayList<String> getEmployees() {
 		return new ArrayList<String>(employees.keySet());
+	}
+	
+	public void addModelListener(ModelListener ml) {
+		listeners.add(ml);
+	}
+	
+	public void removeModelListener(ModelListener ml) {
+		listeners.remove(ml);
+	}
+	
+	private void fireUpdateEvent() {
+		for(ModelListener ml : listeners) {
+			ml.refresh();
+		}
 	}
 	
 	public String listKeys() {

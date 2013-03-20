@@ -580,7 +580,7 @@ public class ServerMessageHandler extends MessageHandler{
 			String meetingRoom = app.getMeetingRoom();
 			String meetingLeader = app.getMeetingLeader();
 			
-			int id = (int)(System.currentTimeMillis());
+			int id = app.getAppointmentID();
 			
 			String sql = String.format("INSERT INTO appointment VALUES (%d,'%s','%s','%s','%s','%s','%s','%s','%s')", 
 					id, title, date, startTime, endTime, desc, location, meetingLeader, meetingRoom);

@@ -221,6 +221,7 @@ public class Client implements MessageListener {
 	/*
 	 * QUERY THE SERVER FOR UPDATE
 	 */
+	
 	public void sendEmployeeUpdate(Employee employee) {
 		String payload = xmlFactory.makeEmployeeXML(employee);
 		String msg = factory.makeUpdateMessage(SBPFactory.OPTION_EMPLOYEE, payload);
