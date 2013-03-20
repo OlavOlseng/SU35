@@ -57,6 +57,7 @@ public class CalendarView extends JPanel{
 	private int appointmentID;
 	private ArrayList<String> selectedUsers = new ArrayList<String>();
 	private ArrayList<String> availableEmailAdresses = new ArrayList<String>();
+	private ArrayList<Integer> notifications = new ArrayList<Integer>();
 	
 /*	public static void main(String[] args) {
 		
@@ -80,7 +81,10 @@ public class CalendarView extends JPanel{
 	}
 	
 	public void updateInfo() {
-		btnNotifications.setText("Notifications (" + Integer.toString(menuNotifications.getComponentCount()) + ")");
+		notifications = ApplicationModel.getInstance().getPendingAppointmentsForUser(CalendarProgram.loggedInUser);
+		if (notifications.size() > 0) {
+			btnNotifications.setText("Notifications (" + Integer.toString(notifications.size()) + ")");
+		}
 		
 		//Finds the appointments for the logged in user
 		//buttonList = new ArrayList<JButton>();
@@ -195,19 +199,8 @@ public class CalendarView extends JPanel{
 		gbl_topLeftPanel.rowWeights = new double[]{1.0, Double.MIN_VALUE};
 		topLeftPanel.setLayout(gbl_topLeftPanel);
 		
-		btnNotifications = new JButton("Notifications");
-		
-		menuNotifications = new JPopupMenu();
-		menuNotifications.add("Menuitem 1");
-		menuNotifications.add("Menuitem 2");
-		menuNotifications.add(new JMenuItem("Menuitem 3"));
-
-		btnNotifications.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        menuNotifications.show(btnNotifications, btnNotifications.getBounds().x, btnNotifications.getBounds().y
-		           + btnNotifications.getBounds().height);
-		    }
-		});
+		btnNotifications = new JButton("Notifications (0)");
+		btnNotifications.addActionListener(new BtnNotificationsListener());
 		
 		GridBagConstraints gbc_btnNotifications = new GridBagConstraints();
 		gbc_btnNotifications.fill = GridBagConstraints.BOTH;
@@ -246,7 +239,7 @@ public class CalendarView extends JPanel{
 		topRightPanel.add(btnMe, gbc_btnMe);
 		
 		btnCalendars = new JButton("Calendars");
-		btnCalendars.addActionListener(new btnCalendarListener());
+		btnCalendars.addActionListener(new BtnCalendarListener());
 		GridBagConstraints gbc_btnCalendars = new GridBagConstraints();
 		gbc_btnCalendars.fill = GridBagConstraints.BOTH;
 		gbc_btnCalendars.insets = new Insets(0, 0, 0, 5);
@@ -571,7 +564,7 @@ public class CalendarView extends JPanel{
 	{ _infoView = infoView; }
 	
 	//--------------------------------------------------------------------------
-	class btnCalendarListener implements ActionListener {
+	class BtnCalendarListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0){
 			menuCalendars = new JPopupMenu();
 			JLabel lblMenuCalendars = new JLabel("Select peoples calendars to view:");
@@ -607,6 +600,37 @@ public class CalendarView extends JPanel{
 			selectedUsers.add(selectedEmail);
 			paintGUI();
 			updateInfo();
+		}
+	}
+	
+	class BtnNotificationsListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0){
+			menuNotifications = new JPopupMenu();
+			
+			//notifications = ApplicationModel.getInstance().getPendingAppointmentsForUser(CalendarProgram.loggedInUser);
+			
+			JMenuItem menuItem;
+			
+			for(int i = 0; i < notifications.size(); i++) {
+				menuItem = new JMenuItem(Integer.toString(ApplicationModel.getInstance().getAppointment(i).getAppointmentID()));
+				menuItem.add(new JLabel("Invited to: " + ApplicationModel.getInstance().getAppointment(i).getTitle()));
+				menuNotifications.add(menuItem);
+				menuItem.addActionListener(new InvitationListener());
+			}
+			
+			menuNotifications.show(btnNotifications, btnNotifications.getBounds().x, btnNotifications.getBounds().y
+					+ btnNotifications.getBounds().height);
+		}
+	}
+	
+	class InvitationListener implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			JMenuItem invitationItem = (JMenuItem)event.getSource();
+			int selectedInvitation = Integer.parseInt(invitationItem.getText());
+			
+			_infoView.initialize(selectedInvitation);
+			CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
+			c1.show(_parentContentPane, "Info View");
 		}
 	}
 }

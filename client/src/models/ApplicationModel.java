@@ -131,6 +131,17 @@ public class ApplicationModel {
 		return array;
 	}
 	
+	public ArrayList<Integer> getPendingAppointmentsForUser(String email) {
+		ArrayList<Integer> array = new ArrayList<Integer>();
+		for (String key : invitations.keySet()) {
+			if (invitations.get(key).getEmployeeEmail().equals(email) && invitations.get(key).getAnswer()== Answer.PENDING) {
+				int appointmentKey = invitations.get(key).getAppointmentID();
+				array.add(appointmentKey);
+			}
+		}
+		return array;
+	}
+	
 	public void updateInvitation(String email, int appointmentID, Invitation i){
 		String id = email + "¤" + appointmentID;
 		if(invitations.containsKey(id)){
