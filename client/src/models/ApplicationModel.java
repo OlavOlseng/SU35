@@ -44,11 +44,10 @@ public class ApplicationModel {
 	// key = email
 	public void addEmployee(String key, Employee value){
 		if(employees.containsKey(key)) {
-			connection.sendEmployeeUpdate(value);
+			updateEmployee(key, value);
 			return;
 		}
 		employees.put(key, value);
-		connection.sendEmployeeCreation(value);
 		System.out.println("Key: " + key);
 		fireUpdateEvent();
 	}
@@ -75,7 +74,9 @@ public class ApplicationModel {
 	public void deleteEmployee(String email){
 		if(employees.containsKey(email)){
 			employees.remove(email);
-			connection.sendEmployeeDeletion(email);
+			if(email.equals(username)) {
+				connection.sendEmployeeDeletion(email);
+			}
 			fireUpdateEvent();
 		}
 	}
