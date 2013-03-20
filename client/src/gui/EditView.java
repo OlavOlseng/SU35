@@ -43,6 +43,7 @@ public class EditView extends JPanel/*JFrame*/ {
 
 	private JButton 				addButton;
 	private JButton 				deleteButton;
+	private JButton 				saveButton;
 	private JButton 				removeButton;
 	private JButton 				calendarButton;
 	private JButton 				chooseDate;
@@ -126,7 +127,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		this.add(calendarButton, gbc_calendarButton);
 		
 		
-		JButton saveButton = new JButton("Save");
+		saveButton = new JButton("Save");
 		saveButton.addActionListener(new SaveListener());
 		GridBagConstraints gbc_saveButton = new GridBagConstraints();
 		gbc_saveButton.fill = GridBagConstraints.BOTH;
@@ -347,10 +348,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		
 		
 		unbookRoomButton = new JButton("Unbook");
-		unbookRoomButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
+		unbookRoomButton.addActionListener(new UnbookRoomListener());
 		GridBagConstraints gbc_unbookRoomButton = new GridBagConstraints();
 		gbc_unbookRoomButton.fill = GridBagConstraints.BOTH;
 		gbc_unbookRoomButton.insets = new Insets(0, 0, 5, 5);
@@ -392,8 +390,32 @@ public class EditView extends JPanel/*JFrame*/ {
 			}
 		}
 	//--------------------------------------------------------------------------
-	public void setLoacationField(String location)
+	public void setLocationField(String location)
 		{ locationField.setText(location); }
+	//--------------------------------------------------------------------------
+	public void setLocationFieldEnabled(boolean enabled)
+		{
+		if(enabled == true)
+			{ locationField.setEnabled(true); }
+		else
+			{ locationField.setEnabled(false); }
+		}
+	//--------------------------------------------------------------------------
+	public void setBookRoomButtonEnabled(boolean enabled)
+		{
+		if(enabled == true)
+			{ bookRoomButton.setEnabled(true); }
+		else
+			{ bookRoomButton.setEnabled(false); }
+		}
+	//--------------------------------------------------------------------------
+	public void setUnbookRoomButtonEnabled(boolean enabled)
+		{
+		if(enabled == true)
+			{ unbookRoomButton.setEnabled(true); }
+		else
+			{ unbookRoomButton.setEnabled(false); }
+		}
 	//--------------------------------------------------------------------------
 	private void resetPanel()
 		{
@@ -409,6 +431,9 @@ public class EditView extends JPanel/*JFrame*/ {
 		peopleListModel.clear();
 		peopleList.clearSelection();
 		
+		//We have to make sure that the user is automatically inserted into the 
+		// the peopleList
+		peopleListModel.addElement((String)CalendarProgram.loggedInUser);
 		
 		unbookRoomButton.setEnabled(false);
 		deleteButton.setEnabled(false);
@@ -598,24 +623,25 @@ public class EditView extends JPanel/*JFrame*/ {
 			}
 		}
 	//**************************************************************************
-	class unbookRoomListener implements ActionListener
+	class UnbookRoomListener implements ActionListener
 		{
 		public void actionPerformed(ActionEvent event)
 			{
-//			public Appointment(int appointmentID, Calendar date, Calendar startTime,
-//					Calendar endTime, String description, String location,
-//					String meetingRoom, Employee meetingLeader)
-//				{
-//				this.appointmentID = appointmentID;
-//				this.date = Calendar.getInstance();//date;
-//				this.startTime = Calendar.getInstance();//startTime;
-//				this.endTime = Calendar.getInstance();//endTime;
-//				this.description = description;
-//				this.location = location;
-//				this.meetingRoom = meetingRoom;
-//				this.meetingLeader = meetingLeader;	
-//				}
-			
+			//We don't really need the if construct, but use it anyway
+			//If locationField is not enabled we know that there has been a room
+			// reservation
+			if(locationField.isEnabled() == false)
+				{ 
+				ApplicationModel.getInstance().deleteRoom(locationField.getText());
+				locationField.setText("");
+				bookRoomButton.setEnabled(true);
+				unbookRoomButton.setEnabled(false);
+				
+				JOptionPane.showMessageDialog(
+						(JFrame)SwingUtilities.getRoot(_parentContentPane),
+						"Room has been unbooked", "Information message",
+						JOptionPane.INFORMATION_MESSAGE);
+				}			
 			}
 		}
 	//**************************************************************************
@@ -628,11 +654,21 @@ public class EditView extends JPanel/*JFrame*/ {
 			
 			
 			if(index != -1)
-				{ peopleListModel.remove(index); }
+				{
+				if(peopleListModel.get(index).equals(CalendarProgram.loggedInUser))
+					{
+					JOptionPane.showMessageDialog(
+							(JFrame)SwingUtilities.getRoot(_parentContentPane),
+							"You cannot remove yourself from this appointment.",
+							"Illegal action", JOptionPane.WARNING_MESSAGE);
+					}
+				else
+					{ peopleListModel.remove(index); }
+				}
 			
-			
-			//If there is no element in list, then we deactivate the removeButton
-			if(peopleListModel.getSize() == 0)
+			//If there is only 1 element in the list (the user), then we
+			//	deactivate the removeButton
+			if(peopleListModel.getSize() == 1)
 				{ removeButton.setEnabled(false); }
 			}
 		}
@@ -646,7 +682,7 @@ public class EditView extends JPanel/*JFrame*/ {
 			//We get the selected email
 			JMenuItem emailItem 		  = (JMenuItem)event.getSource();
 			String selectedEmail 	  = emailItem.getText();
-			boolean isEmailSelected = false;
+			boolean isEmailSelected   = false;
 					
 					
 			//We need to check if the emailaddress is already in the peopleList
@@ -701,8 +737,25 @@ public class EditView extends JPanel/*JFrame*/ {
 				appointment.setStartTime(startField.getText());
 				appointment.setEndTime(startField.getText());
 				appointment.setDescription(descriptionArea.getText());
-				appointment.setLocation(locationField.getText());
-				appointment.setMeetingRoom(locationField.getText());
+				//appointment.setLocation(locationField.getText());
+				
+				
+				//If locationField is not enabled then this means that a room has
+				// been boooked
+				if(locationField.isEnabled() == false)
+					{
+					appointment.setMeetingRoom(locationField.getText());
+					appointment.setLocation("");
+					}
+				//Else a meetingroom has not been selected and the location is
+				// specified manually by the user
+				else
+					{
+					appointment.setMeetingRoom("");
+					appointment.setLocation(locationField.getText());
+					}
+				
+				//appointment.setMeetingRoom(locationField.getText());
 				appointment.setMeetingLeader(CalendarProgram.loggedInUser);
 								
 				ApplicationModel.getInstance().addAppointment(
