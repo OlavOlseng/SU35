@@ -168,12 +168,12 @@ public class ServerMessageHandler extends MessageHandler{
 		ArrayList<String> response = new ArrayList<String>();
 		ArrayList<Invitation> invites = new ArrayList<Invitation>();
 		String query = "SELECT * FROM invitation";
-		
+
 		if(!data[4].equals("all")) {
 			String ids[] = data[4].split("¤");
 			query = String.format("SELECT * FROM invitation WHERE employee_email='%s' AND appointment_ID='%s'", ids[0], ids[1]);
 		}
-		
+
 		String payload = null;
 
 		ResultSet set;
@@ -790,25 +790,28 @@ public class ServerMessageHandler extends MessageHandler{
 	@Override
 	public void checkLogin(String[] data) {
 		String[] msg = data[4].split("¤");
-		String user = msg[0];
-		String pwd = msg[1];
-		String query = String.format("SELECT * FROM employee WHERE email='%s' AND password='%s'", user, pwd);
-
 		boolean error = true;
 		String errorMsg = "Invalid login information";
 		String response = null;
+		String user = null;
 
 		try {
-			ResultSet rs = conn.makeSingleQuery(query);
-			if (rs.first()) {
-				error = false;
-				errorMsg = null;
+			if(msg.length == 2) {
+				user = msg[0];
+				String pwd = msg[1];
+				String query = String.format("SELECT * FROM employee WHERE email='%s' AND password='%s'", user, pwd);
+				ResultSet rs = conn.makeSingleQuery(query);
+				if (rs.first()) {
+					error = false;
+					errorMsg = null;
+					System.out.println(String.format("%s, logged in...", user));
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		finally{
-			response = msgFactory.createMessage(MessageType.LOGIN, error, errorMsg, data[3], msg[0]);
+			response = msgFactory.createMessage(MessageType.LOGIN, error, errorMsg, data[3], user);
 		}
 		try {
 			bridge.send(response);
