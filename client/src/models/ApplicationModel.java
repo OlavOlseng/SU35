@@ -2,7 +2,6 @@ package models;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 import networking.Client;
 import models.Invitation.Answer;
