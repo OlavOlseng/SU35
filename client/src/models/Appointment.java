@@ -1,8 +1,19 @@
 package models;
 
+import java.beans.PropertyChangeSupport;
 import java.util.Calendar;
 
 public class Appointment {
+	public static final String APPOINTMENT_LOCATION_PROPERTY = "APPOINTMENT_LOCATION_CHANGED";
+	public static final String APPOINTMENT_DESCRIPTION_PROPERTY = "APPOINTMENT_DESCRIPTION_CHANGED";
+	public static final String APPOINTMENT_MEETINGLEADER_PROPERTY = "APPOINTMENT_MEETINGLEADER_CHANGED";
+	public static final String APPOINTMENT_MEETINGROOM_PROPERTY = "APPOINTMENT_MEETINGROOM_CHANGED";
+	public static final String APPOINTMENT_APPOINTMENT_ID_PROPERTY = "APPOINTMENT_APPOINTMENT_ID_CHANGED";
+	public static final String APPOINTMENT_TITLE_PROPERTY = "APPOINTMENT_TITLE_CHANGED";
+	public static final String APPOINTMENT_DATE_PROPERTY = "APPOINTMENT_DATE_CHANGED";
+	public static final String APPOINTMENT_STARTTIME_PROPERTY = "APPOINTMENT_STARTTIME_CHANGED";
+	public static final String APPOINTMENT_ENDTIME_PROPERTY = "APPOINTMENT_ENDTIME_CHANGED";
+	
 	private int appointmentID;
 	private Calendar date;
 	private Calendar startTime;
@@ -12,6 +23,8 @@ public class Appointment {
 	private String location;
 	private String meetingRoom;
 	private String meetingLeader;
+	
+	private PropertyChangeSupport pcs;
 
 	public Appointment(int appointmentID) {
 		this.appointmentID = appointmentID;
@@ -20,10 +33,13 @@ public class Appointment {
 		startTime = Calendar.getInstance();
 		endTime = Calendar.getInstance();
 		date = Calendar.getInstance();
+		pcs = new PropertyChangeSupport(this);
 	}
 
 	public void setAppointmentID(int appointmentID){
+		int temp = this.appointmentID;
 		this.appointmentID = appointmentID;
+		pcs.firePropertyChange(APPOINTMENT_APPOINTMENT_ID_PROPERTY, temp, this.appointmentID);
 	}
 
 	public int getAppointmentID() {
@@ -35,7 +51,9 @@ public class Appointment {
 	}
 
 	public void setMeetingRoom(String meetingRoom) {
+		String temp = this.meetingRoom;
 		this.meetingRoom = meetingRoom;
+		pcs.firePropertyChange(APPOINTMENT_MEETINGROOM_PROPERTY, temp, this.meetingRoom);
 	}
 	
 	public String getMeetingLeader() {
@@ -43,13 +61,21 @@ public class Appointment {
 	}
 
 	public void setMeetingLeader(String meetingLeader) {
+		String temp = this.meetingLeader;
 		this.meetingLeader = meetingLeader;
+		pcs.firePropertyChange(APPOINTMENT_MEETINGLEADER_PROPERTY, temp, this.meetingLeader);
 	}
 	
 	private void setDate(int year, int month, int day) {
+		Calendar temp = this.date;
 		date.set(year, month-1, day, 0, 0, 0);
+		pcs.firePropertyChange(APPOINTMENT_DATE_PROPERTY, temp, this.date);
+		temp = this.startTime;
 		startTime.set(year, month-1, day);
+		pcs.firePropertyChange(APPOINTMENT_STARTTIME_PROPERTY, temp, this.startTime);
+		temp = this.endTime;
 		endTime.set(year, month-1, day);
+		pcs.firePropertyChange(APPOINTMENT_ENDTIME_PROPERTY, temp, this.endTime);
 	}
 
 	public void setDate(String dateString) {
@@ -58,9 +84,11 @@ public class Appointment {
 	}
 
 	private void setStartTime(int hour, int minute) {
+		Calendar temp = this.startTime;
 		startTime.setTime(date.getTime());
 		startTime.set(Calendar.HOUR_OF_DAY, hour);
 		startTime.set(Calendar.MINUTE, minute);
+		pcs.firePropertyChange(APPOINTMENT_STARTTIME_PROPERTY, temp, this.startTime);
 	}
 
 	public void setStartTime(String time) {
@@ -69,9 +97,11 @@ public class Appointment {
 	}
 
 	private void setEndTime(int hour, int minute) {
+		Calendar temp = this.endTime;
 		endTime.setTime(date.getTime());
 		endTime.set(Calendar.HOUR_OF_DAY, hour);
 		endTime.set(Calendar.MINUTE, minute);
+		pcs.firePropertyChange(APPOINTMENT_ENDTIME_PROPERTY, temp, this.endTime);
 	}
 
 	public void setEndTime(String time) {
@@ -138,7 +168,9 @@ public class Appointment {
 	}
 
 	public void setDescription(String description) {
+		String temp = this.description;
 		this.description = description;
+		pcs.firePropertyChange(APPOINTMENT_DESCRIPTION_PROPERTY, temp, this.description);
 	}
 
 	public String getDescription() {
@@ -146,7 +178,9 @@ public class Appointment {
 	}
 
 	public void setLocation(String location) {
+		String temp = this.location;
 		this.location = location;
+		pcs.firePropertyChange(APPOINTMENT_LOCATION_PROPERTY, temp, this.location);
 	}
 
 	public String getLocation() {
@@ -158,7 +192,9 @@ public class Appointment {
 	}
 
 	public void setTitle(String title) {
+		String temp = this.title;
 		this.title = title;
+		pcs.firePropertyChange(APPOINTMENT_TITLE_PROPERTY, temp, this.title);
 	}
 
 	// May cause null-pointer hell, too lazy to fix. <--- TRUE DAT
