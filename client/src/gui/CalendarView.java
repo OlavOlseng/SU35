@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -104,6 +105,7 @@ public class CalendarView extends JPanel implements ModelListener{
 				CustomCalendarButton button = new CustomCalendarButton();
 				button.keyOfRelatedAppointment = app.getAppointmentID();
 				//buttonList.add(button);
+				button.setFont(new Font("Tahoma", 1, 11));
 				boolean allAccepted = true;
 				boolean allDeclined = true;
 				for (Invitation inv : ApplicationModel.getInstance().getInvitationsByAppointment(app.getAppointmentID())) {
@@ -126,8 +128,11 @@ public class CalendarView extends JPanel implements ModelListener{
 				}
 				button.setLayout(new BorderLayout());
 				JLabel label1 = new JLabel(app.getTitle());
+				label1.setFont(new Font("Tahoma", 1, 10));
 				JLabel label2 = new JLabel(app.getFormattedStartTime().toString());
+				label2.setFont(new Font("Tahoma", 1, 10));
 				JLabel label3 = new JLabel(app.getFormattedEndTime().toString());
+				label3.setFont(new Font("Tahoma", 1, 10));
 				button.add(BorderLayout.NORTH,label1);
 				button.add(BorderLayout.CENTER,label2);
 				button.add(BorderLayout.SOUTH,label3);
@@ -138,8 +143,9 @@ public class CalendarView extends JPanel implements ModelListener{
 						Appointment tempAppointment = ApplicationModel.getInstance().getAppointment(tempButton.keyOfRelatedAppointment);
 						appointmentID = tempButton.keyOfRelatedAppointment;
 						textAreaInfo.setText("Owner:\n" + tempAppointment.getMeetingLeader() + "\n\nDescription:\n" +
-								tempAppointment.getDescription() + "\n\nStart:\n" + tempAppointment.getFormattedStartTime()
-								+ "\n\nEnd:\n" + tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation()
+								tempAppointment.getDescription() + "\n\nDate:\n" + tempAppointment.getFormattedDate() + 
+								"\n\nStart:\n" + tempAppointment.getFormattedStartTime() + "\n\nEnd:\n" + 
+								tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation()
 								+ "\n" + tempAppointment.getMeetingRoom());
 						btnMore.setEnabled(true);
 						if (ApplicationModel.getInstance().username.equals(tempAppointment.getMeetingLeader())) {
@@ -167,10 +173,33 @@ public class CalendarView extends JPanel implements ModelListener{
 					CustomCalendarButton buttonOther = new CustomCalendarButton();
 					buttonOther.keyOfRelatedAppointment = app.getAppointmentID();
 					//buttonList.add(button);
+					boolean allAccepted = true;
+					boolean allDeclined = true;
+					for (Invitation inv : ApplicationModel.getInstance().getInvitationsByAppointment(app.getAppointmentID())) {
+						if (inv.getAnswer() == Answer.PENDING) {
+							buttonOther.setBackground(new Color(0,0,255));
+							break;
+						}
+						else if (inv.getAnswer() == Answer.DECLINED) {
+							allAccepted = false;
+						}
+						else if (inv.getAnswer() == Answer.ACCEPTED) {
+							allDeclined = false;
+						}
+					}
+					if (allAccepted == true && allDeclined == false) {
+						buttonOther.setBackground(new Color(0,255,0));
+					}
+					if (allAccepted == false && allDeclined == true) {
+						buttonOther.setBackground(new Color(255,0,0));
+					}
 					buttonOther.setLayout(new BorderLayout());
 					JLabel label1 = new JLabel(app.getTitle());
+					label1.setFont(new Font("Tahoma", 1, 10));
 					JLabel label2 = new JLabel(app.getFormattedStartTime().toString());
+					label2.setFont(new Font("Tahoma", 1, 10));
 					JLabel label3 = new JLabel(app.getFormattedEndTime().toString());
+					label3.setFont(new Font("Tahoma", 1, 10));
 					buttonOther.add(BorderLayout.NORTH,label1);
 					buttonOther.add(BorderLayout.CENTER,label2);
 					buttonOther.add(BorderLayout.SOUTH,label3);
@@ -181,8 +210,9 @@ public class CalendarView extends JPanel implements ModelListener{
 							Appointment tempAppointment = ApplicationModel.getInstance().getAppointment(tempButton.keyOfRelatedAppointment);
 							appointmentID = tempButton.keyOfRelatedAppointment;
 							textAreaInfo.setText("Owner:\n" + tempAppointment.getMeetingLeader() + "\n\nDescription:\n" +
-									tempAppointment.getDescription() + "\n\nStart:\n" + tempAppointment.getFormattedStartTime()
-									+ "\n\nEnd:\n" + tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation()
+									tempAppointment.getDescription() + "\n\nDate:\n" + tempAppointment.getFormattedDate() + 
+									"\n\nStart:\n" + tempAppointment.getFormattedStartTime() + "\n\nEnd:\n" + 
+									tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation()
 									+ "\n" + tempAppointment.getMeetingRoom());
 							btnMore.setEnabled(true);
 							if (ApplicationModel.getInstance().username.equals(tempAppointment.getMeetingLeader())) {
