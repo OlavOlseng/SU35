@@ -2,6 +2,8 @@ package models;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import models.Invitation.Answer;
 
@@ -176,6 +178,18 @@ public class ApplicationModel {
 			model = new ApplicationModel();
 		}
 		return model;
+	}
+	
+	public HashSet<String> getRooms() {
+		return new HashSet<String>(rooms.keySet());
+	}
+	
+	public HashSet<Integer> getAppointments() {
+		return new HashSet<Integer>(appointment.keySet());
+	}
+	
+	public String[] getEmployees() {
+		return (String[])employees.keySet().toArray();
 	}
 	
 	public String listKeys() {
