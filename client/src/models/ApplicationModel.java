@@ -145,6 +145,17 @@ public class ApplicationModel {
 		return array;
 	}
 	
+	public ArrayList<Integer> getPendingAppointmentsForUser(String email) {
+		ArrayList<Integer> array = new ArrayList<Integer>();
+		for (String key : invitations.keySet()) {
+			if (invitations.get(key).getEmployeeEmail().equals(email) && invitations.get(key).getAnswer()== Answer.PENDING) {
+				int appointmentKey = invitations.get(key).getAppointmentID();
+				array.add(appointmentKey);
+			}
+		}
+		return array;
+	}
+	
 	public void updateInvitation(String email, int appointmentID, Invitation i){
 		String id = email + "¤" + appointmentID;
 		if(invitations.containsKey(id)){
@@ -236,16 +247,17 @@ public class ApplicationModel {
 		return model;
 	}
 	
-	public HashSet<String> getRooms() {
-		return new HashSet<String>(rooms.keySet());
+	public ArrayList<String> getRooms() {
+		return new ArrayList<String>(rooms.keySet());
 	}
 	
-	public HashSet<Integer> getAppointments() {
-		return new HashSet<Integer>(appointment.keySet());
+	public ArrayList<Integer> getAppointments() {
+		return new ArrayList<Integer>(appointment.keySet());
 	}
 	
-	public ArrayList<String> getEmployees()
-		{ return new ArrayList<String>(employees.keySet()); }
+	public ArrayList<String> getEmployees() {
+		return new ArrayList<String>(employees.keySet());
+	}
 	
 	public void addModelListener(ModelListener ml) {
 		listeners.add(ml);
@@ -275,25 +287,5 @@ public class ApplicationModel {
 		keys += "\nCurrent user: " + username;
 		return keys;
 	}
-	
-	public ArrayList<String> getEmployeesForApplication(int applicationId)
-		{
-		ArrayList<String> employees = new ArrayList<String>();
-		ArrayList<String> allEmployees = getEmployees(); 
-		//Invitation invit = get
-		
-		for(String employee : allEmployees)
-			{
-			String id 			= employee + "¤" + applicationId;
-			Invitation value 	= invitations.get(id);
-					
-			if(value != null)
-				{
-				employees.add(employee);
-				}
-			}
-	
-		
-		return employees;
-		}
 }
+
