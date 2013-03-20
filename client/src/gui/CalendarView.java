@@ -80,6 +80,11 @@ public class CalendarView extends JPanel{
 		paintGUI();
 	}
 	
+	public void refresh() {
+		paintGUI();
+		updateInfo();
+	}
+	
 	public void updateInfo() {
 		notifications = ApplicationModel.getInstance().getPendingAppointmentsForUser(CalendarProgram.loggedInUser);
 		if (notifications.size() > 0) {
