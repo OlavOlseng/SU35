@@ -18,7 +18,7 @@ public class CalendarProgram {
 	private static final String INFO_VIEW = "Info View";
 	
 	//private static ApplicationModel model;
-	public static String loggedInUser;
+	public static String username;
 	
 	private static void createAndShowGui()
 		{

@@ -28,8 +28,9 @@ import javax.swing.ScrollPaneConstants;
 
 import models.ApplicationModel;
 import models.Appointment;
+import models.ModelListener;
 
-public class InfoView extends JPanel/*JFrame*/ 
+public class InfoView extends JPanel implements ModelListener
 	{
 	private int 			_appointmentId;
 	private JButton 		editButton;
@@ -73,7 +74,8 @@ public class InfoView extends JPanel/*JFrame*/
 	 */
 	public InfoView(JPanel parentContentPane) {
 		_parentContentPane = parentContentPane;
-	
+		ApplicationModel.getInstance().addModelListener(this);
+		
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//setBounds(100, 100, 800, 600);
 		//contentPane = new JPanel();
@@ -358,6 +360,11 @@ public class InfoView extends JPanel/*JFrame*/
 		buttonGroup.add(declineRadioButon);
 	}
 	//--------------------------------------------------------------------------
+	public void refresh()
+		{
+		
+		}
+	//--------------------------------------------------------------------------
 	//Here we initialize the different fields, lists and so on.
 	public void initialize(int appointmentId)
 		{ 
@@ -379,7 +386,7 @@ public class InfoView extends JPanel/*JFrame*/
 		//If this user is not the same user who created this appointment, then
 		// he will not be able to edit this appointment. We therefore deactivate
 		// the editButton button
-		if(!CalendarProgram.loggedInUser.equals(appointment.getMeetingLeader()))
+		if(!CalendarProgram.username.equals(appointment.getMeetingLeader()))
 			{ editButton.setEnabled(false); }
 		//TODO: Receive usernames/emails from attending, declined and not
 		// answered employees
