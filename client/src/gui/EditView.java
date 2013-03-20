@@ -463,7 +463,7 @@ public class EditView extends JPanel/*JFrame*/ {
 		
 		//We have to make sure that the user is automatically inserted into the 
 		// the peopleList
-		peopleListModel.addElement((String)CalendarProgram.loggedInUser);
+		peopleListModel.addElement(ApplicationModel.getInstance().username);
 		
 		unbookRoomButton.setEnabled(false);
 		deleteButton.setEnabled(false);
@@ -661,7 +661,7 @@ public class EditView extends JPanel/*JFrame*/ {
 			
 			if(index != -1)
 				{
-				if(peopleListModel.get(index).equals(CalendarProgram.loggedInUser))
+				if(peopleListModel.get(index).equals(ApplicationModel.getInstance().username))
 					{
 					JOptionPane.showMessageDialog(
 							(JFrame)SwingUtilities.getRoot(_parentContentPane),
@@ -761,7 +761,7 @@ public class EditView extends JPanel/*JFrame*/ {
 					
 					
 					//appointment.setMeetingRoom(locationField.getText());
-					appointment.setMeetingLeader(CalendarProgram.loggedInUser);
+					appointment.setMeetingLeader(ApplicationModel.getInstance().username);
 									
 					ApplicationModel.getInstance().addAppointment(
 							appointment.getAppointmentID(), appointment);
