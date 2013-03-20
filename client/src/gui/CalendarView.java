@@ -622,6 +622,7 @@ public class CalendarView extends JPanel implements ModelListener{
 		selectedDate.set(Integer.parseInt(temp[0]), Integer.parseInt(temp[1])-1, Integer.parseInt(temp[2]));
 		//System.out.println(selectedDate.toString());
 		selectedWeek = selectedDate.get(Calendar.WEEK_OF_YEAR);
+		appointmentID = app.getAppointmentID();
 		//System.out.println(selectedWeek);
 		//appointmentID = tempButton.keyOfRelatedAppointment;
 		paintGUI();
