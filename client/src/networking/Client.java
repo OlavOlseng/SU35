@@ -12,7 +12,7 @@ public class Client implements MessageListener {
 	private ClientMessageHandler messageHandler;
 	private XMLFactory xmlFactory;
 	public final static int CONNECTPORT = 49153;
-	public final static String HOST = "localhost";
+	public final static String HOST = "78.91.15.198";
 	
 	public Client() {
 		
@@ -79,6 +79,15 @@ public class Client implements MessageListener {
 		send(msg);
 	}
 	
+	public void getAllAppointments() {
+		String msg = factory.makeGetMessage(SBPFactory.OPTION_APPOINTMENT, "all");
+		send(msg);
+	}
+	
+	public void getAllEmployees() {
+		String msg = factory.makeGetMessage(SBPFactory.OPTION_EMPLOYEE, "all");
+		send(msg);
+	}
 	/*
 	 * QUERY THE SERVER FOR DATA
 	 */

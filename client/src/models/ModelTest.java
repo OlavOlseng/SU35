@@ -6,8 +6,7 @@ import networking.*;
 
 public class ModelTest {
 	public static void main(String args[]) {
-		Client client = new Client();
-		client.connect();
+		Client client = ApplicationModel.getInstance().connection;
 		Scanner scanner = new Scanner(System.in);
 		String command = null;
 		boolean exit = false;
@@ -23,25 +22,27 @@ public class ModelTest {
 					System.out.print("Password: ");
 					String password = scanner.nextLine();
 					client.sendLoginQuery(username, password);
+					//client.getAllAppointments();
+					//client.getAllEmployees();
+					//client.sendRoomQuery("foo");
 				} break;
 				case "GET_EMPLOYEE": {
 					System.out.print("Employee email: ");
 					String email = scanner.nextLine();
-					client.sendEmployeeQuery(email);
+					ApplicationModel.getInstance().getEmployee(email);
 				} break;
 				case "GET_APPOINTMENT": {
 					System.out.print("Appointment ID: ");
-					String ID = scanner.nextLine();
-					client.sendAppointmentQuery(ID);
+					int ID = Integer.parseInt(scanner.nextLine());
+					ApplicationModel.getInstance().getAppointment(ID);
 				} break;
 				case "GET_INVITATION": {
 					System.out.print("Employee email: ");
 					String email = scanner.nextLine();
 					if(email.equals("")) email = null;
 					System.out.print("Appointment ID: ");
-					String ID = scanner.nextLine();
-					if(ID.equals("")) ID = null;
-					client.sendInvitationQuery(email, ID);
+					int ID = Integer.parseInt(scanner.nextLine());
+					ApplicationModel.getInstance().getInvitation(email, ID);
 				} break;
 				case "GET_ROOM": {
 					System.out.print("Room name: ");
@@ -283,6 +284,20 @@ public class ModelTest {
 				} break;
 				case "SHOW_KEYS": {
 					System.out.println(ApplicationModel.getInstance().listKeys());
+				} break;
+				case "BOOK_ROOM": {
+					System.out.print("Room size: ");
+					int minSize = Integer.parseInt(scanner.nextLine());
+					System.out.print("Appointment ID: ");
+					int ID = Integer.parseInt(scanner.nextLine());
+					String roomID = "";
+					try {
+						roomID = RoomManager.pickSuitableRoom(minSize, ApplicationModel.getInstance().getAppointment(ID));
+					}
+					catch(RoomManager.NoAvailableRooms nar) {
+						System.err.println(nar.getMessage());
+					}
+					System.out.println(roomID);
 				} break;
 				default: {
 					System.err.println("UNKNOWN COMMAND");

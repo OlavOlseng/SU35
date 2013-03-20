@@ -57,6 +57,7 @@ public class CalendarView extends JPanel{
 	private int appointmentID;
 	private ArrayList<String> selectedUsers = new ArrayList<String>();
 	private ArrayList<String> availableEmailAdresses = new ArrayList<String>();
+	private ArrayList<Integer> notifications = new ArrayList<Integer>();
 	
 /*	public static void main(String[] args) {
 		
@@ -80,7 +81,10 @@ public class CalendarView extends JPanel{
 	}
 	
 	public void updateInfo() {
-		btnNotifications.setText("Notifications (" + Integer.toString(menuNotifications.getComponentCount()) + ")");
+		notifications = ApplicationModel.getInstance().getPendingAppointmentsForUser(CalendarProgram.loggedInUser);
+		if (notifications.size() > 0) {
+			btnNotifications.setText("Notifications (" + Integer.toString(notifications.size()) + ")");
+		}
 		
 		//Finds the appointments for the logged in user
 		//buttonList = new ArrayList<JButton>();
@@ -106,7 +110,8 @@ public class CalendarView extends JPanel{
 						appointmentID = tempButton.keyOfRelatedAppointment;
 						textAreaInfo.setText("Owner:\n" + tempAppointment.getMeetingLeader() + "\n\nDescription:\n" +
 								tempAppointment.getDescription() + "\n\nStart:\n" + tempAppointment.getFormattedStartTime()
-								+ "\n\nEnd:\n" + tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation());
+								+ "\n\nEnd:\n" + tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation()
+								+ "\n" + tempAppointment.getMeetingRoom());
 						btnMore.setEnabled(true);
 						if (CalendarProgram.loggedInUser.equals(tempAppointment.getMeetingLeader())) {
 							btnEdit.setEnabled(true);
@@ -148,7 +153,8 @@ public class CalendarView extends JPanel{
 							appointmentID = tempButton.keyOfRelatedAppointment;
 							textAreaInfo.setText("Owner:\n" + tempAppointment.getMeetingLeader() + "\n\nDescription:\n" +
 									tempAppointment.getDescription() + "\n\nStart:\n" + tempAppointment.getFormattedStartTime()
-									+ "\n\nEnd:\n" + tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation());
+									+ "\n\nEnd:\n" + tempAppointment.getFormattedEndTime() + "\n\nWhere:\n" + tempAppointment.getLocation()
+									+ "\n" + tempAppointment.getMeetingRoom());
 							btnMore.setEnabled(true);
 							if (CalendarProgram.loggedInUser.equals(tempAppointment.getMeetingLeader())) {
 								btnEdit.setEnabled(true);
@@ -195,19 +201,8 @@ public class CalendarView extends JPanel{
 		gbl_topLeftPanel.rowWeights = new double[]{1.0, Double.MIN_VALUE};
 		topLeftPanel.setLayout(gbl_topLeftPanel);
 		
-		btnNotifications = new JButton("Notifications");
-		
-		menuNotifications = new JPopupMenu();
-		menuNotifications.add("Menuitem 1");
-		menuNotifications.add("Menuitem 2");
-		menuNotifications.add(new JMenuItem("Menuitem 3"));
-
-		btnNotifications.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        menuNotifications.show(btnNotifications, btnNotifications.getBounds().x, btnNotifications.getBounds().y
-		           + btnNotifications.getBounds().height);
-		    }
-		});
+		btnNotifications = new JButton("Notifications (0)");
+		btnNotifications.addActionListener(new BtnNotificationsListener());
 		
 		GridBagConstraints gbc_btnNotifications = new GridBagConstraints();
 		gbc_btnNotifications.fill = GridBagConstraints.BOTH;
@@ -246,7 +241,7 @@ public class CalendarView extends JPanel{
 		topRightPanel.add(btnMe, gbc_btnMe);
 		
 		btnCalendars = new JButton("Calendars");
-		btnCalendars.addActionListener(new btnCalendarListener());
+		btnCalendars.addActionListener(new BtnCalendarListener());
 		GridBagConstraints gbc_btnCalendars = new GridBagConstraints();
 		gbc_btnCalendars.fill = GridBagConstraints.BOTH;
 		gbc_btnCalendars.insets = new Insets(0, 0, 0, 5);
@@ -273,10 +268,10 @@ public class CalendarView extends JPanel{
 					//Update CalendarView with week from gotoDialog.getDate()
 					String date = gotoDialog.getDate();
 					String[] temp = date.split("-");
-					System.out.println(temp[0]+temp[1]+temp[2]);
+					//System.out.println(temp[0]+temp[1]+temp[2]);
 					selectedDate.set(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]), Integer.parseInt(temp[2]));
 					selectedWeek = selectedDate.WEEK_OF_YEAR;
-					System.out.println(selectedWeek);
+					//System.out.println(selectedWeek);
 					paintGUI();
 					updateInfo();
 				}
@@ -360,7 +355,7 @@ public class CalendarView extends JPanel{
 		btnMore.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//Open InfoView
-				System.out.println(appointmentID);
+				//System.out.println(appointmentID);
 				_infoView.initialize(appointmentID);
 				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
 				c1.show(_parentContentPane, "Info View");
@@ -571,7 +566,7 @@ public class CalendarView extends JPanel{
 	{ _infoView = infoView; }
 	
 	//--------------------------------------------------------------------------
-	class btnCalendarListener implements ActionListener {
+	class BtnCalendarListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0){
 			menuCalendars = new JPopupMenu();
 			JLabel lblMenuCalendars = new JLabel("Select peoples calendars to view:");
@@ -607,6 +602,37 @@ public class CalendarView extends JPanel{
 			selectedUsers.add(selectedEmail);
 			paintGUI();
 			updateInfo();
+		}
+	}
+	
+	class BtnNotificationsListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0){
+			menuNotifications = new JPopupMenu();
+			
+			//notifications = ApplicationModel.getInstance().getPendingAppointmentsForUser(CalendarProgram.loggedInUser);
+			
+			CustomJMenuItem menuItem;
+			
+			for(int i = 0; i < notifications.size(); i++) {
+				menuItem = new CustomJMenuItem("Invited to: " + ApplicationModel.getInstance().getAppointment(i).getTitle());
+				menuItem.setAppID(ApplicationModel.getInstance().getAppointment(i).getAppointmentID());
+				menuNotifications.add(menuItem);
+				menuItem.addActionListener(new InvitationListener());
+			}
+			
+			menuNotifications.show(btnNotifications, btnNotifications.getBounds().x, btnNotifications.getBounds().y
+					+ btnNotifications.getBounds().height);
+		}
+	}
+	
+	class InvitationListener implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			CustomJMenuItem invitationItem = (CustomJMenuItem)event.getSource();
+			int selectedInvitation = invitationItem.getAppID();
+			
+			_infoView.initialize(selectedInvitation);
+			CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
+			c1.show(_parentContentPane, "Info View");
 		}
 	}
 }
