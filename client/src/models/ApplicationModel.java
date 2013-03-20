@@ -222,9 +222,6 @@ public class ApplicationModel {
 		return new HashSet<Integer>(appointment.keySet());
 	}
 	
-	/*public String[] getEmployees() {
-		return (String[])employees.keySet().toArray();
-	}*/
 	public ArrayList<String> getEmployees()
 		{ return new ArrayList<String>(employees.keySet()); }
 	
