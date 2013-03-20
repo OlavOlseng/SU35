@@ -33,6 +33,7 @@ public class ApplicationModel {
 		connection.getAllAppointments();
 		connection.getAllEmployees();
 		connection.getAllRooms();
+		connection.getAllInvitations();
 	}
 	
 	// key = email
