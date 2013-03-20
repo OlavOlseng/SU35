@@ -96,6 +96,11 @@ public class ServerMessageHandler extends MessageHandler{
 
 		try {
 			String query = String.format("SELECT * FROM employee WHERE email='%s'", id);
+			
+			if(data[4].equals("all")) {
+				query = "SELECT * FROM employee";
+			} 
+			
 			ResultSet set = conn.makeSingleQuery(query);
 			employees = dbFactory.getEmployees(set);
 
@@ -128,8 +133,11 @@ public class ServerMessageHandler extends MessageHandler{
 		String payload = null;
 		ArrayList<String> response = new ArrayList<String>();
 		ArrayList<Appointment> apps = new ArrayList<Appointment>();
-
+		
 		String query = String.format("SELECT * FROM appointment WHERE ID='%s'", id);
+		if (id.equals("all")) {
+			query = "SELECT * FROM appointment";
+		}
 		ResultSet set;
 
 		try {

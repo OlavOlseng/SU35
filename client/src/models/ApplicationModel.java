@@ -77,6 +77,7 @@ public class ApplicationModel {
 		if(a == null){
 			System.err.println("No entry found in Hashmap");
 			a = new Appointment(aID);
+			appointment.put(aID, a);
 			connection.sendAppointmentQuery(Integer.toString(aID));
 		}
 		return a;
@@ -113,6 +114,7 @@ public class ApplicationModel {
 		if(i == null){
 			System.err.println("No entry found in Hashmap");
 			i = new Invitation(email,appointmentID);
+			invitations.put(id, i);
 			connection.sendInvitationQuery(email, Integer.toString(appointmentID));
 		}
 		return i;
@@ -187,6 +189,7 @@ public class ApplicationModel {
 		if(a == null){
 			System.err.println("No entry found in Hashmap");
 			a = new Alarm(appointmentID, email);
+			alarms.put(id, a);
 			connection.sendAlarmQuery(email, Integer.toString(appointmentID));
 		}
 		return a;

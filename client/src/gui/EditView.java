@@ -29,6 +29,7 @@ import javax.swing.SwingUtilities;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.swing.SwingConstants;
@@ -561,22 +562,22 @@ public class EditView extends JPanel/*JFrame*/ {
 			// array which we use when we add JMenuItems in the JPopupMenu.
 			// This should be put in a method
 			//For testing purposes:
-			String[] emailAddresses = {"This is a text.",
-												"This is a much longer text.",
-												"ASDFFDSFAF",
-												"fasfsfdfdsfaf",
-												"rfasdfadsfsf",
-												"fadsfdsfdfasfdaf",
-												"asfadsfsdfafdsf",
-												"asdgfsdhgfdg",
-												"fasdfsdfdfsfdsf",
-												"safdhfdsrer"};
+			String[] test = { "trtre", "tgsfs" };
+			
+			ArrayList<String> emailAddresses = ApplicationModel.getInstance().getEmployees();
+//			String[] emailAddresses = ApplicationModel.getInstance().getEmployees();
+											/*{"fredrik@ntnu.no",
+												"olav@ntnu.no",
+												"yngve@ntnu.no",
+												"sindre@ntnu.no",
+												"august@ntnu.no",
+												"kenneth@ntnu.no"};*/
 			JMenuItem menuItem;
 			
 			
-			for(int i = 0; i < emailAddresses.length; i++)
+			for(int i = 0; i < emailAddresses.size(); i++)
 				{
-				menuItem = new JMenuItem(emailAddresses[i]);
+				menuItem = new JMenuItem(emailAddresses.get(i));
 				addPeopleMenu.add(menuItem);
 				menuItem.addActionListener(new PeopleListener());
 				}
@@ -639,7 +640,7 @@ public class EditView extends JPanel/*JFrame*/ {
 				
 				JOptionPane.showMessageDialog(
 						(JFrame)SwingUtilities.getRoot(_parentContentPane),
-						"Room has been unbooked", "Information message",
+						"Room has been unbooked.", "Information message",
 						JOptionPane.INFORMATION_MESSAGE);
 				}			
 			}
@@ -659,8 +660,8 @@ public class EditView extends JPanel/*JFrame*/ {
 					{
 					JOptionPane.showMessageDialog(
 							(JFrame)SwingUtilities.getRoot(_parentContentPane),
-							"You cannot remove yourself from this appointment.",
-							"Illegal action", JOptionPane.WARNING_MESSAGE);
+							"You cannot remove yourself from an appointmentent you create.",
+							"Warning", JOptionPane.WARNING_MESSAGE);
 					}
 				else
 					{ peopleListModel.remove(index); }
@@ -727,10 +728,6 @@ public class EditView extends JPanel/*JFrame*/ {
 				{
 				//TODO: Save appointment for this user in database and send message
 				// to relevant employees (employees added to the people-list)
-				//CalendarProgram.getModel().addAppointment(key, value);
-//				ApplicationModel.getInstance().addEmployee("kenneth@ntnu.no",
-//						new Employee("neo@matrix.com", "Thomas A.", "Anderson",
-//						"543678904", "456234765"));
 				Appointment appointment = new Appointment(3);
 				appointment.setTitle(titleField.getText());
 				appointment.setDate(dateField.getText());
