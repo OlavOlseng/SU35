@@ -83,13 +83,21 @@ public class ApplicationModel {
 	// key = appointmentID
 	public void addAppointment(int key, Appointment value){
 		if(appointment.containsKey(key)) {
-			connection.sendAppointmentUpdate(value);
+			updateAppointment(key, value);
 			return;
 		}
 		appointment.put(key, value);
-		connection.sendAppointmentCreation(value);
 		System.out.println("Key: " + key);
 		fireUpdateEvent();
+	}
+	
+	public void createAppointment(Appointment value) {
+		if(appointment.containsKey(value.getAppointmentID())) {
+			connection.sendAppointmentUpdate(value);
+		}
+		else {
+			connection.sendAppointmentCreation(value);
+		}
 	}
 	
 	public Appointment getAppointment(int aID){
@@ -125,13 +133,21 @@ public class ApplicationModel {
 	public void addInvitation(String email, int appointmentID, Invitation value){
 		String key = email + "¤" + appointmentID;
 		if(invitations.containsKey(key)) {
-			connection.sendInvitationUpdate(value);
+			updateInvitation(email, appointmentID, value);
 			return;
 		}
 		invitations.put(key, value);
-		connection.sendInvitationCreation(value);
 		System.out.println("Key: " + key);
 		fireUpdateEvent();
+	}
+	
+	public void createInvitation(Invitation value) {
+		if(appointment.containsKey(value.getEmployeeEmail()+"¤"+value.getAppointmentID())) {
+			connection.sendInvitationUpdate(value);
+		}
+		else {
+			connection.sendInvitationCreation(value);
+		}
 	}
 	
 	public Invitation getInvitation(String email, int appointmentID){
@@ -220,12 +236,20 @@ public class ApplicationModel {
 		String key = email + "¤" + appointmentID;
 		System.out.println("Key: " + key);
 		if (alarms.containsKey(key)) {
-			connection.sendAlarmUpdate(value);
+			updateAlarm(email, appointmentID, value);
 			return;
 		}
 		alarms.put(key, value);
-		connection.sendAlarmCreation(value);
 		fireUpdateEvent();
+	}
+	
+	public void createAlarm(Alarm value) {
+		if(appointment.containsKey(value.getEmployeeEmail()+"¤"+value.getAppointmentID())) {
+			connection.sendAlarmUpdate(value);
+		}
+		else {
+			connection.sendAlarmCreation(value);
+		}
 	}
 	
 	public Alarm getAlarm(String email, int appointmentID){
