@@ -31,6 +31,8 @@ import models.Appointment;
 
 public class InfoView extends JPanel/*JFrame*/ 
 	{
+	private int 			_appointmentId;
+	private JButton 		editButton;
 	private JPanel 		_parentContentPane;
 	private JTextField 	ownerField;
 	private JTextField 	titleField;
@@ -41,6 +43,7 @@ public class InfoView extends JPanel/*JFrame*/
 	private JTextField 	alarmField;
 	private JTextField 	dateField;
 	private JTextArea 	descriptionTextArea;
+	private EditView     _editView;
 
 	/**
 	 * Launch the application.
@@ -100,9 +103,10 @@ public class InfoView extends JPanel/*JFrame*/
 		gbc_backButton.gridy = 1;
 		this.add(calendarButton, gbc_backButton);
 		
-		JButton editButton = new JButton("Edit");
+		editButton = new JButton("Edit");
 		editButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				_editView.initialize(_appointmentId);
 				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
 				c1.show(_parentContentPane, "Edit View");
 			}
@@ -284,6 +288,7 @@ public class InfoView extends JPanel/*JFrame*/
 		
 		descriptionTextArea = new JTextArea();
 		descriptionTextArea.setEditable(false);
+		descriptionTextArea.setLineWrap(true);
 		
 		JScrollPane descriptionScrollPane = new JScrollPane(descriptionTextArea,
 				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -356,6 +361,7 @@ public class InfoView extends JPanel/*JFrame*/
 	//Here we initialize the different fields, lists and so on.
 	public void initialize(int appointmentId)
 		{ 
+		_appointmentId = appointmentId;
 		Appointment appointment = 
 				ApplicationModel.getInstance().getAppointment(appointmentId);
 		
@@ -369,7 +375,16 @@ public class InfoView extends JPanel/*JFrame*/
 //		alarmField.setText(ApplicationModel.getInstance().getAlarm(
 //				CalendarProgram.loggedInUser, appointmentId).getTime());
 		
+		
+		//If this user is not the same user who created this appointment, then
+		// he will not be able to edit this appointment. We therefore deactivate
+		// the editButton button
+		if(!CalendarProgram.loggedInUser.equals(appointment.getMeetingLeader()))
+			{ editButton.setEnabled(false); }
 		//TODO: Receive usernames/emails from attending, declined and not
 		// answered employees
 		}
+	//--------------------------------------------------------------------------
+	public void setEditView(EditView editView)
+		{ _editView = editView; }
 }
