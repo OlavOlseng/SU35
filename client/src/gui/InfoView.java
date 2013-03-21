@@ -18,8 +18,10 @@ import javax.swing.JTextField;
 import javax.swing.JList;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
 import javax.swing.JScrollPane;
 import javax.swing.JCheckBox;
 import javax.swing.JTextArea;
@@ -28,23 +30,31 @@ import javax.swing.ScrollPaneConstants;
 
 import models.ApplicationModel;
 import models.Appointment;
+import models.Invitation;
 import models.ModelListener;
+
 
 public class InfoView extends JPanel implements ModelListener
 	{
-	private int 			_appointmentId;
-	private JButton 		editButton;
-	private JPanel 		_parentContentPane;
-	private JTextField 	ownerField;
-	private JTextField 	titleField;
-	private final JLabel startLabel = new JLabel("Start:");
-	private JTextField 	startField;
-	private JTextField 	endField;
-	private JTextField 	locationField;
-	private JTextField 	alarmField;
-	private JTextField 	dateField;
-	private JTextArea 	descriptionTextArea;
-	private EditView     _editView;
+	private int 					_appointmentId;
+	private JButton 				editButton;
+	private JList 					_attendingList;
+	private JList 					_declinedList;
+	private JList 					_notAnsweredList;
+	private JPanel 				_parentContentPane;
+	private JTextField 			ownerField;
+	private JTextField 			titleField;
+	private final JLabel 		startLabel = new JLabel("Start:");
+	private JTextField 			startField;
+	private JTextField 			endField;
+	private JTextField 			locationField;
+	private JTextField 			alarmField;
+	private JTextField 			dateField;
+	private JTextArea 			descriptionTextArea;
+	private EditView     		_editView;
+	private DefaultListModel 	_attendingListModel;
+	private DefaultListModel	_declinedListModel;
+	private DefaultListModel	_notAnsweredListModel;
 
 	/**
 	 * Launch the application.
@@ -90,6 +100,9 @@ public class InfoView extends JPanel implements ModelListener
 		//gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 		//gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		this.setLayout(gbl_contentPane);
+		_attendingListModel 		= new DefaultListModel();
+		_declinedListModel  	 	= new DefaultListModel();
+		_notAnsweredListModel 	= new DefaultListModel();
 		
 		JButton calendarButton = new JButton("Calendar");
 		calendarButton.addActionListener(new ActionListener() {
@@ -245,13 +258,13 @@ public class InfoView extends JPanel implements ModelListener
 		gbc_descriptionLabel.gridy = 5;
 		this.add(descriptionLabel, gbc_descriptionLabel);
 		
-		JList attendingList = new JList();
-		attendingList.setVisibleRowCount(5);
-		attendingList.setFixedCellWidth(117);
+		_attendingList = new JList(_attendingListModel);
+		_attendingList.setVisibleRowCount(5);
+		_attendingList.setFixedCellWidth(117);
 		//attendingList.setMaximumSize(new Dimension(117, 45));
 		//attendingList.setFixedCellHeight(1);
 		
-		JScrollPane attendingScrollPane = new JScrollPane(attendingList);
+		JScrollPane attendingScrollPane = new JScrollPane(_attendingList);
 		GridBagConstraints gbc_attendingScrollPane = new GridBagConstraints();
 		gbc_attendingScrollPane.insets = new Insets(0, 0, 5, 5);
 		gbc_attendingScrollPane.fill = GridBagConstraints.BOTH;
@@ -260,12 +273,12 @@ public class InfoView extends JPanel implements ModelListener
 		gbc_attendingScrollPane.gridheight = 3;
 		this.add(attendingScrollPane, gbc_attendingScrollPane);
 		
-		JList declinedList = new JList();
-		declinedList.setVisibleRowCount(5);
-		declinedList.setFixedCellWidth(117);
+		_declinedList = new JList(_declinedListModel);
+		_declinedList.setVisibleRowCount(5);
+		_declinedList.setFixedCellWidth(117);
 		//declinedList.setFixedCellHeight(1);
 		
-		JScrollPane declinedScrollPane = new JScrollPane(declinedList);
+		JScrollPane declinedScrollPane = new JScrollPane(_declinedList);
 		GridBagConstraints gbc_declinedScrollPane = new GridBagConstraints();
 		gbc_declinedScrollPane.insets = new Insets(0, 0, 5, 5);
 		gbc_declinedScrollPane.fill = GridBagConstraints.BOTH;
@@ -274,12 +287,12 @@ public class InfoView extends JPanel implements ModelListener
 		gbc_declinedScrollPane.gridheight = 3;
 		this.add(declinedScrollPane, gbc_declinedScrollPane);
 		
-		JList notAnsweredList = new JList();
-		notAnsweredList.setVisibleRowCount(5);
-		notAnsweredList.setFixedCellWidth(117);
+		_notAnsweredList = new JList(_notAnsweredListModel);
+		_notAnsweredList.setVisibleRowCount(5);
+		_notAnsweredList.setFixedCellWidth(117);
 		//notAnsweredList.setFixedCellHeight(8);
 		
-		JScrollPane notAnsweredScrollPane = new JScrollPane(notAnsweredList);
+		JScrollPane notAnsweredScrollPane = new JScrollPane(_notAnsweredList);
 		GridBagConstraints gbc_notAnsweredScrollPane = new GridBagConstraints();
 		gbc_notAnsweredScrollPane.insets = new Insets(0, 0, 5, 5);
 		gbc_notAnsweredScrollPane.fill = GridBagConstraints.BOTH;
@@ -388,8 +401,23 @@ public class InfoView extends JPanel implements ModelListener
 		// the editButton button
 		if(!ApplicationModel.getInstance().username.equals(appointment.getMeetingLeader()))
 			{ editButton.setEnabled(false); }
-		//TODO: Receive usernames/emails from attending, declined and not
-		// answered employees
+		
+		
+		//We also need to fill the peopleList with employees
+		ArrayList<Invitation> invitationList = 
+				ApplicationModel.getInstance().getInvitationsByAppointment(
+						appointmentId);
+		
+		for(Invitation invitation : invitationList)
+			{
+			if(invitation.getAnswer() == Invitation.Answer.ACCEPTED)
+				{ _attendingListModel.addElement(invitation.getEmployeeEmail()); }
+			else if(invitation.getAnswer() == Invitation.Answer.DECLINED)
+				{ _declinedListModel.addElement(invitation.getEmployeeEmail()); }
+			else
+				{ _notAnsweredListModel.addElement(
+						invitation.getEmployeeEmail()); }
+			}
 		}
 	//--------------------------------------------------------------------------
 	public void setEditView(EditView editView)
