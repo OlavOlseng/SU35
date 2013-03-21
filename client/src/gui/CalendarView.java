@@ -106,7 +106,6 @@ public class CalendarView extends JPanel implements ModelListener{
 				CustomCalendarButton button = new CustomCalendarButton();
 				button.keyOfRelatedAppointment = app.getAppointmentID();
 				//buttonList.add(button);
-				button.setFont(new Font("Tahoma", 1, 11));
 				boolean allAccepted = true;
 				boolean allDeclined = true;
 				for (Invitation inv : ApplicationModel.getInstance().getInvitationsByAppointment(app.getAppointmentID())) {
