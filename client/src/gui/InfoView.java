@@ -21,16 +21,20 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JCheckBox;
 import javax.swing.JTextArea;
 import javax.swing.JRadioButton;
 import javax.swing.ScrollPaneConstants;
 
+import models.Alarm;
 import models.ApplicationModel;
 import models.Appointment;
 import models.Invitation;
+import models.Invitation.Answer;
 import models.ModelListener;
 
 
@@ -55,6 +59,10 @@ public class InfoView extends JPanel implements ModelListener
 	private DefaultListModel 	_attendingListModel;
 	private DefaultListModel	_declinedListModel;
 	private DefaultListModel	_notAnsweredListModel;
+	private JRadioButton attendRadioButton;
+	private JRadioButton declineRadioButton;
+	private ButtonGroup buttonGroup;
+	private ArrayList<Invitation> invitationList = new ArrayList<Invitation>();
 
 	/**
 	 * Launch the application.
@@ -128,6 +136,17 @@ public class InfoView extends JPanel implements ModelListener
 		});
 		
 		JButton saveButton = new JButton("Save");
+		saveButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Alarm alarm = new Alarm(_appointmentId, ApplicationModel.getInstance().username);
+				alarm.setTime(alarmField.getText());
+				ApplicationModel.getInstance().createAlarm(alarm);
+				JOptionPane.showMessageDialog(JOptionPane.getFrameForComponent(getRootPane()),
+					    "Your answer has been saved.",
+					    "Your answer has been saved.",
+					    JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
 		GridBagConstraints gbc_saveButton = new GridBagConstraints();
 		gbc_saveButton.fill = GridBagConstraints.BOTH;
 		gbc_saveButton.insets = new Insets(0, 0, 5, 5);
@@ -335,7 +354,17 @@ public class InfoView extends JPanel implements ModelListener
 		//locationField.setColumns(20);
 		locationField.setEditable(false);
 		
-		JRadioButton attendRadioButton = new JRadioButton("Attend");
+		attendRadioButton = new JRadioButton("Attend");
+		attendRadioButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for (Invitation invitation : invitationList) {
+					if (invitation.getEmployeeEmail().equals(ApplicationModel.getInstance().username)) {
+						invitation.setAnswer(Answer.ACCEPTED);
+						//buttonGroup.setSelected(attendRadioButton.getModel(), true);
+					}
+				}
+			}
+		});
 		GridBagConstraints gbc_attendRadioButton = new GridBagConstraints();
 		gbc_attendRadioButton.anchor = GridBagConstraints.WEST;
 		gbc_attendRadioButton.insets = new Insets(0, 0, 5, 5);
@@ -360,17 +389,27 @@ public class InfoView extends JPanel implements ModelListener
 		this.add(alarmField, gbc_alarmField);
 		//alarmField.setColumns(10);
 		
-		JRadioButton declineRadioButon = new JRadioButton("Decline");
+		declineRadioButton = new JRadioButton("Decline");
+		declineRadioButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for (Invitation invitation : invitationList) {
+					if (invitation.getEmployeeEmail().equals(ApplicationModel.getInstance().username)) {
+						invitation.setAnswer(Answer.DECLINED);
+						//buttonGroup.setSelected(declineRadioButton.getModel(), true);
+					}
+				}
+			}
+		});
 		GridBagConstraints gbc_declineRadioButon = new GridBagConstraints();
 		gbc_declineRadioButon.anchor = GridBagConstraints.WEST;
 		gbc_declineRadioButon.insets = new Insets(0, 0, 5, 5);
 		gbc_declineRadioButon.gridx = 6;
 		gbc_declineRadioButon.gridy = 10;
-		this.add(declineRadioButon, gbc_declineRadioButon);
+		this.add(declineRadioButton, gbc_declineRadioButon);
 		
-		ButtonGroup buttonGroup = new ButtonGroup();
+		buttonGroup = new ButtonGroup();
 		buttonGroup.add(attendRadioButton);
-		buttonGroup.add(declineRadioButon);
+		buttonGroup.add(declineRadioButton);
 	}
 	//--------------------------------------------------------------------------
 	public void refresh()
@@ -381,6 +420,9 @@ public class InfoView extends JPanel implements ModelListener
 	//Here we initialize the different fields, lists and so on.
 	public void initialize(int appointmentId)
 		{ 
+		_attendingListModel.clear();
+		_declinedListModel.clear();
+		_notAnsweredListModel.clear();
 		_appointmentId = appointmentId;
 		Appointment appointment = 
 				ApplicationModel.getInstance().getAppointment(appointmentId);
@@ -404,9 +446,7 @@ public class InfoView extends JPanel implements ModelListener
 		
 		
 		//We also need to fill the peopleList with employees
-		ArrayList<Invitation> invitationList = 
-				ApplicationModel.getInstance().getInvitationsByAppointment(
-						appointmentId);
+		invitationList = ApplicationModel.getInstance().getInvitationsByAppointment(appointmentId);
 		
 		for(Invitation invitation : invitationList)
 			{
@@ -418,7 +458,20 @@ public class InfoView extends JPanel implements ModelListener
 				{ _notAnsweredListModel.addElement(
 						invitation.getEmployeeEmail()); }
 			}
+		
+		for (Invitation invitation : invitationList) {
+			if (invitation.getEmployeeEmail().equals(ApplicationModel.getInstance().username)) {
+				if (invitation.getAnswer() == Answer.ACCEPTED) {
+					buttonGroup.setSelected(attendRadioButton.getModel(), true);
+				}
+				else if (invitation.getAnswer() == Answer.DECLINED) {
+					buttonGroup.setSelected(declineRadioButton.getModel(), true);
+				}
+			}
 		}
+		
+		alarmField.setText(ApplicationModel.getInstance().getAlarm(ApplicationModel.getInstance().username, _appointmentId).getTime());
+	}
 	//--------------------------------------------------------------------------
 	public void setEditView(EditView editView)
 		{ _editView = editView; }
