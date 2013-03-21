@@ -58,6 +58,7 @@ public class CalendarView extends JPanel implements ModelListener{
 	private InfoView _infoView;
 	private int selectedWeek = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR);
 	private Calendar selectedDate = Calendar.getInstance();
+	private int selectedYear = Calendar.getInstance().get(Calendar.YEAR);
 	private int appointmentID;
 	private ArrayList<String> selectedUsers = new ArrayList<String>();
 	private ArrayList<String> availableEmailAdresses = new ArrayList<String>();
@@ -101,11 +102,10 @@ public class CalendarView extends JPanel implements ModelListener{
 		ArrayList<Appointment> appointmentsForUser = new ArrayList<Appointment>();
 		appointmentsForUser = ApplicationModel.getInstance().getAppointmentsForUser(ApplicationModel.getInstance().username);
 		for (Appointment app : appointmentsForUser) {
-			if (app.getDate().get(Calendar.WEEK_OF_YEAR) == selectedWeek) {
+			if (app.getDate().get(Calendar.WEEK_OF_YEAR) == selectedWeek && app.getDate().get(Calendar.YEAR) == selectedYear  && app != null) {
 				CustomCalendarButton button = new CustomCalendarButton();
 				button.keyOfRelatedAppointment = app.getAppointmentID();
 				//buttonList.add(button);
-				button.setFont(new Font("Tahoma", 1, 11));
 				boolean allAccepted = true;
 				boolean allDeclined = true;
 				for (Invitation inv : ApplicationModel.getInstance().getInvitationsByAppointment(app.getAppointmentID())) {
@@ -168,7 +168,7 @@ public class CalendarView extends JPanel implements ModelListener{
 			ArrayList<Appointment> appointmentsForOtherUsers = new ArrayList<Appointment>();
 			appointmentsForOtherUsers = ApplicationModel.getInstance().getAppointmentsForUser(email);
 			for (Appointment app : appointmentsForOtherUsers) {
-				if (app.getDate().get(Calendar.WEEK_OF_YEAR) == selectedWeek) {
+				if (app.getDate().get(Calendar.WEEK_OF_YEAR) == selectedWeek && app.getDate().get(Calendar.YEAR) == selectedYear && app != null) {
 					CustomCalendarButton buttonOther = new CustomCalendarButton();
 					buttonOther.keyOfRelatedAppointment = app.getAppointmentID();
 					//buttonList.add(button);
@@ -230,7 +230,7 @@ public class CalendarView extends JPanel implements ModelListener{
 				}
 			}
 		}
-		lblWeek.setText("Week: " + selectedWeek);
+		lblWeek.setText("Week: " + selectedWeek + ", " + selectedYear);
 	}
 	
 	private void paintGUI() {
@@ -329,6 +329,7 @@ public class CalendarView extends JPanel implements ModelListener{
 					selectedDate.set(Integer.parseInt(temp[0]), Integer.parseInt(temp[1])-1, Integer.parseInt(temp[2]));
 					System.out.println(selectedDate.toString());
 					selectedWeek = selectedDate.get(Calendar.WEEK_OF_YEAR);
+					selectedYear = selectedDate.get(Calendar.YEAR);
 					//System.out.println(selectedWeek);
 					paintGUI();
 					updateInfo();
@@ -466,6 +467,7 @@ public class CalendarView extends JPanel implements ModelListener{
 				//Load previous week in calendar
 				if (selectedWeek == 1) {
 					selectedWeek = 52;
+					selectedYear--;
 				}
 				else {
 					selectedWeek--;
@@ -496,6 +498,7 @@ public class CalendarView extends JPanel implements ModelListener{
 				//Load next week in calendar
 				if (selectedWeek == 52) {
 					selectedWeek = 1;
+					selectedYear++;
 				}
 				else {
 					selectedWeek++;
@@ -622,6 +625,7 @@ public class CalendarView extends JPanel implements ModelListener{
 		selectedDate.set(Integer.parseInt(temp[0]), Integer.parseInt(temp[1])-1, Integer.parseInt(temp[2]));
 		//System.out.println(selectedDate.toString());
 		selectedWeek = selectedDate.get(Calendar.WEEK_OF_YEAR);
+		selectedYear = selectedDate.get(Calendar.YEAR);
 		appointmentID = app.getAppointmentID();
 		//System.out.println(selectedWeek);
 		//appointmentID = tempButton.keyOfRelatedAppointment;
@@ -656,8 +660,8 @@ public class CalendarView extends JPanel implements ModelListener{
 			availableEmailAdresses.clear();
 			ArrayList<String> tempAvailableEmailAdresses = ApplicationModel.getInstance().getEmployees();
 			for(String email : tempAvailableEmailAdresses) {
-				System.out.println(ApplicationModel.getInstance().username);
-				System.out.println(email);
+				//System.out.println(ApplicationModel.getInstance().username);
+				//System.out.println(email);
 				if (!email.equals(ApplicationModel.getInstance().username) && selectedUsers.contains(email) == false) {
 					availableEmailAdresses.add(email);
 				}
