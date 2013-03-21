@@ -360,6 +360,7 @@ public class InfoView extends JPanel implements ModelListener
 				for (Invitation invitation : invitationList) {
 					if (invitation.getEmployeeEmail().equals(ApplicationModel.getInstance().username)) {
 						invitation.setAnswer(Answer.ACCEPTED);
+						ApplicationModel.getInstance().createInvitation(invitation);
 						//buttonGroup.setSelected(attendRadioButton.getModel(), true);
 					}
 				}
@@ -395,6 +396,7 @@ public class InfoView extends JPanel implements ModelListener
 				for (Invitation invitation : invitationList) {
 					if (invitation.getEmployeeEmail().equals(ApplicationModel.getInstance().username)) {
 						invitation.setAnswer(Answer.DECLINED);
+						ApplicationModel.getInstance().createInvitation(invitation);
 						//buttonGroup.setSelected(declineRadioButton.getModel(), true);
 					}
 				}

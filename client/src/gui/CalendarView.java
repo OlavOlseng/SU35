@@ -114,7 +114,8 @@ public class CalendarView extends JPanel implements ModelListener{
 						break;
 					}
 					else if (inv.getAnswer() == Answer.DECLINED) {
-						allAccepted = false;
+						button.setBackground(new Color(255,0,0));
+						break;
 					}
 					else if (inv.getAnswer() == Answer.ACCEPTED) {
 						allDeclined = false;
@@ -180,7 +181,8 @@ public class CalendarView extends JPanel implements ModelListener{
 							break;
 						}
 						else if (inv.getAnswer() == Answer.DECLINED) {
-							allAccepted = false;
+							buttonOther.setBackground(new Color(255,0,0));
+							break;
 						}
 						else if (inv.getAnswer() == Answer.ACCEPTED) {
 							allDeclined = false;
