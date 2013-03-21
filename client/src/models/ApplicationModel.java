@@ -128,8 +128,9 @@ public class ApplicationModel {
 	
 	public void deleteAppointment(int aID){
 		if(appointment.containsKey(aID)){
+			Appointment app = getAppointment(aID); 
 			appointment.remove(aID);
-			if(getAppointment(aID).getMeetingLeader().equals(username)) {
+			if(app.getMeetingLeader().equals(username)) {
 				connection.sendAppointmentDeletion(aID);
 			}
 			fireUpdateEvent();

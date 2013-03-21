@@ -12,7 +12,7 @@ public class Client implements MessageListener {
 	private ClientMessageHandler messageHandler;
 	private XMLFactory xmlFactory;
 	public final static int CONNECTPORT = 49153;
-	public final static String HOST = "78.91.15.198";
+	public final static String HOST = "localhost";
 	
 	public Client() {
 		try {

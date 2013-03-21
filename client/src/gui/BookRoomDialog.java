@@ -18,11 +18,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
 
 import models.ApplicationModel;
+import models.Appointment;
+import models.RoomManager;
+import models.RoomManager.NoAvailableRooms;
 
 public class BookRoomDialog extends JDialog
 	{
@@ -32,6 +36,10 @@ public class BookRoomDialog extends JDialog
 	private JComboBox 			roomComboBox;
 	private JPanel					contentPane;
 	private EditView  			_editView;
+	String date;
+	String start;
+	String end;
+	Appointment temp;
 	/**
 	 * Launch the application.
 	 */
@@ -57,12 +65,14 @@ public class BookRoomDialog extends JDialog
 	/**
 	 * Create the dialog.
 	 */
-	public BookRoomDialog(JFrame frame, boolean modal, int nPeople, EditView editView)
+	public BookRoomDialog(JFrame frame, boolean modal, int nPeople, EditView editView, String date, String start, String end)
 		{
 		super(frame, modal);
-		
+		this.date = date;
+		this.start = start;
+		this.end = end;
 		contentPane = new JPanel();
-		nPeople		= nPeople;
+		_nPeople		= nPeople;
 		_editView   = editView;
 		
 		
@@ -81,9 +91,13 @@ public class BookRoomDialog extends JDialog
 		
 		JButton autoBookButton = new JButton("Auto Book");
 		
-		if(_nPeople == 0)
-			{ autoBookButton.setEnabled(false); }
+		if(_nPeople < 1)
+			{ autoBookButton.setEnabled(false); 
+			autoBookButton.setEnabled(true);
+			} 
 		
+		
+		autoBookButton.addActionListener(new AutoBookListener());
 		
 		JLabel text1Label = new JLabel(
 				"Select a room from the dropdown menu, or press AutoBook");
@@ -116,8 +130,19 @@ public class BookRoomDialog extends JDialog
 		contentPane.add(text3Label, gbc_text3Label);
 		
 		
+		temp = new Appointment(0);
+		temp.setDate(date);
+		temp.setStartTime(start);
+		temp.setEndTime(end);
+		
 		//Here we get all the rooms 
-		ArrayList<String> roomList = ApplicationModel.getInstance().getRooms();
+		ArrayList<String> roomList = null;
+		try {
+			roomList = RoomManager.findSuitableRooms(_nPeople, temp);
+		} catch (NoAvailableRooms e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		_roomList = new String[roomList.size()];
 		_roomList = roomList.toArray(_roomList);
 		// _roomList = rooms;
@@ -153,6 +178,30 @@ public class BookRoomDialog extends JDialog
 		gbc_cancelButton.gridy = 7;
 		contentPane.add(cancelButton, gbc_cancelButton);
 		
+		}
+	
+	class AutoBookListener implements ActionListener {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				String room = "";
+				try {
+					room = RoomManager.pickSuitableRoom(_nPeople, temp);
+					int index = 0;
+					for (int j = 0; j < _roomList.length; j++) {
+						if (room.equals(_roomList[j])) {
+							index = j;
+							break;
+						}
+					}
+					roomComboBox.setSelectedIndex(index);
+					
+				} catch (NoAvailableRooms e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
 		}
 	
 	//**************************************************************************

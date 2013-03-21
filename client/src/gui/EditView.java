@@ -141,10 +141,8 @@ public class EditView extends JPanel/*JFrame*/ {
 		
 		
 		deleteButton = new JButton("Delete");
-		deleteButton.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent arg0) {
-		}
-		});
+		//TODO IMPLEMENT DELEITION MOTHERFUCKER
+		deleteButton.addActionListener(new DeleteListener());
 		
 		GridBagConstraints gbc_deleteButton = new GridBagConstraints();
 		gbc_deleteButton.fill = GridBagConstraints.BOTH;
@@ -370,12 +368,16 @@ public class EditView extends JPanel/*JFrame*/ {
 	
 		//If appointmentID is -1 this means that this is a new appointment and we
 		// need to make sure that the fields are empty 
-		if(appointmentId == 0)
-			{ resetPanel(); }
+		if(_appointmentId == 0) { 
+			
+			resetPanel(); 
+			deleteButton.setEnabled(false);
+			}
 		//This is an appointment that we might want to edit.  Get data from
 		// the specified appointment 
 		else
 			{
+			deleteButton.setEnabled(true);
 			Appointment appointment = 
 					ApplicationModel.getInstance().getAppointment(appointmentId);
 	
@@ -408,7 +410,6 @@ public class EditView extends JPanel/*JFrame*/ {
 					ApplicationModel.getInstance().getInvitationsByAppointment(
 							appointmentId);
 	
-			System.out.println("Antall i ansatte lista for avtale: " +invitationList.size());
 			for(Invitation invitation : invitationList)
 				{
 				peopleListModel.addElement(invitation.getEmployeeEmail());
@@ -562,12 +563,13 @@ public class EditView extends JPanel/*JFrame*/ {
 			}
 		if(locationField.getText().equals(""))
 			{
-			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
-					_parentContentPane), "Location field is empty!\n" +
-							"Please enter location of appointment.",
-							"Not valid input", JOptionPane.ERROR_MESSAGE);
-	
-			return false;
+//			JOptionPane.showMessageDialog((JFrame)SwingUtilities.getRoot(
+//					_parentContentPane), "Location field is empty!\n" +
+//							"Please enter location of appointment.",
+//							"Not valid input", JOptionPane.ERROR_MESSAGE);
+//	
+			locationField.setText("Nowhere");
+//			return false;
 			}
 	
 	
@@ -613,7 +615,7 @@ public class EditView extends JPanel/*JFrame*/ {
 				{
 				BookRoomDialog bookRoomDialog = new BookRoomDialog(
 						(JFrame) bookRoomButton.getTopLevelAncestor(), true,
-						peopleList.getModel().getSize(), EditView.this);
+						peopleList.getModel().getSize(), EditView.this, dateField.getText(), startField.getText(), endField.getText());
 				bookRoomDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				bookRoomDialog.setVisible(true);
 				}
@@ -720,6 +722,32 @@ public class EditView extends JPanel/*JFrame*/ {
 			}
 		}
 	//**************************************************************************
+	class DeleteListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			String question = "You wanna delete this shizz, mothertrucker!?";
+			String title = "Delete me?";
+			
+			int i = JOptionPane.showConfirmDialog(JOptionPane.getFrameForComponent(getRootPane()), question, title, JOptionPane.YES_NO_OPTION );
+			if(i == 0) {
+				ApplicationModel.getInstance().connection.sendAppointmentDeletion(_appointmentId);
+				
+				ArrayList<Invitation> invitationList = 
+						ApplicationModel.getInstance().getInvitationsByAppointment(
+								_appointmentId);
+		
+				for(Invitation invitation : invitationList)
+					{
+					ApplicationModel.getInstance().connection.sendInvitationDeletion(invitation.getEmployeeEmail(), _appointmentId);
+					}
+				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
+				c1.show(_parentContentPane, "Calendar View");
+			}
+		}
+	}
+	
 	class SaveListener implements ActionListener
 		{	
 		public void actionPerformed(ActionEvent event)
@@ -757,7 +785,7 @@ public class EditView extends JPanel/*JFrame*/ {
 				// specified manually by the user
 				else
 					{
-						appointment.setMeetingRoom("");
+						appointment.setMeetingRoom("None");
 						appointment.setLocation(locationField.getText());
 					}
 		

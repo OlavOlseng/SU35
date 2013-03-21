@@ -11,16 +11,26 @@ public class RoomManager {
 		}
 	}
 	
-	private static ArrayList<String> removeRooms(ArrayList<String> roomIDs, int minSize) {
+	private synchronized static ArrayList<String> removeRooms(ArrayList<String> roomIDs, int minSize) {
+		ArrayList<String> avaliableRooms = new ArrayList<String>();
+		int minRoom = 100000000;
 		for(String roomID : roomIDs) {
-			if(ApplicationModel.getInstance().getRoom(roomID).getRoomSize() < minSize) {
-				roomIDs.remove(roomID);
+			Room r = ApplicationModel.getInstance().getRoom(roomID); 
+			if(r.getRoomSize() >= minSize) {
+				System.out.println(r.getRoomSize());
+				System.out.println(minSize);
+				if(r.getRoomSize() <= minRoom) {
+					avaliableRooms.add(0, roomID);
+					minRoom = r.getRoomSize();
+				}else{
+					avaliableRooms.add(roomID);
+				}
 			}
 		}
-		return roomIDs;
+		return avaliableRooms;
 	}
 	
-	private static ArrayList<Appointment> removeAppointments(ArrayList<Integer> appointmentIDs, Calendar date) {
+	private synchronized static ArrayList<Appointment> removeAppointments(ArrayList<Integer> appointmentIDs, Calendar date) {
 		ArrayList<Appointment> appointments = new ArrayList<Appointment>();
 		for(Integer ID : appointmentIDs) {
 			Appointment appointment = ApplicationModel.getInstance().getAppointment(ID);
@@ -33,7 +43,7 @@ public class RoomManager {
 		return appointments;
 	}
 	
-	public static ArrayList<String> findSuitableRooms(int minSize, Appointment appointment) throws NoAvailableRooms {
+	public synchronized static ArrayList<String> findSuitableRooms(int minSize, Appointment appointment) throws NoAvailableRooms {
 		Calendar date = appointment.getDate();
 		Calendar startTime = appointment.getStartTime();
 		Calendar endTime = appointment.getEndTime();
@@ -53,7 +63,7 @@ public class RoomManager {
 		return suitableRooms;
 	}
 	
-	public static String pickSuitableRoom(int minSize, Appointment appointment) throws NoAvailableRooms {
+	public synchronized static String pickSuitableRoom(int minSize, Appointment appointment) throws NoAvailableRooms {
 		String roomID = findSuitableRooms(minSize, appointment).iterator().next();
 		if(roomID==null) {
 			throw new NoAvailableRooms();

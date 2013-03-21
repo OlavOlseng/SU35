@@ -124,7 +124,7 @@ public class CalendarProgram {
 		JFrame frame = new JFrame("Superblaster");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBounds(50, 50, 800, 600);
-		
+//		frame.setUndecorated(true);
 		final JPanel contentPane = new JPanel();
 		contentPane.setLayout(new CardLayout());
 						
