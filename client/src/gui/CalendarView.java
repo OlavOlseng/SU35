@@ -102,7 +102,7 @@ public class CalendarView extends JPanel implements ModelListener{
 		ArrayList<Appointment> appointmentsForUser = new ArrayList<Appointment>();
 		appointmentsForUser = ApplicationModel.getInstance().getAppointmentsForUser(ApplicationModel.getInstance().username);
 		for (Appointment app : appointmentsForUser) {
-			if (app.getDate().get(Calendar.WEEK_OF_YEAR) == selectedWeek && app.getDate().get(Calendar.YEAR) == selectedYear  && app != null) {
+			if (app != null && app.getDate().get(Calendar.WEEK_OF_YEAR) == selectedWeek && app.getDate().get(Calendar.YEAR) == selectedYear  ) {
 				CustomCalendarButton button = new CustomCalendarButton();
 				button.keyOfRelatedAppointment = app.getAppointmentID();
 				//buttonList.add(button);
