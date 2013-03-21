@@ -130,7 +130,7 @@ public class ApplicationModel {
 		if(appointment.containsKey(aID)){
 			Appointment app = getAppointment(aID); 
 			appointment.remove(aID);
-			if(app.getMeetingLeader().equals(username)) {
+			if(app.getMeetingLeader() != null && app.getMeetingLeader().equals(username)) {
 				connection.sendAppointmentDeletion(aID);
 			}
 			fireUpdateEvent();

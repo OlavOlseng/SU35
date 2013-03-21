@@ -239,48 +239,28 @@ public class ClientMessageHandler extends MessageHandler{
 	
 	public void deleteEmployee(Element element){
 		Element email = element.getFirstChildElement("email");
-		Employee savedEmployee = ApplicationModel.getInstance().getEmployee(email.getValue());
-		if(savedEmployee == null){
-			return;
-		}
-		ApplicationModel.getInstance().deleteEmployee(savedEmployee.getEmail());
+		ApplicationModel.getInstance().deleteEmployee(email.getValue());
 	}
 	
 	public void deleteAppointment(Element element){
 		Element aID = element.getFirstChildElement("appointmentID");
-		Appointment savedAppointment = ApplicationModel.getInstance().getAppointment(Integer.parseInt(aID.getValue()));
-		if(savedAppointment == null){
-			return;
-		}
-		ApplicationModel.getInstance().deleteAppointment(savedAppointment.getAppointmentID());
+		ApplicationModel.getInstance().deleteAppointment(Integer.parseInt(aID.getValue()));
 	}
 	
 	public void deleteRoom(Element element){
 		Element rID = element.getFirstChildElement("roomID");
-		Room savedRoom = ApplicationModel.getInstance().getRoom(rID.getValue());
-		if(savedRoom == null){
-			return;
-		}
-		ApplicationModel.getInstance().deleteRoom(savedRoom.getName());
+		ApplicationModel.getInstance().deleteRoom(rID.getValue());
 	}
 	
 	public void deleteInvitation(Element element){
 		Element email = element.getFirstChildElement("employeeEmail");
 		Element aID = element.getFirstChildElement("appointmentID");
-		Invitation savedInvation = ApplicationModel.getInstance().getInvitation(email.getValue(), Integer.parseInt(aID.getValue()));
-		if(savedInvation == null){
-			return;
-		}
-		ApplicationModel.getInstance().deleteInvitation(savedInvation.getEmployeeEmail(), savedInvation.getAppointmentID());
+		ApplicationModel.getInstance().deleteInvitation(email.getValue(), Integer.parseInt(aID.getValue()));
 	}
 	
 	public void deleteAlarm(Element element){
 		Element email = element.getFirstChildElement("employeeEmail");
 		Element aID = element.getFirstChildElement("appointmentID");
-		Alarm savedAlarm = ApplicationModel.getInstance().getAlarm(email.getValue(), Integer.parseInt(aID.getValue()));
-		if(savedAlarm == null){
-			return;
-		}
-		ApplicationModel.getInstance().deleteAlarm(savedAlarm.getEmployeeEmail(), savedAlarm.getAppointmentID());
+		ApplicationModel.getInstance().deleteAlarm(email.getValue(), Integer.parseInt(aID.getValue()));
 	}
 }

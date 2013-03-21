@@ -820,6 +820,8 @@ public class EditView extends JPanel/*JFrame*/ {
 						"Appointment has been saved!",
 						"Information Message",
 						JOptionPane.INFORMATION_MESSAGE);
+				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
+				c1.show(_parentContentPane, "Calendar View");
 				}
 			//This is an editable appointment and we need to updata data
 			//				else
@@ -835,8 +837,6 @@ public class EditView extends JPanel/*JFrame*/ {
 			//					
 			//					}
 			//We go to the calendar view
-			CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
-			c1.show(_parentContentPane, "Calendar View");
 			}
 		}
 	}
