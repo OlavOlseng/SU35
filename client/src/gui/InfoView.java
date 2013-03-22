@@ -42,13 +42,25 @@ public class InfoView extends JPanel implements ModelListener
 	{
 	private int 					_appointmentId;
 	private JButton 				editButton;
+	private JButton 				calendarButton;
+	private JButton 				saveButton;
 	private JList 					_attendingList;
 	private JList 					_declinedList;
 	private JList 					_notAnsweredList;
 	private JPanel 				_parentContentPane;
+	private final JLabel 		startLabel = new JLabel("Start:");
+	private JLabel 				endLabel;
+	private JLabel 				ownerLabel;
+	private JLabel 				dateLabel;
+	private JLabel 				titleLabel;
+	private JLabel 				attendingLabel;
+	private JLabel 				declinedLabel;
+	private JLabel 				notAnsweredLabel;
+	private JLabel 				alarmLabel;
+	private JLabel 				locationLabel;
+	private JLabel 				descriptionLabel;
 	private JTextField 			ownerField;
 	private JTextField 			titleField;
-	private final JLabel 		startLabel = new JLabel("Start:");
 	private JTextField 			startField;
 	private JTextField 			endField;
 	private JTextField 			locationField;
@@ -112,13 +124,9 @@ public class InfoView extends JPanel implements ModelListener
 		_declinedListModel  	 	= new DefaultListModel();
 		_notAnsweredListModel 	= new DefaultListModel();
 		
-		JButton calendarButton = new JButton("Calendar");
-		calendarButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
-				c1.show(_parentContentPane, "Calendar View");
-			}
-		});
+		calendarButton = new JButton("Calendar");
+		calendarButton.addActionListener(new CalendarListener());
+			
 		GridBagConstraints gbc_backButton = new GridBagConstraints();
 		gbc_backButton.fill = GridBagConstraints.BOTH;
 		gbc_backButton.insets = new Insets(0, 0, 5, 5);
@@ -127,26 +135,12 @@ public class InfoView extends JPanel implements ModelListener
 		this.add(calendarButton, gbc_backButton);
 		
 		editButton = new JButton("Edit");
-		editButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				_editView.initialize(_appointmentId);
-				CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
-				c1.show(_parentContentPane, "Edit View");
-			}
-		});
+		editButton.addActionListener(new EditListener());
+
 		
-		JButton saveButton = new JButton("Save");
-		saveButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Alarm alarm = new Alarm(_appointmentId, ApplicationModel.getInstance().username);
-				alarm.setTime(alarmField.getText());
-				ApplicationModel.getInstance().createAlarm(alarm);
-				JOptionPane.showMessageDialog(JOptionPane.getFrameForComponent(getRootPane()),
-					    "Your answer has been saved.",
-					    "Your answer has been saved.",
-					    JOptionPane.INFORMATION_MESSAGE);
-			}
-		});
+		saveButton = new JButton("Save");
+		saveButton.addActionListener(new SaveListener());
+			
 		GridBagConstraints gbc_saveButton = new GridBagConstraints();
 		gbc_saveButton.fill = GridBagConstraints.BOTH;
 		gbc_saveButton.insets = new Insets(0, 0, 5, 5);
@@ -160,7 +154,7 @@ public class InfoView extends JPanel implements ModelListener
 		gbc_editButton.gridy = 1;
 		this.add(editButton, gbc_editButton);
 		
-		JLabel ownerLabel = new JLabel("Owner:");
+		ownerLabel = new JLabel("Owner:");
 		GridBagConstraints gbc_ownerLabel = new GridBagConstraints();
 		gbc_ownerLabel.anchor = GridBagConstraints.EAST;
 		gbc_ownerLabel.insets = new Insets(0, 0, 5, 5);
@@ -178,7 +172,7 @@ public class InfoView extends JPanel implements ModelListener
 		//ownerField.setColumns(15);
 		ownerField.setEditable(false);
 		
-		JLabel dateLabel = new JLabel("Date:");
+		dateLabel = new JLabel("Date:");
 		GridBagConstraints gbc_dateLabel = new GridBagConstraints();
 		gbc_dateLabel.anchor = GridBagConstraints.EAST;
 		gbc_dateLabel.insets = new Insets(0, 0, 5, 5);
@@ -213,7 +207,7 @@ public class InfoView extends JPanel implements ModelListener
 		//startField.setColumns(20);
 		startField.setEditable(false);
 		
-		JLabel titleLabel = new JLabel("Title:");
+		titleLabel = new JLabel("Title:");
 		GridBagConstraints gbc_titleLabel = new GridBagConstraints();
 		gbc_titleLabel.anchor = GridBagConstraints.EAST;
 		gbc_titleLabel.insets = new Insets(0, 0, 5, 5);
@@ -231,7 +225,7 @@ public class InfoView extends JPanel implements ModelListener
 		//titleField.setColumns(20);
 		titleField.setEditable(false);
 		
-		JLabel endLabel = new JLabel("End:");
+		endLabel = new JLabel("End:");
 		GridBagConstraints gbc_endLabel = new GridBagConstraints();
 		gbc_endLabel.anchor = GridBagConstraints.EAST;
 		gbc_endLabel.insets = new Insets(0, 0, 5, 5);
@@ -249,28 +243,28 @@ public class InfoView extends JPanel implements ModelListener
 		//endField.setColumns(20);
 		endField.setEditable(false);
 		
-		JLabel attendingLabel = new JLabel("Attending");
+		attendingLabel = new JLabel("Attending");
 		GridBagConstraints gbc_attendingLabel = new GridBagConstraints();
 		gbc_attendingLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_attendingLabel.gridx = 1;
 		gbc_attendingLabel.gridy = 5;
 		this.add(attendingLabel, gbc_attendingLabel);
 		
-		JLabel declinedLabel = new JLabel("Declined");
+		declinedLabel = new JLabel("Declined");
 		GridBagConstraints gbc_declinedLabel = new GridBagConstraints();
 		gbc_declinedLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_declinedLabel.gridx = 2;
 		gbc_declinedLabel.gridy = 5;
 		this.add(declinedLabel, gbc_declinedLabel);
 		
-		JLabel notAnsweredLabel = new JLabel("Not answered");
+		notAnsweredLabel = new JLabel("Not answered");
 		GridBagConstraints gbc_notAnsweredLabel = new GridBagConstraints();
 		gbc_notAnsweredLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_notAnsweredLabel.gridx = 3;
 		gbc_notAnsweredLabel.gridy = 5;
 		this.add(notAnsweredLabel, gbc_notAnsweredLabel);
 		
-		JLabel descriptionLabel = new JLabel("Description");
+		descriptionLabel = new JLabel("Description");
 		GridBagConstraints gbc_descriptionLabel = new GridBagConstraints();
 		gbc_descriptionLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_descriptionLabel.gridx = 5;
@@ -336,7 +330,7 @@ public class InfoView extends JPanel implements ModelListener
 		gbc_descriptionScrollPane.gridwidth = 2;
 		this.add(descriptionScrollPane, gbc_descriptionScrollPane);
 					
-		JLabel locationLabel = new JLabel("Location:");
+		locationLabel = new JLabel("Location:");
 		GridBagConstraints gbc_locationLabel = new GridBagConstraints();
 		gbc_locationLabel.anchor = GridBagConstraints.EAST;
 		gbc_locationLabel.insets = new Insets(0, 0, 5, 5);
@@ -373,7 +367,7 @@ public class InfoView extends JPanel implements ModelListener
 		gbc_attendRadioButton.gridy = 9;
 		this.add(attendRadioButton, gbc_attendRadioButton);
 		
-		JLabel alarmLabel = new JLabel("Alarm:");
+		alarmLabel = new JLabel("Alarm:");
 		GridBagConstraints gbc_alarmLabel = new GridBagConstraints();
 		gbc_alarmLabel.anchor = GridBagConstraints.EAST;
 		gbc_alarmLabel.insets = new Insets(0, 0, 5, 5);
@@ -477,4 +471,39 @@ public class InfoView extends JPanel implements ModelListener
 	//--------------------------------------------------------------------------
 	public void setEditView(EditView editView)
 		{ _editView = editView; }
-}
+	//**************************************************************************
+	class CalendarListener implements ActionListener
+		{
+		public void actionPerformed(ActionEvent e) 
+			{
+			CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
+			c1.show(_parentContentPane, "Calendar View");
+			}
+		}
+	//**************************************************************************
+	class EditListener implements ActionListener
+		{
+		public void actionPerformed(ActionEvent e) 
+			{
+			_editView.initialize(_appointmentId);
+			CardLayout c1 = (CardLayout)(_parentContentPane.getLayout());
+			c1.show(_parentContentPane, "Edit View");
+			}
+		}
+	//**************************************************************************
+	class SaveListener implements ActionListener
+		{
+		public void actionPerformed(ActionEvent e) 
+			{
+			Alarm alarm = new Alarm(_appointmentId,
+					ApplicationModel.getInstance().username);
+			alarm.setTime(alarmField.getText());
+			ApplicationModel.getInstance().createAlarm(alarm);
+			
+			JOptionPane.showMessageDialog(JOptionPane.getFrameForComponent(getRootPane()),
+					"Your answer has been saved.",
+					"Your answer has been saved.",
+					JOptionPane.INFORMATION_MESSAGE);
+			}
+		}
+	}
