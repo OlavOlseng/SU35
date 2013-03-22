@@ -208,13 +208,8 @@ public class EditView extends JPanel/*JFrame*/ {
 		gbc_chooseDate.gridy = 4;
 		add(chooseDate, gbc_chooseDate);
 		
-		chooseDate.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent event)
-			{
-			dateField.setText(new DatePicker((JFrame)SwingUtilities.getRoot(
-					_parentContentPane)).setPickedDate());
-			}
-		});
+		chooseDate.addActionListener(new ChooseDateListener());
+		
 		
 		
 		//Here we create the list that will contain emailaddresses for the people
@@ -837,6 +832,15 @@ public class EditView extends JPanel/*JFrame*/ {
 			//					
 			//					}
 			//We go to the calendar view
+			}
+		}
+	//**************************************************************************
+	class ChooseDateListener implements ActionListener
+		{
+		public void actionPerformed(ActionEvent event)
+			{
+			dateField.setText(new DatePicker((JFrame)SwingUtilities.getRoot(
+					_parentContentPane)).setPickedDate());
 			}
 		}
 	}
