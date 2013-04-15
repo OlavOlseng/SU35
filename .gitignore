@@ -1,5 +1,8 @@
 *.class
 
+# Folders #
+ktn2/Log/
+
 # Package Files #
 *.jar
 *.war
