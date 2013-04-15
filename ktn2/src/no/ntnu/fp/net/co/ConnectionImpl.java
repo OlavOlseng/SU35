@@ -103,12 +103,15 @@ public class ConnectionImpl extends AbstractConnection {
     	KtnDatagram ack = null;
     	// Send datagram, retransmit if needed. Receive ACK
     	try {
-			Thread.sleep(100);
+    		// Sleep a bit, so that we got a chance of receiving the ACK
+			Thread.sleep(150);
 			ack = sendDataPacketWithRetransmit(datamsg);
 		} catch (InterruptedException e) {
-			// If the threads fail to sleep
+			// The Thread was interrupted
 			e.printStackTrace();
 		}
+    	//TODO Finish method and decide if we want Selective Repeat
+    	
     }
 
     /**
@@ -120,6 +123,22 @@ public class ConnectionImpl extends AbstractConnection {
      * @see AbstractConnection#sendAck(KtnDatagram, boolean)
      */
     public String receive() throws ConnectException, IOException {
+    	// Check if the connection has valid state
+    	if(this.state != State.ESTABLISHED){
+    		throw new IllegalStateException("The connection is not in an established state.");
+    	}
+    	// Receive packet.
+    	KtnDatagram data = receivePacket(false);
+    	if(data.getSeq_nr() == this.nextSequenceNo){
+    		if(isValid(data)){
+    			// Send ACK, valid packet.
+    			sendAck(data, false);
+    			this.lastValidPacketReceived = data;
+    			return (String) data.getPayload();
+    		}
+    	}
+    	// The packet was a ghost packet, send ack
+    	
     	
     	return null;
     }
@@ -142,7 +161,7 @@ public class ConnectionImpl extends AbstractConnection {
      * @return true if packet is free of errors, false otherwise.
      */
     protected boolean isValid(KtnDatagram packet) {
-    	if(state == State.ESTABLISHED || packet.getFlag() == Flag.ACK || packet.getFlag() == Flag.NONE){
+    	if(state == State.ESTABLISHED && (packet.getFlag() == Flag.ACK || packet.getFlag() == Flag.NONE)){
     		if(packet.calculateChecksum() == lastDataPacketSent.getChecksum()){
     			return true;
     		} else {
