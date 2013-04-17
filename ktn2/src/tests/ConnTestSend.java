@@ -3,6 +3,7 @@ package tests;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
@@ -13,7 +14,6 @@ public class ConnTestSend {
 	
 	
 	Connection initConn;
-	
 	public ConnTestSend() {
 		initConn = new ConnectionImpl(30000);
 	}

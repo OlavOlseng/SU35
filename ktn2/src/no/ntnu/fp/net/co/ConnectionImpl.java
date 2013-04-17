@@ -12,6 +12,9 @@ import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.sun.corba.se.spi.servicecontext.SendingContextServiceContext;
+
 import no.ntnu.fp.net.admin.Log;
 import no.ntnu.fp.net.cl.ClException;
 import no.ntnu.fp.net.cl.ClSocket;
@@ -250,9 +253,84 @@ public class ConnectionImpl extends AbstractConnection {
      * @see Connection#close()
      */
     public void close() throws IOException {
-        
+        //Sending close request from established state
+    	KtnDatagram response = null;
+    	if(state == State.ESTABLISHED) {
+        	KtnDatagram finPacket = constructInternalPacket(Flag.FIN);
+			try {
+				int count = 0;
+				do{
+					simplySendPacket(finPacket);
+					response = receiveAck();
+					count++;
+				}while(response == null || count < 3);
+				
+				//Response is null if the connection was unable to receive any ack
+				if (response == null) {
+					System.out.println("Did not receive ACK on FIN request...");
+					forceClose();
+					return;
+				}
+				
+				state = State.FIN_WAIT_1;
+			} catch (ClException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+    	
+    	if(state == State.FIN_WAIT_1) {
+    		response = receiveAck();
+    		if (response != null && response.getFlag() == Flag.ACK) {
+    			state = State.FIN_WAIT_2;
+    		}
+    	}
+    	
+    	if (state == State.FIN_WAIT_2) {
+    		KtnDatagram expectedFINPacket = receivePacket(true);
+    		if (expectedFINPacket.getFlag() == Flag.FIN) {
+    			KtnDatagram finalAck = constructInternalPacket(Flag.ACK);
+    			try {
+					simplySendPacket(finalAck);
+					state = State.TIME_WAIT;
+					Thread.sleep(TIMEOUT);
+					state = State.CLOSED;
+					usedPorts.put(myPort, false);
+					return;
+				} catch (ClException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		}
+    	}
+    	
+    	
+    	//This chunk does the close operation when other end initiated.
+    	if(state == State.CLOSE_WAIT) {
+    		KtnDatagram finPacket = constructInternalPacket(Flag.FIN);
+    		try {
+				simplySendPacket(finPacket);
+				state = State.LAST_ACK;
+			} catch (ClException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	if (state == State.LAST_ACK) {
+    		KtnDatagram ack = receiveAck();
+    		state = State.CLOSED;
+    		usedPorts.put(myPort, false);
+    	}
     }
-
+    
+    private void forceClose() {
+    	state = State.CLOSED;
+    	usedPorts.put(myPort, false);
+    }
+    
     /**
      * Test a packet for transmission errors. This function should only called
      * with data or ACK packets in the ESTABLISHED state.
