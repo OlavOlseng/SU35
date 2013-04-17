@@ -209,6 +209,8 @@ public class ConnectionImpl extends AbstractConnection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		/* Det burde funke naa! */
     }
 	
   
