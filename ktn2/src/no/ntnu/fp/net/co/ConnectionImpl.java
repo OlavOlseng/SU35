@@ -250,7 +250,7 @@ public class ConnectionImpl extends AbstractConnection {
     	} catch(EOFException e) {
     		// FIN-packet received
     		state = State.CLOSE_WAIT;
-    		close();
+    		throw e;
     	}
     	if(data!= null){ //Packet is received
     		// TODO do some checks on the received data
@@ -280,7 +280,7 @@ public class ConnectionImpl extends AbstractConnection {
 					simplySendPacket(finPacket);
 					response = receiveAck();
 					count++;
-				}while(response == null || count < 3);
+				}while(response == null && count < 3);
 				
 				//Response is null if the connection was unable to receive any ack
 				if (response == null) {
