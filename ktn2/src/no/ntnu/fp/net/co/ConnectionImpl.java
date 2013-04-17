@@ -43,6 +43,8 @@ public class ConnectionImpl extends AbstractConnection {
 	private volatile static int minPort = 40000;
 	private volatile static int lastAssignedPort = 40000;
 	private volatile static int maxPort = 45000;
+	
+	private int sendCount;
 
 
 	/**
@@ -53,6 +55,7 @@ public class ConnectionImpl extends AbstractConnection {
 	 */
 	public ConnectionImpl(int myPort) {
 		super();
+		this.sendCount = 0;
 		this.myPort = myPort;
 		this.myAddress = getIPv4Address();
 	}
@@ -200,20 +203,25 @@ public class ConnectionImpl extends AbstractConnection {
      * @see no.ntnu.fp.net.co.Connection#send(String)
      */
     public void send(String msg) throws ConnectException, IOException {
+    	if(this.state != State.ESTABLISHED){
+    		throw new IOException("No connection established");
+    	}
+    	int count = 0;
     	// Create new datagram to send
     	KtnDatagram datamsg = constructDataPacket(msg);
     	// Create a datagram to receive ACK
     	KtnDatagram ack = null;
-    	// Send datagram, retransmit if needed. Receive ACK
-    	// Sleep a bit, so that we got a chance of receiving the ACK
-		try {
-			Thread.sleep(150);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		/* Det burde funke naa! */
+    	// Send datagram, retransmit if needed. Receive ack.
+    	ack = sendDataPacketWithRetransmit(datamsg);
+    	// Check ack
+    	if(ack != null){ // Check ack
+    	// If it is ok, we are done
+    		System.out.println("The ack was received");
+        	return;
+        }
+    	// Something went wrong
+    	throw new IOException("Unable to send the packet");
+    	
     }
 	
   
@@ -231,20 +239,29 @@ public class ConnectionImpl extends AbstractConnection {
     	if(this.state != State.ESTABLISHED){
     		throw new IllegalStateException("The connection is not in an established state.");
     	}
-    	// Receive packet.
-    	KtnDatagram data = receivePacket(false);
-    	if(data.getSeq_nr() == this.nextSequenceNo){
-    		if(isValid(data)){
-    			// Send ACK, valid packet.
-    			sendAck(data, false);
-    			this.lastValidPacketReceived = data;
-    			return (String) data.getPayload();
-    		}
+    	//If we do five recursive calls, we will say the connection is broken
+    	if(sendCount > 5){
+    		throw new ConnectException("No longer valid connection.");
     	}
-    	// The packet was a ghost packet, send ack
-    	
-    	
-    	return null;
+    	KtnDatagram data = null;
+    	// Receive packet.
+    	try{
+    		 data = receivePacket(false);
+    	} catch(EOFException e) {
+    		// FIN-packet received
+    		state = State.CLOSE_WAIT;
+    		close();
+    	}
+    	if(data!= null){ //Packet is received
+    		// TODO do some checks on the received data
+    		sendAck(data, false);
+    		return  data.getPayload().toString();
+    	}else { // Packet not received, try again 
+    		sendCount++;
+    		String msg = receive();
+    		sendCount = 0;
+    		return msg;
+    	}
     }
 
     /**
@@ -340,12 +357,10 @@ public class ConnectionImpl extends AbstractConnection {
      * @return true if packet is free of errors, false otherwise.
      */
     protected boolean isValid(KtnDatagram packet) {
-    	if(state == State.ESTABLISHED && (packet.getFlag() == Flag.ACK || packet.getFlag() == Flag.NONE)){
-    		if(packet.calculateChecksum() == lastDataPacketSent.getChecksum()){
-    			return true;
-    		} else {
-    			return false;
-    		}
+    	if((packet.getFlag() == Flag.ACK || packet.getFlag() == Flag.NONE) &&
+    			packet.calculateChecksum() == lastDataPacketSent.getChecksum()){
+    		return true;
+    		
     	}else{
     		return false;
     	}
