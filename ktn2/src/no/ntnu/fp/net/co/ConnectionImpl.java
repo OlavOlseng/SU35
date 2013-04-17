@@ -52,6 +52,7 @@ public class ConnectionImpl extends AbstractConnection {
 	 */
 	public ConnectionImpl(int myPort) {
 		super();
+		this.sendCount = 0;
 		this.myPort = myPort;
 		this.myAddress = getIPv4Address();
 	}
@@ -210,8 +211,9 @@ public class ConnectionImpl extends AbstractConnection {
     	// Send datagram, retransmit if needed. Receive ack.
     	ack = sendDataPacketWithRetransmit(datamsg);
     	// Check ack
-    	if(isValid(ack)){ // Check ack
+    	if(ack != null){ // Check ack
     	// If it is ok, we are done
+    		System.out.println("The ack was received");
         	return;
         }
     	// Something went wrong
@@ -248,7 +250,9 @@ public class ConnectionImpl extends AbstractConnection {
     		close();
     	}
     	if(data!= null){ //Packet is received
-    		return null;
+    		// TODO do some checks on the received data
+    		sendAck(data, false);
+    		return  data.getPayload().toString();
     	}else { // Packet not received, try again 
     		sendCount++;
     		String msg = receive();
