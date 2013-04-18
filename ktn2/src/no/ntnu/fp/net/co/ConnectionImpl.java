@@ -271,25 +271,27 @@ public class ConnectionImpl extends AbstractConnection {
      */
     public void close() throws IOException {
         //Sending close request from established state
+    	System.out.println("\nCLOSING!!\n");
     	KtnDatagram response = null;
+    	
     	if(state == State.ESTABLISHED) {
         	KtnDatagram finPacket = constructInternalPacket(Flag.FIN);
 			try {
 				int count = 0;
 				do{
+					System.out.println("SENDING INITIAL FIN");
 					simplySendPacket(finPacket);
 					response = receiveAck();
 					count++;
 				}while(response == null && count < 3);
+				state = State.FIN_WAIT_1;
 				
 				//Response is null if the connection was unable to receive any ack
 				if (response == null) {
-					System.out.println("Did not receive ACK on FIN request...");
+					System.out.println("Did not receive ACK on FIN request, force closing...");
 					forceClose();
 					return;
 				}
-				
-				state = State.FIN_WAIT_1;
 			} catch (ClException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -297,18 +299,50 @@ public class ConnectionImpl extends AbstractConnection {
         }
     	
     	if(state == State.FIN_WAIT_1) {
-    		response = receiveAck();
+    		if (response == null) {
+    			response = receiveAck();
+    		}
     		if (response != null && response.getFlag() == Flag.ACK) {
+    			System.out.println("ACK RECEIVED ON FIN");
     			state = State.FIN_WAIT_2;
+    		}
+    		else{
+    			System.out.println("Did not receive ACK on FIN request, force closing...");
+				forceClose();
+				return;
     		}
     	}
     	
     	if (state == State.FIN_WAIT_2) {
-    		KtnDatagram expectedFINPacket = receivePacket(true);
-    		if (expectedFINPacket.getFlag() == Flag.FIN) {
-    			KtnDatagram finalAck = constructInternalPacket(Flag.ACK);
+    		response = null;
+    		
+    		int count = 0;
+			do{
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				System.out.println("\nWAITING FOR LAST FIN\n");
+				response = receivePacket(true);
+				count++;
+				if (response != null) {
+					if (response.getFlag() == Flag.FIN) break;
+				}
+			}while(count < 3);
+    		
+    		if (response == null) {
+    			System.out.println("DIDN'T RECEIVE FINAL FIN PACKET");
+    			forceClose();
+    			return;
+    		}
+    		
+    		if (response.getFlag() == Flag.FIN) {
+    			KtnDatagram finReceivedAck = constructInternalPacket(Flag.ACK);
     			try {
-					simplySendPacket(finalAck);
+    				System.out.println("SENDING FINAL FIN RECEIVED ACK");
+					simplySendPacket(finReceivedAck);
 					state = State.TIME_WAIT;
 					Thread.sleep(TIMEOUT);
 					state = State.CLOSED;
@@ -327,9 +361,25 @@ public class ConnectionImpl extends AbstractConnection {
     	
     	//This chunk does the close operation when other end initiated.
     	if(state == State.CLOSE_WAIT) {
-    		KtnDatagram finPacket = constructInternalPacket(Flag.FIN);
+    		KtnDatagram ackPacket = constructInternalPacket(Flag.ACK);
     		try {
-				simplySendPacket(finPacket);
+				System.out.println("\nSENDING ACK RESPONSE ON FIN INIT\n");
+				simplySendPacket(ackPacket);
+				KtnDatagram finPacket = constructInternalPacket(Flag.FIN);
+				
+				int count = 0;
+				do{
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					System.out.println("\nSENDING FIN RESPONSE ON FIN INIT\n");
+					simplySendPacket(finPacket);
+					response = receiveAck();
+					count++;
+				}while(response == null && count < 3);
 				state = State.LAST_ACK;
 			} catch (ClException e) {
 				// TODO Auto-generated catch block
@@ -337,7 +387,13 @@ public class ConnectionImpl extends AbstractConnection {
 			}
     	}
     	if (state == State.LAST_ACK) {
-    		KtnDatagram ack = receiveAck();
+    		if(response == null) {
+    			int count = 0;
+				do{
+					response = receiveAck();
+					count++;
+				}while(response == null && count < 3);
+    		}
     		state = State.CLOSED;
     		usedPorts.put(myPort, false);
     	}
