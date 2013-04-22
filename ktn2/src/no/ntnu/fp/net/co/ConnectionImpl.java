@@ -413,12 +413,20 @@ public class ConnectionImpl extends AbstractConnection {
      * @return true if packet is free of errors, false otherwise.
      */
     protected boolean isValid(KtnDatagram packet) {
-    	if((packet.getFlag() == Flag.ACK || packet.getFlag() == Flag.NONE) &&
-    			packet.calculateChecksum() == lastDataPacketSent.getChecksum()){
-    		return true;
-    		
-    	}else{
-    		return false;
+    	if (!packet.getDest_addr().equals(myAddress)) return false;
+    	if (packet.getDest_port() != myPort) return false;
+    	if (packet.getChecksum() != packet.calculateChecksum()) return false;
+    	
+    	if (packet.getFlag() == Flag.ACK) {
+    		if (packet.getAck() != lastDataPacketSent.getSeq_nr()) return false;
     	}
+    	else if(packet.getFlag() == Flag.NONE) {
+    		if (lastValidPacketReceived == null);
+    		else if (packet.getSeq_nr() != lastValidPacketReceived.getSeq_nr() + 1) return false;
+    	}
+    	else return false;
+    	
+    	return true;
     }
+    
 }
