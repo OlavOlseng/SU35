@@ -203,22 +203,25 @@ public class ConnectionImpl extends AbstractConnection {
     	if(this.state != State.ESTABLISHED){
     		throw new IOException("No connection established");
     	}
-    	int count = 0;
     	// Create new datagram to send
     	KtnDatagram datamsg = constructDataPacket(msg);
     	// Create a datagram to receive ACK
     	KtnDatagram ack = null;
     	// Send datagram, retransmit if needed. Receive ack.
-    	ack = sendDataPacketWithRetransmit(datamsg);
-    	lastDataPacketSent = datamsg;
-    	// Check ack
-    	if(ack != null && isValid(ack)){ // Check ack
-    	// If it is ok, we are done
-    		System.out.println("The ack was received");
-        	return;
-        } else{
-        	send(msg);
-        }
+    	int count = 0;
+    	do{
+    		ack = sendDataPacketWithRetransmit(datamsg);
+        	lastDataPacketSent = datamsg;
+        	// Check ack
+        	if(ack != null && isValid(ack)){ // Check ack
+        	// If it is ok, we are done
+        		System.out.println("The ack was received");
+            	return;
+            } 
+        	count++;
+    	}while(count < 5);
+    	// Failed to send packet, closing connection
+    	close();
     	
     }
 	
