@@ -12,9 +12,6 @@ import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.sun.corba.se.spi.servicecontext.SendingContextServiceContext;
-
 import no.ntnu.fp.net.admin.Log;
 import no.ntnu.fp.net.cl.ClException;
 import no.ntnu.fp.net.cl.ClSocket;
@@ -213,14 +210,15 @@ public class ConnectionImpl extends AbstractConnection {
     	KtnDatagram ack = null;
     	// Send datagram, retransmit if needed. Receive ack.
     	ack = sendDataPacketWithRetransmit(datamsg);
+    	lastDataPacketSent = datamsg;
     	// Check ack
-    	if(ack != null){ // Check ack
+    	if(ack != null && isValid(ack)){ // Check ack
     	// If it is ok, we are done
     		System.out.println("The ack was received");
         	return;
+        } else{
+        	send(msg);
         }
-    	// Something went wrong
-    	throw new IOException("Unable to send the packet");
     	
     }
 	
@@ -239,10 +237,6 @@ public class ConnectionImpl extends AbstractConnection {
     	if(this.state != State.ESTABLISHED){
     		throw new IllegalStateException("The connection is not in an established state.");
     	}
-    	//If we do five recursive calls, we will say the connection is broken
-    	if(sendCount > 5){
-    		throw new ConnectException("No longer valid connection.");
-    	}
     	KtnDatagram data = null;
     	// Receive packet.
     	try{
@@ -252,15 +246,13 @@ public class ConnectionImpl extends AbstractConnection {
     		state = State.CLOSE_WAIT;
     		throw e;
     	}
-    	if(data!= null){ //Packet is received
-    		// TODO do some checks on the received data
+    	if(isValid(data)){
+    		lastValidPacketReceived = data;
     		sendAck(data, false);
-    		return  data.getPayload().toString();
-    	}else { // Packet not received, try again 
-    		sendCount++;
-    		String msg = receive();
-    		sendCount = 0;
-    		return msg;
+    		return data.getPayload().toString();
+    	} else{
+    		sendAck(lastValidPacketReceived, false);
+    		return receive();
     	}
     }
 
